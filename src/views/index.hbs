@@ -1,0 +1,201 @@
+<div class="fsubir float-lg-right fixed-bottom">
+<a href="#videoId"><img src="/img/flechas.svg"></a>
+</div>
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #242424;">
+
+<div class="container" style="font-size: 14px;">
+    <div class="container-fluid">
+
+
+    {{!-- Respective Menu --}}
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    {{!-- Main Menu --}}
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <a class="navbar-brand" href="/"><img src="/img/LogoEspectre.png" width="80px"></a>
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item p-4">
+          <a class="nav-link" style="color:#ff7f22;" href="#quienesomos"><u>¿QUIENES SOMOS?</u></a>
+        </li>
+        <li class="nav-item p-4">
+          <a class="nav-link" style="color:#ff7f22;" href="#espectre"><u>ESPECTRE</u></a>
+        </li>
+        <li class="nav-item p-4">
+          <a class="nav-link" style="color:#ff7f22;" href="#comojugar"><u>COMO JUGAR</u></a>
+        </li>
+        <li class="nav-item p-4">
+          <a class="nav-link" style="color:#ff7f22;" href="#porque"><u>¿PORQUE?</u></a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ml-auto">
+        {{#if user}}
+          <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            NOTES
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="/users/edit-user/{{user._id}}">All Notes</a></li>
+            <li><a class="dropdown-item" href="/notes/add">Add Note</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/users/logout">Logout</a></li>
+          </ul>
+        </li>
+        {{else}}
+        <li class="nav-item">
+          <a type="button" class="btn btnlog mr-1" href="../users/signin"><span class="fas fa-user">&nbsp;</span>Login</a>
+        </li>
+        <li class="nav-item">
+          <a type="button" href="/users/signup" type="button" class="btn btnreg"><span class="fas fa-sign-in-alt">&nbsp;</span>Sign Up</a>
+        </li>
+        {{/if}}
+      </ul>
+    </div>
+  </div>
+</div>
+</nav>
+<section>
+  
+  <video width="100%" autoplay loop muted id="videoId">
+    <source src="/img/video-background.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+  </video>
+  
+<div class="text-center" id="inicio"> 
+  
+  <div class="onepage">
+    
+  <div class="mx-auto my-5" data-aos="zoom-in" data-aos-duration="500">
+      <div class="logopage">
+        <p><img  src="/img/LogoEspectre.png" width="270px"></p>
+        
+     </div>
+    <a class="btn btn-warning" href="https://deck.toys/zkn-xknq-csf" target="_blank">Empieza La Aventura</a>
+   </div>
+  <div class="poweredbybubble float-lg-left"><img src="/img/Powered.png"></div>
+</div>
+</div>
+</section>
+
+<div id="quienesomos" class="overflow-hidden bg-light" data-image-src="/img/bg-1.png" 
+style="background-image: url(/img/bg-1.png)">
+
+<div class="text-center" data-aos="fade-up" data-aos-delay="200">
+  <div class="onepagem">
+  <div class="col-md-6 p-5 my-5 mx-auto">
+      
+      <h1 class="onepaget">¿QUIENES SOMOS?</h1>
+        <p>Bubbleby es una empresa joven e innovadora que se basa en tres grandes sectores: <u>la ciberseguridad, la domótica y la enseñanza.</u> <br/>
+          <br/>Pretendemos integrar al máximo posible las dos primeras tanto para ayudar a dinamizar las clases como para aportar soluciones a alumnos 
+          con necesidades especiales de todo tipo, incluyendo aquellos alumnos que necesitan refuerzos y a los que se benefician con una
+          ampliación del contenido.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="espectre" class="overflow-hidden text-center bg-light" data-image-src="/img/background-hero2" 
+style="background-image: url(/img/background-hero2)">
+<div class="onepagew" data-aos="fade-left" data-aos-delay="200">
+  <div class="p-lg-5 my-5">
+    <div class="descripcionesinversa">
+      <h1>ESPECTRE</h1>
+      <p>Espectre es nuestra herramienta número uno enfocada en la educación dinámica en las aulas. El modelo de aprendizaje se basa en el trabajo en equipo, 
+        el desarrollo de estrategias 
+        y la bonificación por la buena realización de las tareas y exámenes propuestos por los profesores.</p>
+    </div>
+      <img class="apartadosdiscleft" src="/img/bannerEspectre.png">
+  </div>
+</div>
+</div>
+
+<div id="comojugar" class="overflow-hidden bg-light" data-image-src="/img/bg-1.png" 
+style="background-image: url(/img/bg-1.png)">
+
+<div class="text-center" data-aos="fade-up" data-aos-delay="200">
+  <div class="onepagem">
+  <div class="col-md-6 p-5 my-5 mx-auto">
+      
+      <h1 class="onepaget">COMO JUGAR ESPECTRE</h1>
+        <p>Quienes se sumerjan en esta aventura deberán tener en mente algunos conceptos clave, estan todos resumidos en un PDF.<br/>
+          <br/>Descargalo Aqui:
+          <br/><a href="/conceptosBasicos.pdf" download="ConceptosBasicosEspectre.pdf">
+          <br/><button class="btn btn-warning btn-lg" >Descargar Conceptos Basicos</button>
+          </p></a>
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="porque" class="overflow-hidden text-center bg-light" data-image-src="/img/background-hero2" 
+style="background-image: url(/img/background-hero2)">
+<div class="onepagew" data-aos="fade-left" data-aos-delay="200">
+  <div class="p-lg-5 my-5">
+    <div class="descripcionesinversa">
+      <h1>¿PORQUE?</h1>
+      <p>Espectre nace con la intención de enseñar a los alumnos de una forma divertida la historia de la seguridad informática atraves de la immersión de los estudiantes en un juego interactivo con mensajes ocultos, actividades de encriptación y bonficación por realizar buenas tareas.</p></td>
+    </div>
+      <img class="apartadosdiscleft" src="/img/background-hero.png">
+  </div>
+</div>
+</div>
+
+<div id="sobrenosotros" class="overflow-hidden bg-light" data-image-src="/img/bg-1.png" 
+style="background-image: url(/img/bg-1.png)">
+
+<div data-aos="fade-up" data-aos-delay="500">
+  <div class="onepagem text-center">
+  <div class="col-md-6 p-lg-5 my-5">
+      <div class="descripciones">
+      <h1 class="onepaget">SOBRE NOSOTROS</h1>
+        <p>El equipo detrás de Espectre está compuesto por tres estudiantes leridanos de <u>Sistemas Microinformáticos y Redes</u> de 17 Años con una gran iniciativa emprendedora y ganas de mejorar la educación con sus conocimientos.
+
+          <div class="cartasfinal">
+          <div class="contenedor">
+          <div class="carta">
+              <div class="lado frente"><img src="/img/Ignacio.jpg"></div>
+              <div class="lado atras">
+                <h4>Ignacio Godino</h4><hr>
+                <p><img src="/img/github.png" width="25px" height="25px">&nbsp;&nbsp;<a href="https://github.com/Ekon16">Ekon16</a></p><hr>
+                <p class="desctarjetas">Soy un estudiante de<br/> SMX2-M y me gusta <br/>la ciberseguridad,<br/>Docker y Snort</p><br/><hr>
+              </div>
+          </div>
+        </div>
+
+        <div class="contenedor">
+          <div class="carta">
+              <div class="lado frente"><img src="/img/Alex.jpg"></div>
+              <div class="lado atras">
+                <h4>Alex Madrigal</h4><hr>
+                <p><img src="/img/github.png" width="25px" height="25px">&nbsp;&nbsp;<a href="https://github.com/AlexMadrigalAlriols">AlexMadrigalAlriols</a></p><hr>
+                <p class="desctarjetas">Soy un estudiante de<br/> SMX2-M y me encanta <br/>la programación y el<br/>lenguaje de marcas.</p><br/><hr>
+              </div>
+          </div>
+        </div>
+
+        <div class="contenedor">
+          <div class="carta">
+              <div class="lado frente"> <img src="/img/Alba.PNG"></div>
+              <div class="lado atras">
+                <h4>Alba Serrano</h4><hr>
+                <p><img src="/img/github.png" width="25px" height="25px">&nbsp;&nbsp;<a href="https://github.com/GoodLvck">GoodLvck</a></p><hr>
+                <p class="desctarjetas">Soy un ping&uuml;ino de<br/> SMX2-M y me encanta <br/>la ciberseguridad y el<br/>scutre</p><br/><hr>
+              </div>
+
+              </div>
+          </div>
+      </div>
+      </p>
+    </div>
+  </div>
+          </div>
+</div>
+</div>
+
+<script type="text/javascript">
+    var video = document.getElementById("videoId");
+    video.play();
+    
+
+</script>

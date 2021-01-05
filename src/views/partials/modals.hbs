@@ -1,0 +1,128 @@
+<!-- The Modal -->
+  <div class="modal bg-modal" id="ModalPerfil" tabindex="-1" role="dialog" aria-hidden="true" data-aos="fade-down">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="exampleModalLabel">Your Profile</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+<div class="z-depth-5 main">
+    <div class="row">
+        <div class="col-sm-6 picture">
+            <center><img class="circle responsive-img rounded-circle" src="{{user.path}}"></center>
+            <center class="mt-4">{{user.class}}</center>
+            <center class="mt-4">{{user.group}}</center>
+        </div>
+        <div class="col-sm-6 details">
+            <center>
+                <p class="name"><b>{{user.name}}</b></p>
+                <hr>
+            </center>
+            <center>
+                <p>{{user.description}}</p>
+            </center>
+        </div>
+    </div>
+    <table class="table">
+      <hr>
+        <tr>
+            <td>
+                <p><b>0</b></p>
+                <p>Paises Derribados</p>
+            </td>
+            <td>
+                <p><b>0</b></p>
+                <p>Ataques con exito</p>
+            </td>
+        </tr>
+    </table>
+    <center><a href="/users/edit-user/{{user.id}}" class="waves-effect waves-light btn edit">Edit Profile</a></center>
+</div>
+        <div class="modal-footer">
+          <button type="button" id="buttonclose" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+<div class="modal bg-modal" id="ModalNamerica" tabindex="-1" role="dialog" aria-labelledby="Namerica" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+         <h3 class="modal-title text-center" id="nameCont"></h3>
+        </div>
+        <div class="modal-body">
+          <div id="oroCont"></div>
+          <div id="construCont"></div>
+          <div id="inteliCont"></div>
+          <hr>
+          <h3 class="text-center">Actividades</h3>
+          <hr>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="buttoncloseN" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal bg-modal" id="adminPanel" tabindex="-1" role="dialog" aria-labelledby="AdminPanel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+         <h3 class="modal-title text-center">Admin Panel</h3>
+        </div>
+        <div class="modal-body">
+          <a href="/ingame/gameSettings/"><button class="btn btn-primary btn-block">InGame Settings</button></a>
+          <hr>
+          <a href="/users/all-users/"><button class="btn btn-primary btn-block">Users Settings</button></a>
+          <hr>
+          <button class="btn btn-primary btn-block">Groups Settings</button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="buttoncloseAdmin" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="modal bg-modal" id="periodicoM" tabindex="-1" role="dialog" aria-labelledby="periodicoM" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+         <h3 class="modal-title text-center">Periodico</h3>
+        </div>
+        <div class="modal-body">
+          <center>
+          <img src="/uploads/{{game.periodico}}" width="400px">
+          <hr>
+          <h3>Entrega Actividad</h3></center>
+          {{#if user.subido}}
+          <div>
+            <img src="/img/tick.png" class="rounded-circle mx-auto d-block m-3 logo" style="width: 60px;">
+            <p>Ya has realizado la entrega de esta Actividad</p>
+          </div>
+          {{else}}
+          <form action="" method="POST" enctype="multipart/form-data">
+            <div class="input-group mb-2">
+              <label class="input-group-text" for="inputGroupFile01">Upload</label>
+              <input type="file" name="file" class="form-control" id="inputGroupFile01">
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-block">Subir</button>
+            </div>
+          </form>
+          {{/if}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="buttonclosePeriodico" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+

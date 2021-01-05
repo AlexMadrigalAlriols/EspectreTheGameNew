@@ -1,0 +1,54 @@
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #242424;">
+
+<div class="container" style="font-size: 14px;">
+    <div class="container-fluid">
+
+
+    {{!-- Respective Menu --}}
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    {{!-- Main Menu --}}
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <a class="navbar-brand" href="/"><img src="/img/EspectreIcono.png" width="80px"></a>
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item p-4">
+          <a class="nav-link" style="color:#ff7f22;" href="#quienesomos"><u>¿QUIENES SOMOS?</u></a>
+        </li>
+        <li class="nav-item p-4">
+          <a class="nav-link" style="color:#ff7f22;" href="#espectre"><u>ESPECTRE</u></a>
+        </li>
+        <li class="nav-item p-4">
+          <a class="nav-link" style="color:#ff7f22;" href="#comojugar"><u>COMO JUGAR</u></a>
+        </li>
+        <li class="nav-item p-4">
+          <a class="nav-link" style="color:#ff7f22;" href="#porque"><u>¿PORQUE?</u></a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ml-auto">
+        {{#if user}}
+          <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            NOTES
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="/notes">All Notes</a></li>
+            <li><a class="dropdown-item" href="/notes/add">Add Note</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/users/logout">Logout</a></li>
+          </ul>
+        </li>
+        {{else}}
+        <li class="nav-item">
+          <a type="button" class="btn btnlog mr-1" href="../users/signin"><span class="fas fa-user">&nbsp;</span>Login</a>
+        </li>
+        <li class="nav-item">
+          <a type="button" href="/users/signup" type="button" class="btn btnreg"><span class="fas fa-sign-in-alt">&nbsp;</span>Sign Up</a>
+        </li>
+        {{/if}}
+      </ul>
+    </div>
+  </div>
+</div>
+</nav>

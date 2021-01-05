@@ -1,0 +1,45 @@
+<div class="col-md-6 mx-auto mt-2">
+    <div class="card">
+        <div class="card-header">
+            <h3>Edit {{user.name}}</h3>
+            <img class="rounded-circle mx-auto d-block logo" src="{{user.path}}">
+        </div>
+        <div class="card-body">
+            <form action="/users/edit-user/{{user._id}}?__method=PUT" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="__method" value="PUT">
+                <div class="form-group">
+                    <input type="text" name="name" class="form-control" placeholder="Name"
+                    value="{{user.name}}">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="email" class="form-control" value="{{user.email}}">
+                </div>
+                <div class="form-group">
+                    <textarea name="description" class="form-control">{{user.description}}</textarea>
+                </div>
+                {{#if userId.admin}}
+                <select class="form-control" name="group">
+                    <option value="{{user.group}}">{{user.group}}</option> 
+                    <option value="North_America">North America</option>
+                    <option value="Sud_America">Sud America</option>  
+                    <option value="Africa">Africa</option> 
+                    <option value="Oceania">Oceania</option>   
+                    <option value="Europa">Europa</option>
+                    <option value="Asia">Asia</option>                                            
+                </select> </br>
+                {{/if}}
+                <div class="input-group mb-4">
+                    <input type="file" name="file" class="form-control" id="inputGroupFile02" value="{{user.path}}">
+                    <label class="input-group-text" for="inputGroupFile02">EXPLORE</label>
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-block" style="background-color: #ff6d05; color: #242424;" type="submit">
+                    Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

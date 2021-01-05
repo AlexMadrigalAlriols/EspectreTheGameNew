@@ -1,0 +1,22 @@
+<div class="row">
+    {{#each users}}
+    <div class="col-md-3 ml-3 mt-4">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title d-flex justify-content-between align-items-center">
+                    {{name}}  <a href="/users/edit-user/{{_id}}"><i class="far fa-edit"></i></a>
+                </h4>
+                <p>{{email}}</p>
+                <form action="/users/delete/{{_id}}?__method=DELETE" method="POST">
+                <input type="hidden" name="__method" value="DELETE">
+
+                <button class="btn btn-danger btn-block btn-sm" type="submit">
+                Delete
+                </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</div>
+
