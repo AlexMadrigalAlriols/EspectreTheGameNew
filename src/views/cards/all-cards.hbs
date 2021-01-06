@@ -3,14 +3,26 @@
     <div class="col-md-2-5 ml-4 mt-4">
         <div class="card">
             <div class="card-body">
-                <center>
-                    <p>{{userId.name}}</p>
-                <p><img src="/img/unknown.png" width="175px"></p>
-                <a href="{{_id}}"> <button class="btn btn-block btn-md" style="background-color: green; color: white;">Usar</button></a>
-
-                </form>
+                {{userId.name}}
+                <div class="cartasGame">
+                   <div class="contenedorCarta">
+                    <div class="cartaG">
+                        <div class="ladoG frenteG">
+                            <img src="{{img}}" width="155px">
+                        </div>
+                        <div class="ladoG atrasG">
+                        <h6 class="ml-2 mt-1">Descripcion</h6>
+                        <p>{{desc}}</p><hr>
+                        <img src="/img/Construccion.png" class="ml-3"> +3 <img src="/img/Inteligencia.png" class="ml-3"> +1
+                        </div>
+                    </div> 
+                    <div class="">Cantidad: 0</div>
+                    <div class="cartasDetalles">Precio: {{precio}} <img src="/img/Oro.png" width="15px" class="ml-1 mb-1"></div>
+                </div>
             </div>
         </div>
     </div>
+      <a href="{{_id}}"> <button class="btn btn-block btn-md mt-2" style="background-color: green; color: white;">Usar</button></a>
+</div>
     {{/each}}
 </div>

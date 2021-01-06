@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const GameSchema = new Schema({
+    code: { type: String},
     players: { type: Array },
     periodico: { type: String, default: 'PeriodicoDefault.png'},
     mapa: { type: String, default: '/img/background-hero.png'},

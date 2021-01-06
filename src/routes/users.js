@@ -26,23 +26,26 @@ router.get('/users/signup', (req, res) => {
 });
 
 router.get('/users/all-users/', isAuthenticated, async (req, res) => {
-    await User.find().sort({date: 'desc'})
-      .then(documentos => {
+    const userId = await User.findById(req.user._id);
+    
+    await User.find({class: req.user.class}).sort({name: 'desc'})
+      .then(async documentos => {
         const contexto = {
             users: documentos.map(documento => {
             return {
                 name: documento.name,
                 _id: documento._id,
-                email: documento.email
+                email: documento.email,
+                description: documento.description,
+                group: documento.group,
+                class: documento.class,
+                ProfileImg: documento.path
             }
           })
         }
-        if(req.user.admin){
-            res.render('users/all-users.hbs', {users: contexto.users});
-        }else{
-            req.flash('error_msg', 'You are not Admin');
-            res.redirect('/ingame');
-        }
+        const userAdmin = userId.admin;
+        const users = contexto.users;
+        res.render('users/all-users.hbs', {users, userAdmin });
       });
   });
 
@@ -205,27 +208,38 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
 
 router.get('/ingame/gameSettings', isAuthenticated, async (req, res) => {
     const game = await Game.findById('5fedf15fa1268c39d8229e47');
-    res.render('./game/gameSettings.hbs', {game});
+    var user = await User.findById(req.user.id);
+
+    if(req.user.admin == true){
+        res.render('./game/gameSettings.hbs', {game});
+    }else{
+        res.redirect('/ingame');
+    }
 });
 
 router.put('/ingame/gameSettings', isAuthenticated, async (req, res, file) => {
     const lastGame = await Game.findById('5fedf15fa1268c39d8229e47');
+    var user = await User.findById(req.user.id);
 
     if(req.file == null){
         var periodico = lastGame.periodico;
     }else{
         var periodico  = req.file.filename;
+
+        var subido = user.subido;
+        subido = false;
     }
 
     const year = req.body.year;
-    if(mapa == 'ningunoElegido'){
+
+    if(req.body.mapa == "ningunoElegido"){
         var mapa = lastGame.mapa;
     } else{
         var mapa = req.body.mapa;
     }
 
     await Game.findByIdAndUpdate('5fedf15fa1268c39d8229e47', { periodico, year, mapa });
-
+    await User.findByIdAndUpdate(req.user.id, { subido })
     res.redirect('/ingame');
 });
 
@@ -238,7 +252,8 @@ router.get('/ingame/cards', isAuthenticated, async (req, res) => {
               name: documento.name,
               _id: documento._id,
               precio: documento.precio,
-              img: documento.img
+              img: documento.img,
+              desc: documento.descripcion
           }
         })
       }
@@ -253,7 +268,7 @@ router.post('/ingame', isAuthenticated, async (req, res) => {
    await subidoU.save();
 
    
-   res.redirect('/ingame', { duki });
+   res.redirect('/ingame');
 });
 
 module.exports = router;

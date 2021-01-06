@@ -32,12 +32,11 @@
       <ul class="navbar-nav ml-auto">
         {{#if user}}
           <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            NOTES
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: orangered;">
+            Account
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="/users/edit-user/{{user._id}}">All Notes</a></li>
-            <li><a class="dropdown-item" href="/notes/add">Add Note</a></li>
+            <li><a class="dropdown-item" href="/ingame">InGame</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="/users/logout">Logout</a></li>
           </ul>
@@ -195,7 +194,5 @@ style="background-image: url(/img/bg-1.png)">
 
 <script type="text/javascript">
     var video = document.getElementById("videoId");
-    video.play();
-    
-
+    video.play(); 
 </script>
