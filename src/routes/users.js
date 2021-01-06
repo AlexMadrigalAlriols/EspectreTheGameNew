@@ -109,8 +109,7 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
 
 
     if(estaError.length == 0){
-        console.log('Hago push');
-       // groupUser.users.push(req.params.id);
+        groupUser.users.push(req.params.id);
         const nameGroup = groupUser.name;
         
         if(nameGroup == 'North_America'){

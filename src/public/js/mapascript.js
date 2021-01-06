@@ -52,8 +52,7 @@ document.getElementById('buttonclosePeriodico').addEventListener("click", functi
 	document.getElementById('periodicoM').style.display = "none";
 });
 
-var continenteNumero = 0;
-  var continenteId = 0;
+
   var cartas = 0; 
   var cartaId = 0;
   var año = 1800;
@@ -78,21 +77,6 @@ var continenteNumero = 0;
   
   ];
 
-  var continentesBase = [
-    { name:"North América", Oro: 3000, Construccion: 0, Inteligencia: 2, Diamantes: 0},
-    { name:"Europa", Oro: 3500, Construccion: 0, Inteligencia: 0, Diamantes: 0},
-    { name:"Oceania", Oro: 3000, Construccion: 5, Inteligencia: 0, Diamantes: 0},
-    { name:"Asia", Oro: 3250, Construccion: 0, Inteligencia: 1, Diamantes: 0},
-    { name:"África", Oro: 3000, Construccion: 0, Inteligencia: 0, Diamantes: 1},
-    { name:"Sur América", Oro: 3250, Construccion: 2, Inteligencia: 0, Diamantes: 1}
-  ];
-
-  localStorage.micontinente = localStorage.micontinente || JSON.stringify(continentesBase);
-  localStorage.cartasguard = localStorage.cartasguard || JSON.stringify(cards);
-  
-
-añoControler();
-
 
 
 function cargarCantidad(cartaId){
@@ -106,28 +90,6 @@ function cargarCantidad(cartaId){
   }else{
     document.getElementById("botonCartas0").innerHTML = "<p>Precio:  "+ cartasguard[cartaId].precio +" <img src='assets/img/Oro.png' width='20px'></p><button type='button' class='btn btn-warning' onclick='comprarCarta("+cartaId+");' data-dismiss='modal'>Comprar</button>";
   }
-}
-
-function continenteModal(){
-  console.log(continenteNumero);
-
-  let micontinente = JSON.parse(localStorage.micontinente);
-  let cartasguard = JSON.parse(localStorage.cartasguard);
-
-  let i=0;
-  while(i <= 0){
-    document.getElementById("nameCont").innerHTML = "" + micontinente[continenteNumero].name + "";
-    document.getElementById("oroCont").innerHTML = "<p><img src='/img/Oro.png' width='20px'> Oro: " + micontinente[continenteNumero].Oro + "</p>";
-    document.getElementById("construCont").innerHTML = "<p><img src='/img/Construccion.png' width='20px'> Construcci&oacute;n: " + micontinente[continenteNumero].Construccion + "</p>";
-    document.getElementById("inteliCont").innerHTML = "<p><img src='/img/Inteligencia.png' width='20px'> Inteligencia: " + micontinente[continenteNumero].Inteligencia + "</p>";
-    i++;
-    console.log("colocadotodo");
-  }
-}
-function cargarVariables(){
-  let micontinente = JSON.parse(localStorage.micontinente);
-  let cartasguard = JSON.parse(localStorage.cartasguard);
-  document.getElementById("variablesInventario").innerHTML = "<img src='assets/img/Oro.png' width='20px'> Oro: " + micontinente[continenteNumero].Oro + "&nbsp;&nbsp;<img src='assets/img/Diamantes.png' width='20px'> Diamantes: " + micontinente[continenteNumero].Diamantes + "&nbsp;&nbsp;&nbsp;<img src='assets/img/Construccion.png' width='20px'> Construcción: " + micontinente[continenteNumero].Construccion + "&nbsp;&nbsp;&nbsp;<img src='assets/img/Inteligencia.png' width='20px'> Inteligencia: " + micontinente[continenteNumero].Inteligencia;
 }
 
 
@@ -151,15 +113,6 @@ while (cartas <= 13) {
 // }
 }
 
-
-
-function añoControler(){
-  const html = "Año: " +año;
-  document.getElementById("añoT").innerHTML = html;
-
-  diarioC = "<img src='assets/img/"+año+".png' alt='"+año+"'>";
-  document.getElementById("diarioDiv").innerHTML = diarioC;
-}
 
 function comprarCarta(cartaId){
     let micontinente = JSON.parse(localStorage.micontinente);
