@@ -1,0 +1,32 @@
+<div class="col-md-6 mx-auto mt-2">
+    <div class="card">
+        <div class="card-header">
+            <h3>Edit {{group.name}}</h3>
+        </div>
+        <div class="card-body">
+            <form action="/ingame/edit-group/{{group._id}}?__method=PUT" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="__method" value="PUT">
+                <div class="form-group">
+                    <input type="text" name="name" class="form-control"
+                    value="{{group.name}}" aria-label="Disabled input example" disabled readonly>
+                </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text"><img src="/img/oro.png" width="20px"></span>
+                    <input type="text" class="form-control" placeholder="Username" aria-label="Username" value="{{group.oro}}" name="oro">
+                <span class="input-group-text"><img src="/img/inteligencia.png" width="20px"></span>
+                    <input type="text" class="form-control" placeholder="Server" aria-label="Server" value="{{group.inteligencia}}" name="inteligencia">
+                <span class="input-group-text"><img src="/img/construccion.png" width="20px"></span>
+                    <input type="text" class="form-control" placeholder="Server" aria-label="Server" value="{{group.construccion}}" name="construccion">
+                <span class="input-group-text"><img src="/img/diamantes.png" width="20px"></span>
+                    <input type="text" class="form-control" placeholder="Server" value="{{group.diamantes}}" name="diamantes">
+            </div>
+                <div class="form-group">
+                    <button class="btn btn-block" style="background-color: #ff6d05; color: #242424;" type="submit">
+                    Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

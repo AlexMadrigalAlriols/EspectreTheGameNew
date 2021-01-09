@@ -5,7 +5,7 @@ html {
 body {
     background-size: 100%;
     font-family: Orbitron;
-
+    overflow-x: hidden;
 }
 
 h1,
@@ -540,11 +540,11 @@ section {
 }
 
 .menu li a.archive:before {
-  content: "\f187";
+  content: "\f02d";
 }
 
-.menu li a.pencil:before {
-  content: "\f040";
+.menu li a.shop:before {
+  content: "\f54e";
 }
 
 .menu li a.contact:before {
@@ -843,4 +843,77 @@ tr {
   font-size: 0.8em;
   letter-spacing: 1px;
   opacity: 0.8;
+}
+
+.buybtn {
+  background-color: #ffae42; 
+  color: white;
+}
+.buybtn:hover{
+  background-color: #ff9100;
+}
+
+.btnvolver{
+  background-color: #ff6d05; 
+  color: #fff;
+}
+
+.btnvolver:hover{
+  background-color: #ff8833; 
+}
+
+.duki {
+  position: absolute;
+  z-index: -5;
+  width: 100%;
+  height: 110%;
+  margin-top: -10%;
+}
+
+.cartasDisp{
+  margin-left: 50%;
+}
+
+.parallax {
+  /* The image used */
+  background-image: url("/img/tienda-background.jpg");
+
+  /* Set a specific height */
+  height: 100%;
+
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* Animaciones */
+.gelatine:hover {
+  animation: gelatine 0.5s;
+}
+@keyframes gelatine {
+  from, to { transform: scale(1, 1); }
+  25% { transform: scale(0.9, 1.1); }
+  50% { transform: scale(1.1, 0.9); }
+  75% { transform: scale(0.95, 1.05); }
+}
+
+.elastic-spin:hover {
+  animation: elastic-spin 1s ease;
+}
+@keyframes elastic-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.hithere:hover {
+  animation: hithere 1s ease;
+}
+@keyframes hithere {
+  30% { transform: scale(1.1); }
+  40%, 60% { transform: rotate(-20deg) scale(1.1); }
+  50% { transform: rotate(20deg) scale(1.1); }
+  70% { transform: rotate(0deg) scale(1.1); }
+  100% { transform: scale(1); }
 }

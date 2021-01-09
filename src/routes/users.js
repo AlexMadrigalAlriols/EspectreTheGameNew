@@ -9,6 +9,7 @@ const Group = require('../models/Group');
 const Game = require('../models/Game');
 const Card = require('../models/Cartas');
 const Cartas = require('../models/Cartas');
+const Bundle = require('../models/Bundle');
 
 
 router.get('/users/signin', (req, res) => {
@@ -16,7 +17,7 @@ router.get('/users/signin', (req, res) => {
 });
 
 router.post('/users/signin', passport.authenticate('local', {
-    successRedirect: '/ingame',
+    successRedirect: '/code',
     failureRedirect: '/users/signin',
     failureFlash: true
 }));
@@ -243,8 +244,70 @@ router.put('/ingame/gameSettings', isAuthenticated, async (req, res, file) => {
     res.redirect('/ingame');
 });
 
+router.post('/ingame', isAuthenticated, async (req, res) => {
+   const subidoU = await User.findById(req.user._id);
+   subidoU.subido = true;
+   await subidoU.save();
+
+   res.redirect('/ingame');
+});
+
+
+// ========= GROUPS =============== //
+
+router.get('/ingame/all-groups/', isAuthenticated, async (req, res) => {
+    const userId = await User.findById(req.user._id);
+    
+    await Group.find().sort({name: 'desc'})
+      .then(async documentos => {
+        const contexto = {
+            groups: documentos.map(documento => {
+            return {
+                name: documento.name,
+                _id: documento._id,
+                oro: documento.oro,
+                inteligencia: documento.inteligencia,
+                construccion: documento.construccion,
+                diamantes: documento.diamantes
+            }
+          })
+        }
+        const userAdmin = userId.admin;
+        var groups = contexto.groups;
+        if(req.user.admin == true){
+            res.render('groups/all-groups.hbs', {groups, userAdmin });
+        }else{
+            req.flash('error_msg', 'You are not admin');
+            res.redirect('/ingame');
+        }
+      });
+  });
+
+  router.get(`/ingame/edit-group/:id`, isAuthenticated, async (req, res) => {
+    const userId = await User.findById(req.user._id);
+    const group = await Group.findById(req.params.id);
+
+    if(req.user.admin == true){
+       res.render('groups/edit-group.hbs', {group, userId});
+    }else{
+        req.flash('error_msg', 'You are not admin');
+        res.redirect('/ingame');
+    }
+});
+
+router.put('/ingame/edit-group/:id', isAuthenticated, async (req, res) => {
+    const { oro, inteligencia, construccion, diamantes } = req.body;
+    await Group.findByIdAndUpdate(req.params.id, { oro, inteligencia, construccion, diamantes });
+    req.flash('success_msg', 'Group Updated Successfully');
+    res.redirect('/ingame/all-groups/');
+  });
+
+// =========== CARDS ========== //
+
 router.get('/ingame/cards', isAuthenticated, async (req, res) => {
-    await Cartas.find().sort({date: 'desc'})
+    const group = await Group.findOne({name: req.user.group});
+
+    await Cartas.find({_id: group.cartas}).sort({date: 'desc'})
     .then(async documentos => {
       const contexto = {
           cartas: documentos.map(documento => {
@@ -259,16 +322,134 @@ router.get('/ingame/cards', isAuthenticated, async (req, res) => {
       }
       const cartas = contexto.cartas;
       const userId = await User.findById(req.user._id);
-      res.render('cards/all-cards.hbs', { cartas, userId });
+      res.render('cards/all-cards.hbs', { cartas, userId, group });
     });
 });
-router.post('/ingame', isAuthenticated, async (req, res) => {
-   const subidoU = await User.findById(req.user._id);
-   subidoU.subido = true;
-   await subidoU.save();
 
-   
-   res.redirect('/ingame');
+router.get('/ingame/bundles', isAuthenticated, async (req, res) => {
+    const group = await Group.findOne({name: req.user.group});
+
+    await Bundle.find().sort({date: 'desc'})
+    .then(async documentos => {
+      const contexto = {
+          bundles: documentos.map(documento => {
+          return {
+              name: documento.name,
+              _id: documento._id,
+              precio: documento.precio,
+              img: documento.img,
+              desc: documento.descripcion
+          }
+        })
+      }
+      const bundles = contexto.bundles;
+      const userId = await User.findById(req.user._id);
+
+      res.render('cards/all-bundles.hbs', { bundles, userId, group });
+    });
 });
+
+router.get('/ingame/shop', isAuthenticated, async (req, res) => {
+    const group = await Group.findOne({name: req.user.group});
+
+    await Cartas.find().sort({date: 'desc'})
+    .then(async documentos => {
+      const contexto = {
+          cartas: documentos.map(documento => {
+          return {
+              name: documento.name,
+              _id: documento._id,
+              precio: documento.precio,
+              img: documento.img,
+              desc: documento.descripcion,
+              construccion: documento.construccion,
+              inteligencia: documento.inteligencia
+
+          }
+        })
+      }
+      const cartas = contexto.cartas;
+      const userId = await User.findById(req.user._id);
+      res.render('cards/cards-shop.hbs', { cartas, userId, group });
+    });
+});
+
+router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
+    const card = await Card.findOne({_id: req.params.id});
+    const group = await Group.findOne({name: req.user.group});
+
+    if(group.oro >= card.precio){
+        const estaError = [];
+        for(var i=0; i<group.cartas.length;){
+            if(group.cartas[i] == req.params.id){
+                estaError.push(i);
+                i++;
+            }else{
+                i++;
+            }
+        }
+
+        if(estaError.length == 0){
+            group.oro = group.oro - card.precio ;
+
+            group.cartas.push(card._id);
+            group.save();
+            req.flash('success_msg', 'Carta comprada con exito!');
+            res.redirect('/ingame/shop');
+        }else{
+            req.flash('error_msg', 'Ya tienes una carta de estas! Usa primero la otra y luego compra!');
+            res.redirect('/ingame/shop');
+        }
+    }else{
+        req.flash('error_msg', 'No tienes suficiente oro!');
+        res.redirect('/ingame/shop');
+    }
+
+  });
+
+  router.get('/cards/select', isAuthenticated, async (req, res) => {
+    const group = await Group.findOne({name: req.user.group});
+
+    res.render('cards/cards-select.hbs', { group });
+  });
+
+  router.put('/cards/use/:id', isAuthenticated, async (req, res) => {
+    const card = await Card.findOne({_id: req.params.id});
+    const group = await Group.findOne({name: req.user.group});
+
+    const indexCarta = group.cartas.indexOf(req.params.id);
+    if(indexCarta > -1){
+        group.cartas.splice(indexCarta);
+    }else{
+        req.flash('error_msg', 'No tienes esta carta');
+    }
+
+    group.save();
+  });
+
+  router.get('/code', isAuthenticated, async (req, res) => {
+    const user = await User.findOne({_id: req.user.id});
+    if(user.class == 'SinAsignar'){
+        res.render('users/classCode.hbs', { user });
+    }else{
+        res.redirect('/ingame');
+    }
+  });
+
+  router.put('/code', isAuthenticated, async (req, res) => {
+    const user = await User.findOne({_id: req.user.id});
+    const codeClass = req.body.codeClass;
+
+    if(codeClass == '5ff23sxg'){
+        user.class = 'SMX-M';
+        user.save();
+    }else if(codeClass == '823jsjdk'){
+        user.class = 'SMX-T';
+        user.save();
+    }
+    
+    res.redirect('/ingame');
+  });
+
 
 module.exports = router;

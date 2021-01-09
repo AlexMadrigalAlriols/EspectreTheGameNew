@@ -1,5 +1,5 @@
 <nav style="background-color: white;">
-<a href="/ingame"><button class="btn ml-2 mt-3 mb-3 btnvolver">Volver InGame</button></a>
+<a href="/cards/select"><button class="btn ml-2 mt-3 mb-3 btnvolver">Volver Shop</button></a>
 <div style="float: right;">
     <a href="/ingame/cards/"><img src="/img/libro.png" width="42px" class="mr-3 ml-2 mt-2 gelatine"></a>
 </div>
@@ -8,10 +8,10 @@
 </div>
 </nav>
 <div>
-    <img src="/img/all-cards-background.jpg" class="duki">
+    <img src="/img/tienda-background.jpg" class="duki">
 </div>
 <div class="row">
-    {{#each cartas}}
+    {{#each bundles}}
     <div class="col-md-2-5 ml-4 mt-4">
         <div class="card">
             <div class="card-body">
@@ -28,15 +28,15 @@
                         <img src="/img/Construccion.png" class="ml-3"> +3 <img src="/img/Inteligencia.png" class="ml-3"> +1
                         </div>
                     </div> 
-                    <center><div class="mt-2">Cantidad: 1</div></center>
+                    <center><div style="border-color: #d9d9d9; border-width: 2px; border-style:groove; background-color: #e6e6e6; border-radius: 5px"><div class="cartasDetalles mt-1">Precio: {{precio}} <img src="/img/diamantes.png" width="18px" class="ml-1 mb-1"></div></div></center>
                 </div>
             </div>
         </div>
     </div>
-    <form action="/cards/use/{{_id}}?__method=PUT" method="POST">
+    <form action="/cards/buybundle/{{_id}}?__method=PUT" method="POST">
         <input type="hidden" name="__method" value="PUT">
 
-        <a href="#"><button class="btn btn-block btn-md mt-2" style="background-color: green; color: white;">Usar</button></a></a>
+        <a href="#"><button class="btn btn-block btn-md mt-2 buybtn">Comprar</button></a></a>
     </form>
 </div>
 {{else}}

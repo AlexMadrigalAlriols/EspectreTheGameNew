@@ -1,0 +1,44 @@
+<nav style="background-color: white;">
+<a href="/cards/select"><button class="btn ml-2 mt-3 mb-3 btnvolver">Volver Shop</button></a>
+<div style="float: right;">
+    <a href="/ingame/cards/"><img src="/img/libro.png" width="42px" class="mr-3 ml-2 mt-2 gelatine"></a>
+</div>
+<div style="float: right; border-color: gray; border-width: 2px; border-style:groove; background-color:whitesmoked; border-radius: 5px" class="mr-2 mt-2 mb-3 ml-2 p-1">  
+    <p>&nbsp;<img src="/img/oro.png"> {{group.oro}} &nbsp;<img src="/img/construccion.png"> {{group.construccion}}&nbsp; <img src="/img/inteligencia.png"> {{group.inteligencia}} &nbsp; <img src="/img/diamantes.png"> {{group.diamantes}} &nbsp;</p>
+</div>
+</nav>
+
+<div class="parallax">
+
+<div class="row container mx-auto" style="align-items: center;">
+    {{#each cartas}}
+    <div class="col-md-2-5 ml-5 mt-4 mb-2">
+        <div class="card">
+            <div class="card-body">
+                {{userId.name}}
+            <div class="cartasGame">
+                <div class="contenedorCarta">
+                    <div class="cartaG">
+                        <div class="ladoG frenteG">
+                            <img src="{{img}}" width="155px">
+                        </div>
+                        <div class="ladoG atrasG">
+                            <h6 class="ml-2 mt-1">Descripcion</h6>
+                            <p>{{desc}}</p><hr>
+                            <img src="/img/Construccion.png" class="ml-2"> {{construccion}} <img src="/img/Inteligencia.png" class="ml-3"> {{inteligencia}}
+                        </div>
+                    </div>
+                    <center><div style="border-color: #d9d9d9; border-width: 2px; border-style:groove; background-color: #e6e6e6; border-radius: 5px"><div class="cartasDetalles mt-1">Precio: {{precio}} <img src="/img/Oro.png" width="18px" class="ml-1 mb-1"></div></div></center>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form action="/cards/buy/{{_id}}?__method=PUT" method="POST">
+        <input type="hidden" name="__method" value="PUT">
+
+        <a href="#"><button class="btn btn-block btn-md mt-2 buybtn">Comprar</button></a></a>
+    </form>
+</div>
+    {{/each}}
+</div>
+</div>

@@ -1,7 +1,6 @@
 {
   "name": "notes-app",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/index.js"
@@ -28,5 +27,14 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.6"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexMadrigalAlriols/EspectreTheGameNew.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AlexMadrigalAlriols/EspectreTheGameNew/issues"
+  },
+  "homepage": "https://github.com/AlexMadrigalAlriols/EspectreTheGameNew#readme",
+  "description": ""
 }
