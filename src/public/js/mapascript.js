@@ -51,3 +51,13 @@ document.getElementById('periodicoButt').addEventListener("click", function() {
 document.getElementById('buttonclosePeriodico').addEventListener("click", function() {
 	document.getElementById('periodicoM').style.display = "none";
 });
+
+// Sobre 0
+document.getElementById('sobre0Butt').addEventListener("click", function() {
+	document.getElementById('sobre0M').style.display = "flex";
+});
+
+document.getElementById('buttoncloseSobre0').addEventListener("click", function() {
+	document.getElementById('sobre0M').style.display = "none";
+});
+

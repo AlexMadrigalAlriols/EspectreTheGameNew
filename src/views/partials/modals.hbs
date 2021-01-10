@@ -12,18 +12,18 @@
 <div class="z-depth-5 main">
     <div class="row">
         <div class="col-sm-6 picture">
-            <center><img class="circle responsive-img rounded-circle" src="{{user.path}}"></center>
-            <center class="mt-4">{{user.class}}</center>
-            <center class="mt-4">{{user.group}}</center>
+            <center><img class="circle mb-4 responsive-img rounded-circle" src="{{user.path}}"></center>
+            <center>{{user.class}} / {{user.group}}</center>
         </div>
         <div class="col-sm-6 details">
             <center>
                 <p class="name"><b>{{user.name}}</b></p>
                 <hr>
-            </center>
-            <center>
                 <p>{{user.description}}</p>
-            </center>
+            <div class="p-2">
+                <a href="/users/all-users/"><button class="btn btn-sm btn-block btnvolver">All Users</button></a>
+            </div>
+            </center>                     
         </div>
     </div>
     <table class="table">
@@ -39,7 +39,7 @@
             </td>
         </tr>
     </table>
-    <center><a href="/users/edit-user/{{user.id}}" class="waves-effect waves-light btn edit">Edit Profile</a></center>
+    <center><a href="/users/edit-user/{{user.id}}" class="waves-effect waves-light btn edit btnvolver p-2">Edit Profile</a></center>
 </div>
         <div class="modal-footer">
           <button type="button" id="buttonclose" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
@@ -83,6 +83,8 @@
           <a href="/users/all-users/"><button class="btn btn-primary btn-block">Users Settings</button></a>
           <hr>
           <a href="/ingame/all-groups/"><button class="btn btn-primary btn-block">Groups Settings</button></a>
+          <hr>
+          <a href="/ingame/events/"><button class="btn btn-primary btn-block">Events Console</button></a>
         </div>
         <div class="modal-footer">
           <button type="button" id="buttoncloseAdmin" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
@@ -126,4 +128,19 @@
     </div>
   </div>
 
+  <div class="modal bg-modal" id="sobre0M" tabindex="-1" role="dialog" aria-labelledby="sobre0M" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+         <h3 class="modal-title text-center">Sobre 0</h3>
+        </div>
+        <div class="modal-body">
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="buttoncloseSobre0" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 

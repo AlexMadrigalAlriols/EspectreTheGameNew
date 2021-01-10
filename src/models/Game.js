@@ -6,7 +6,8 @@ const GameSchema = new Schema({
     players: { type: Array },
     periodico: { type: String, default: 'PeriodicoDefault.png'},
     mapa: { type: String, default: '/img/background-hero.png'},
-    year: { type: Number, default: 1800 }
+    year: { type: Number, default: 1800 },
+    events: { type: Array }
 });
 
 module.exports = mongoose.model('Game', GameSchema);

@@ -12,16 +12,16 @@ const UserSchema = new Schema({
     Africa: { type: Boolean, default: false},
     Europa: { type: Boolean, default: false},
     Oceania: { type: Boolean, default: false},
+    SinGroup: { type: Boolean, default: true},
     Asia: { type: Boolean, default: false},
     class: {type: String, default: 'SinAsignar'},
+    banner: {type: String, default: 'https://hipertextual.com/files/2013/11/Wallpaper-Monta%C3%B1as.jpg'},
     rol: { type: String, default: 'Alumno'},
     subido: { type: Boolean, default: false},
     path: { type: String, default: '/uploads/ImageProfile.jpg' },
     admin: {type: Boolean, default: false},
     description: { type: String, default: 'CAMBIA LA DESCRIPCIÓN EDITANDO EL PERFIL'},
-    date: { type: Date, default: Date.now },
-    smxm : { type: Boolean, default: false},
-    smxt: { type: Boolean, default: false}
+    date: { type: Date, default: Date.now }
 });
 
 

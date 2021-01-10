@@ -15,7 +15,7 @@
                     <input type="text" name="email" class="form-control" value="{{user.email}}">
                 </div>
                 <div class="form-group">
-                    <textarea name="description" class="form-control">{{user.description}}</textarea>
+                    <textarea name="description" class="form-control" minlength="5" maxlength="30">{{user.description}}</textarea>
                 </div>
                 {{#if userId.admin}}
                 <select class="form-control" name="group">

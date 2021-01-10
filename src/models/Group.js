@@ -8,7 +8,9 @@ const GroupSchema = new Schema({
     inteligencia: { type: Number, default: 0},
     construccion: { type: Number, default: 0},
     diamantes: { type: Number, default: 0},
-    cartas: {type: Array }
+    cartas: {type: Array },
+    Ataqued: { type: Boolean, default: false},
+    TierOfAttacked: {type: String}
 });
 
 module.exports = mongoose.model('Group', GroupSchema);

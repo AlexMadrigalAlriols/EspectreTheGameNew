@@ -1,0 +1,38 @@
+<nav style="background-color: white;">
+<a href="/ingame"><button class="btn ml-2 mt-3 mb-3 btnvolver">Volver a InGame</button></a>
+</nav>
+<div class="col-md-6 mx-auto mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h3>Events On Game</h3>
+        </div>
+        <div class="card-body">
+                {{#each events}}
+                <div class="input-group mb-3">
+                    {{#if defensa}}
+                    <textarea style="background-color: green; color: white;" type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2" readonly>{{desc}}</textarea>
+                        <span class="input-group-text" id="basic-addon2">                
+                <form action="/event/delete/{{_id}}?__method=DELETE" method="POST">
+                <input type="hidden" name="__method" value="DELETE">
+
+                <button class="btn btn-danger btn-block btn-sm" type="submit">
+                Delete
+                </button>
+                </form></span>
+                    {{/if}}
+                    {{#if ataque}}
+                    <textarea style="background-color: red; color: white;" type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2" readonly>{{desc}}</textarea>
+                                                <span class="input-group-text" id="basic-addon2">                
+                <form action="/event/delete/{{_id}}?__method=DELETE" method="POST">
+                <input type="hidden" name="__method" value="DELETE">
+
+                <button class="btn btn-danger btn-block btn-sm" type="submit">
+                Delete
+                </button>
+                </form></span>
+                    {{/if}}
+                </div>
+                {{/each}}
+        </div>
+    </div>
+</div>

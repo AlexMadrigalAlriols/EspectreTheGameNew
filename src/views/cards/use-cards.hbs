@@ -1,0 +1,36 @@
+<nav style="background-color: white;">
+<a href="/ingame"><button class="btn ml-2 mt-3 mb-3 btnvolver">Volver InGame</button></a>
+<div style="float: right;">
+    <a href="/cards/select"><img src="/img/TiendaIcono.png" width="65px" class="mr-3 ml-2 mt-2 gelatine"></a>
+</div>
+<div style="float: right; border-color: gray; border-width: 2px; border-style:groove; background-color:whitesmoked; border-radius: 5px" class="mr-2 mt-2 mb-3 ml-2 p-1">  
+    <p>&nbsp;<img src="/img/oro.png"> {{group.oro}} &nbsp;<img src="/img/construccion.png"> {{group.construccion}}&nbsp; <img src="/img/inteligencia.png"> {{group.inteligencia}} &nbsp; <img src="/img/diamantes.png"> {{group.diamantes}} &nbsp;</p>
+</div>
+</nav>
+<div>
+    <img src="/img/all-cards-background.jpg" class="duki">
+</div>
+
+<div class="col-md-6 mx-auto mt-2">
+    <div class="card">
+        <div class="card-header">
+            <h3>Select Team To Attack</h3>
+        </div>
+        <div class="card-body">
+            <form action="/cards/use/{{card._id}}?__method=PUT" method="POST">
+                <input type="hidden" name="__method" value="PUT">
+                    <select class="form-control" name="groupAttac">
+                        <option value="North_America">North America</option>
+                        <option value="Sud_America">Sud America</option>  
+                        <option value="Africa">Africa</option> 
+                        <option value="Oceania">Oceania</option>   
+                        <option value="Europa">Europa</option>
+                        <option value="Asia">Asia</option>                                            
+                    </select>   
+                <div class="form-group">
+                    <button type="submit" class="btn btn-block mt-3" data-dismiss="modal" aria-label="Close" style="background-color: green; color: white;">Use</button></br>
+                </div>        
+            </form>
+            </form>
+        </div>
+    </div>

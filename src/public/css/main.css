@@ -656,7 +656,7 @@ tr {
 }
 
 .table {
-  margin-top: 2vw
+  margin-top: 2vw;
 }
 
 .edit {
@@ -736,7 +736,7 @@ tr {
 }
 
 .frenteG {
-  background: crimson;
+  background: white;
 }
 .cartasDetalles {
   margin-bottom: 5%;
@@ -888,6 +888,13 @@ tr {
   background-size: cover;
 }
 
+.btnsucces{
+  background-color: green;
+  color: white;
+}
+.btnsucces:hover{
+  background-color: rgb(5, 187, 5);
+}
 /* Animaciones */
 .gelatine:hover {
   animation: gelatine 0.5s;
@@ -917,3 +924,38 @@ tr {
   70% { transform: rotate(0deg) scale(1.1); }
   100% { transform: scale(1); }
 }
+
+.flip:hover {
+	backface-visibility: visible !important;
+	animation: flip 2s ease;
+}
+@keyframes flip {
+	0% {
+		transform: perspective(400px) rotateY(0);
+		animation-timing-function: ease-out;
+	}
+	40% {
+		transform: perspective(400px) translateZ(150px) rotateY(170deg);
+		animation-timing-function: ease-out;
+	}
+	50% {
+		transform: perspective(400px) translateZ(150px) rotateY(190deg) scale(1);
+		animation-timing-function: ease-in;
+	}
+	80% {
+		transform: perspective(400px) rotateY(360deg) scale(.95);
+		animation-timing-function: ease-in;
+	}
+	100% {
+		transform: perspective(400px) scale(1);
+		animation-timing-function: ease-in;
+	}
+}
+.pulse {
+  animation: pulse 1s infinite ease-in-out alternate;
+}
+@keyframes pulse {
+  from { transform: scale(0.8); }
+  to { transform: scale(1); }
+}
+

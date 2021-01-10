@@ -1,34 +1,26 @@
 <nav style="background-color: white;">
-<a href="/ingame"><button class="btn ml-2 mt-3 mb-3 btnvolver">Volver InGame</button></a>
+<a href="/cards/select"><button class="btn ml-2 mt-3 mb-3 btnvolver">Volver Shop</button></a>
 <div style="float: right;">
-    <a href="/ingame/cards/"><img src="/img/libro.png" width="42px" class="mr-3 ml-2 mt-2 gelatine"></a>
+
 </div>
 <div style="float: right; border-color: gray; border-width: 2px; border-style:groove; background-color:whitesmoked; border-radius: 5px" class="mr-2 mt-2 mb-3 ml-2 p-1">  
     <p>&nbsp;<img src="/img/oro.png"> {{group.oro}} &nbsp;<img src="/img/construccion.png"> {{group.construccion}}&nbsp; <img src="/img/inteligencia.png"> {{group.inteligencia}} &nbsp; <img src="/img/diamantes.png"> {{group.diamantes}} &nbsp;</p>
 </div>
 </nav>
-
 <div>
     <img src="/img/tienda-background.jpg" class="duki">
 </div>
 
 <div class="row container">
- <div class="col-md-4-5 mt-4 mx-auto">
+ <div class="col-md-4-5 mt-4 ml-4 mx-auto">
         <div class="card" style="background-color: rgba(255, 255, 255, 0.405);">
             <div class="card-body">
-            <center><h3>Cards Shop</h3></center><hr>
-               <a href="/ingame/shop"><img src="/img/PackCartas.png" width="450px" class="hithere"></a> 
+               <center><img src="{{cartaTocada.img}}" width="275px" class="pulse">
+               <p style="color: white;" class="mt-3">{{descripcion}}</p></center>
             </div>
-        </div>
-    </div>
-
-     <div class="col-md-4-5 mt-4 ml-5 mx-auto">
-        <div class="card" style="background-color: rgba(255, 255, 255, 0.405);">
-            <div class="card-body">
-                <center><h3>Booster Shop</h3></center><hr>
-                <a href="/ingame/bundles"><img src="/img/PackSobres.png" width="389px" class="hithere"></a>
-            </div>
+            <a href="/ingame/cards"><button class="btn bt-lg mr-2 mb-2 btnsucces btn-block">Use</button></a>
         </div>
     </div>
 </div>
+
 

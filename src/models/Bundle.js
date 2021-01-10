@@ -5,6 +5,7 @@ const BundleSchema = new Schema({
     name: { type: String, required: true },
     precio: { type: Number },
     img: { type: String },
+    modal: { type: String },
     descripcion: { type: String }    
 });
 

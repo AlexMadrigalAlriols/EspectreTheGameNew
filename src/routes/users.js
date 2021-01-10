@@ -4,12 +4,14 @@ const router = express.Router();
 const User = require('../models/User');
 const { isAuthenticated } = require('../helpers/auth');
 const passport = require('passport');
-const { find } = require('../models/User');
+const { find, findOne } = require('../models/User');
 const Group = require('../models/Group');
 const Game = require('../models/Game');
 const Card = require('../models/Cartas');
+const ExtraCards = require('../models/ExtraCards');
 const Cartas = require('../models/Cartas');
 const Bundle = require('../models/Bundle');
+const Events = require('../models/Events');
 
 
 router.get('/users/signin', (req, res) => {
@@ -40,6 +42,7 @@ router.get('/users/all-users/', isAuthenticated, async (req, res) => {
                 description: documento.description,
                 group: documento.group,
                 class: documento.class,
+                banner: documento.banner,
                 ProfileImg: documento.path
             }
           })
@@ -95,41 +98,42 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
 
     const { name, email, description, group } = req.body;
 
-    const groupUser = await Group.findOne({name: group});
+
+    const groupUserT = await Group.findOne({name: group + 'T'});
 
     const userG = await User.findById(req.params.id);
 
-    const estaError = [];
-
-    for(var i=0; i<groupUser.users.length;){
-        if(groupUser.users[i] == req.params.id){
-            console.log('Esta en el grupo');
-            estaError.push(i);
-            i++;
-        }else{
-            i++;
-        }
+    if(req.user.class == 'SMX-M'){
+        var groupUser = await Group.findOne({name: group});
+        var indexGroup = groupUser.users.indexOf(req.params.id);
+    }else if(req.user.class == 'SMX-T'){
+        var groupUser = await Group.findOne({name: group + 'T'});
+        var indexGroup = groupUser.users.indexOf(req.params.id);
     }
 
 
-    if(estaError.length == 0){
+    if(indexGroup > -1){
+        console.log('Esta en el grupo ya');
+    }else{
         groupUser.users.push(req.params.id);
         const nameGroup = groupUser.name;
         
         if(nameGroup == 'North_America'){
             var North_America = req.user.North_America = true;
-
             var Oceania = req.user.Oceania = false;
             var Asia = req.user.Asia = false;
             var Africa = req.user.Africa = false;
             var Europa = req.user.Europa = false;
+            var SinGroup = req.user.SinGroup = false;
             var Sud_America = req.user.Sud_America = false;
+
         }else if( nameGroup == 'Sud_America'){
             var North_America = req.user.North_America = false;
             var Oceania = req.user.Oceania = false;
             var Asia = req.user.Asia = false;
             var Africa = req.user.Africa = false;
             var Europa = req.user.Europa = false;
+            var SinGroup = req.user.SinGroup = false;
             var Sud_America = req.user.Sud_America = true;
         }else if( nameGroup == 'Oceania'){
             var North_America = req.user.North_America = false;
@@ -137,12 +141,14 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
             var Asia = req.user.Asia = false;
             var Africa = req.user.Africa = false;
             var Europa = req.user.Europa = false;
+            var SinGroup = req.user.SinGroup = false;
             var Sud_America = req.user.Sud_America = false;
         }else if( nameGroup == 'Asia'){
             var North_America = req.user.North_America = false;
             var Oceania = req.user.Oceania = false;
             var Asia = req.user.Asia = true;
             var Africa = req.user.Africa = false;
+            var SinGroup = req.user.SinGroup = false;
             var Europa = req.user.Europa = false;
             var Sud_America = req.user.Sud_America = false;
         }else if(nameGroup == 'Europa'){
@@ -150,6 +156,7 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
             var Oceania = req.user.Oceania = false;
             var Asia = req.user.Asia = false;
             var Africa = req.user.Africa = false;
+            var SinGroup = req.user.SinGroup = false;
             var Europa = req.user.Europa = true;
             var Sud_America = req.user.Sud_America = false;
         }else if(nameGroup == 'Africa'){
@@ -157,12 +164,14 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
             var Oceania = req.user.Oceania = false;
             var Asia = req.user.Asia = false;
             var Africa = req.user.Africa = true;
+            var SinGroup = req.user.SinGroup = false;
             var Europa = req.user.Europa = false;
             var Sud_America = req.user.Sud_America = false;
         }else if(nameGroup == 'SinGroup'){
             var North_America = req.user.North_America = false;
             var Oceania = req.user.Oceania = false;
             var Asia = req.user.Asia = false;
+            var SinGroup = req.user.SinGroup = true;
             var Africa = req.user.Africa = false;
             var Europa = req.user.Europa = false;
             var Sud_America = req.user.Sud_America = false;
@@ -170,6 +179,8 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
 
         await groupUser.save();
     }
+
+    
 
     if(req.file == null) {
         const path = lastImage.path;
@@ -202,9 +213,22 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
     var game = await Game.findById('5fedf15fa1268c39d8229e47');
     var user = await User.findById(req.user.id);
 
-    var group = await Group.findOne({name: user.group});
+    if(req.user.class == 'SMX-M'){
+        var group = await Group.findOne({name: user.group});
+    }else if(req.user.class == 'SMX-T'){
+        var group = await Group.findOne({name: user.group + 'T'});
+    }
 
-    res.render('layouts/mapa.hbs', { game, user, group });
+    if(user.class == 'SinAsignar'){
+        res.redirect('/code');
+    }else{
+        if(group.Ataqued == true){
+            req.flash('error_msg', 'Estas siendo atacado si no te defiendes en 24h perderas recursos!');
+            res.render('layouts/mapa.hbs', { game, user, group });
+        }else{
+            res.render('layouts/mapa.hbs', { game, user, group });
+        }
+    }
 });
 
 router.get('/ingame/gameSettings', isAuthenticated, async (req, res) => {
@@ -305,8 +329,11 @@ router.put('/ingame/edit-group/:id', isAuthenticated, async (req, res) => {
 // =========== CARDS ========== //
 
 router.get('/ingame/cards', isAuthenticated, async (req, res) => {
-    const group = await Group.findOne({name: req.user.group});
-
+    if(req.user.class == 'SMX-M'){
+        var group = await Group.findOne({name: req.user.group});
+    }else if(req.user.class == 'SMX-T'){
+        var group = await Group.findOne({name: req.user.group + 'T'});
+    }
     await Cartas.find({_id: group.cartas}).sort({date: 'desc'})
     .then(async documentos => {
       const contexto = {
@@ -320,14 +347,18 @@ router.get('/ingame/cards', isAuthenticated, async (req, res) => {
           }
         })
       }
-      const cartas = contexto.cartas;
-      const userId = await User.findById(req.user._id);
+      var cartas = contexto.cartas;
+      var userId = await User.findById(req.user._id);
       res.render('cards/all-cards.hbs', { cartas, userId, group });
     });
 });
 
 router.get('/ingame/bundles', isAuthenticated, async (req, res) => {
-    const group = await Group.findOne({name: req.user.group});
+    if(req.user.class == 'SMX-M'){
+        var group = await Group.findOne({name: req.user.group});
+    }else if(req.user.class == 'SMX-T'){
+        var group = await Group.findOne({name: req.user.group + 'T'});
+    }
 
     await Bundle.find().sort({date: 'desc'})
     .then(async documentos => {
@@ -338,6 +369,7 @@ router.get('/ingame/bundles', isAuthenticated, async (req, res) => {
               _id: documento._id,
               precio: documento.precio,
               img: documento.img,
+              modal: documento.modal,
               desc: documento.descripcion
           }
         })
@@ -350,7 +382,11 @@ router.get('/ingame/bundles', isAuthenticated, async (req, res) => {
 });
 
 router.get('/ingame/shop', isAuthenticated, async (req, res) => {
-    const group = await Group.findOne({name: req.user.group});
+    if(req.user.class == 'SMX-M'){
+        var group = await Group.findOne({name: req.user.group});
+    }else if(req.user.class == 'SMX-T'){
+        var group = await Group.findOne({name: req.user.group + 'T'});
+    }
 
     await Cartas.find().sort({date: 'desc'})
     .then(async documentos => {
@@ -374,9 +410,297 @@ router.get('/ingame/shop', isAuthenticated, async (req, res) => {
     });
 });
 
+router.put('/cards/buybundle/:id', isAuthenticated, async (req, res) => {
+    const bundle = await Bundle.findOne({_id: req.params.id});
+
+    if(req.user.class == 'SMX-M'){
+        var group = await Group.findOne({name: req.user.group});
+    }else if(req.user.class == 'SMX-T'){
+        var group = await Group.findOne({name: req.user.group + 'T'});
+    }
+
+// ============== SOBRE RECURSOS ===========
+    if(bundle.name == 'Sobre Recursos'){
+        if(group.diamantes >= 3){
+            group.diamantes = group.diamantes - 3;
+            var numRand = Math.floor(Math.random() * 7);
+            if(numRand == 0){
+                var cartaTocada = await ExtraCards.findOne({name: 'Oro'});
+                group.oro = group.oro + 550;
+                req.flash('success_msg', 'Has recibido: 550 de Oro');
+                group.save();
+            }else if(numRand == 1){
+                var cartaTocada = await ExtraCards.findOne({name: 'Bolsa De Oro'});
+                group.oro = group.oro + 750;
+                req.flash('success_msg', 'Has recibido: 750 de Oro');
+                group.save();
+    
+            }else if(numRand == 2){
+                var cartaTocada = await ExtraCards.findOne({name: 'Construccion Basica'});
+                group.construccion = group.construccion + 2;
+                req.flash('success_msg', 'Has recibido: 2 De Construccion');
+                group.save();
+            }else if(numRand == 3){
+                var cartaTocada = await ExtraCards.findOne({name: 'Construccion Avanzada'});
+                group.construccion = group.construccion + 4;
+                req.flash('success_msg', 'Has recibido: 4 De Construccion');
+                group.save();
+    
+            }else if(numRand == 4){
+                var cartaTocada = await ExtraCards.findOne({name: 'Inteligencia Basica'});
+                group.inteligencia = group.inteligencia + 2;
+                req.flash('success_msg', 'Has recibido: 2 De Inteligencia');
+                group.save();
+            }else if(numRand == 5){
+                var cartaTocada = await ExtraCards.findOne({name: 'Inteligencia Avanzada'});
+                group.inteligencia = group.inteligencia + 4;
+                req.flash('success_msg', 'Has recibido: 4 De Inteligencia');
+                group.save();
+            }else if(numRand == 6){
+                var cartaTocada = await ExtraCards.findOne({name: 'Diamantes'});
+                group.diamantes = group.diamantes + 2;
+                req.flash('success_msg', 'Has recibido: 2 Diamantes');
+                group.save();
+            }else if(numRand == 7){
+                var cartaTocada = await ExtraCards.findOne({name: 'Bolsa de Diamantes'});
+                group.diamantes = group.diamantes + 4;
+                group.save();
+            }
+            
+            var descripcion = cartaTocada.descripcion;
+            res.render('cards/bundle-opened.hbs', { group, cartaTocada,descripcion });
+        }else if(group.diamantes < 3){
+            req.flash('error_msg', 'No tienes los suficientes diamantes para comprar este sobre!');
+            res.redirect('/ingame/bundles/');
+        }
+
+
+
+    // ========== SOBRE DEFENSA =============
+    }else if(bundle.name == 'Sobre Defensas'){
+        if(group.diamantes >= 5){
+            group.diamantes = group.diamantes - 5;
+            var numRand = Math.floor(Math.random() * 5);
+
+            if(numRand == 0){
+                var cartaTocada = await Card.findOne({name: 'Antimisiles'});
+                const indexCarta = group.cartas.indexOf(cartaTocada._id);
+                if(indexCarta > -1){
+                    var descripcion = "Ya tienes esta carta te damos oro a cambio";
+                    group.oro = group.oro + 500;
+                }else{
+                    var descripcion = cartaTocada.descripcion;
+                    group.cartas.push(cartaTocada._id);
+                }
+
+                group.save();
+            }else if(numRand == 1){
+                var cartaTocada = await Card.findOne({name: 'Defensa Militar'});
+                const indexCarta = group.cartas.indexOf(cartaTocada._id);
+                if(indexCarta > -1){
+                    var descripcion = "Ya tienes esta carta te damos oro a cambio";
+                    group.oro = group.oro + 500;
+                }else{
+                    var descripcion = cartaTocada.descripcion;
+                    group.cartas.push(cartaTocada._id);
+                }
+                group.save();
+    
+            }else if(numRand == 2){
+                var cartaTocada = await Card.findOne({name: 'Barricadas'});
+                const indexCarta = group.cartas.indexOf(cartaTocada._id);
+                if(indexCarta > -1){
+                    var descripcion = "Ya tienes esta carta te damos oro a cambio";
+                    group.oro = group.oro + 500;
+                }else{
+                    var descripcion = cartaTocada.descripcion;
+                    group.cartas.push(cartaTocada._id);
+                }
+
+                group.save();
+            }else if(numRand == 3){
+                var cartaTocada = await Card.findOne({name: 'Firewall'});
+                const indexCarta = group.cartas.indexOf(cartaTocada._id);
+                if(indexCarta > -1){
+                    var descripcion = "Ya tienes esta carta te damos oro a cambio";
+                    group.oro = group.oro + 500;
+                }else{
+                    var descripcion = cartaTocada.descripcion;
+                    group.cartas.push(cartaTocada._id);
+                }
+
+                group.save();
+    
+            }else if(numRand == 4){
+                var cartaTocada = await Card.findOne({name: 'Equipo de Ciberseguridad'});
+                const indexCarta = group.cartas.indexOf(cartaTocada._id);
+                if(indexCarta > -1){
+                    var descripcion = "Ya tienes esta carta te damos oro a cambio";
+                    group.oro = group.oro + 500;
+                }else{
+                    var descripcion = cartaTocada.descripcion;
+                    group.cartas.push(cartaTocada._id);
+                }
+
+                group.save();
+            }else if(numRand == 5){
+                var cartaTocada = await Card.findOne({name: 'Inteligencia Avanzada'});
+                const indexCarta = group.cartas.indexOf(cartaTocada._id);
+
+                if(indexCarta > -1){
+                    var descripcion = "Ya tienes esta carta te damos oro a cambio";
+                    group.oro = group.oro + 500;
+                }else{
+                    var descripcion = cartaTocada.descripcion;
+                    group.cartas.push(cartaTocada._id);
+                }
+
+                group.save();
+            }   
+            console.log(cartaTocada._id);
+            res.render('cards/bundle-opened.hbs', { group, cartaTocada, descripcion });
+        }else if(group.diamantes < 5){
+            req.flash('error_msg', 'No tienes los suficientes diamantes para comprar este sobre!');
+            res.redirect('/ingame/bundles/');
+        }
+
+    // ======== SOBRE DE ATAQUE ========
+    }else if(bundle.name == 'Sobre Ataques'){
+        if(group.diamantes >= 7){
+            group.diamantes = group.diamantes - 7;
+            var numRand = Math.floor(Math.random() * 8);
+
+            if(numRand == 0){
+                var cartaTocada = await Card.findOne({name: 'Ataque Aereo'});
+                const indexCarta = group.cartas.indexOf(cartaTocada._id);
+                if(indexCarta > -1){
+                    var descripcion = "Ya tienes esta carta te damos oro a cambio";
+                    group.oro = group.oro + 700;
+                }else{
+                    var descripcion = cartaTocada.descripcion;
+                    group.cartas.push(cartaTocada._id);
+                }
+
+                group.save();
+            }else if(numRand == 1){
+                var cartaTocada = await Card.findOne({name: 'Ataque Terrestre'});
+                const indexCarta = group.cartas.indexOf(cartaTocada._id);
+                if(indexCarta > -1){
+                    var descripcion = "Ya tienes esta carta te damos oro a cambio";
+                    group.oro = group.oro + 700;
+                }else{
+                    var descripcion = cartaTocada.descripcion;
+                    group.cartas.push(cartaTocada._id);
+                }
+                group.save();
+    
+            }else if(numRand == 2){
+                var cartaTocada = await Card.findOne({name: 'Ataque Aliado'});
+                const indexCarta = group.cartas.indexOf(cartaTocada._id);
+                if(indexCarta > -1){
+                    var descripcion = "Ya tienes esta carta te damos oro a cambio";
+                    group.oro = group.oro + 700;
+                }else{
+                    var descripcion = cartaTocada.descripcion;
+                    group.cartas.push(cartaTocada._id);
+                }
+
+                group.save();
+            }else if(numRand == 3){
+                var cartaTocada = await Card.findOne({name: 'Ataque de Phishing'});
+                const indexCarta = group.cartas.indexOf(cartaTocada._id);
+                if(indexCarta > -1){
+                    var descripcion = "Ya tienes esta carta te damos oro a cambio";
+                    group.oro = group.oro + 700;
+                }else{
+                    var descripcion = cartaTocada.descripcion;
+                    group.cartas.push(cartaTocada._id);
+                }
+
+                group.save();
+    
+            }else if(numRand == 4){
+                var cartaTocada = await Card.findOne({name: 'Ingeniería social'});
+                const indexCarta = group.cartas.indexOf(cartaTocada._id);
+                if(indexCarta > -1){
+                    var descripcion = "Ya tienes esta carta te damos oro a cambio";
+                    group.oro = group.oro + 700;
+                }else{
+                    var descripcion = cartaTocada.descripcion;
+                    group.cartas.push(cartaTocada._id);
+                }
+
+                group.save();
+            }else if(numRand == 5){
+                var cartaTocada = await Card.findOne({name: 'Ataque DDOS'});
+                const indexCarta = group.cartas.indexOf(cartaTocada._id);
+
+                if(indexCarta > -1){
+                    var descripcion = "Ya tienes esta carta te damos oro a cambio";
+                    group.oro = group.oro + 700;
+                }else{
+                    var descripcion = cartaTocada.descripcion;
+                    group.cartas.push(cartaTocada._id);
+                }
+
+                group.save();
+            }else if(numRand == 6){
+                var cartaTocada = await Card.findOne({name: 'Ataque de Bot net'});
+                const indexCarta = group.cartas.indexOf(cartaTocada._id);
+
+                if(indexCarta > -1){
+                    var descripcion = "Ya tienes esta carta te damos oro a cambio";
+                    group.oro = group.oro + 700;
+                }else{
+                    var descripcion = cartaTocada.descripcion;
+                    group.cartas.push(cartaTocada._id);
+                }
+
+                group.save();  
+            }else if(numRand == 7){
+                var cartaTocada = await Card.findOne({name: 'Ataque Spoofing'});
+                const indexCarta = group.cartas.indexOf(cartaTocada._id);
+
+                if(indexCarta > -1){
+                    var descripcion = "Ya tienes esta carta te damos oro a cambio";
+                    group.oro = group.oro + 700;
+                }else{
+                    var descripcion = cartaTocada.descripcion;
+                    group.cartas.push(cartaTocada._id);
+                }
+
+                group.save();
+            }else if(numRand == 8){
+                var cartaTocada = await Card.findOne({name: 'Ataque de Babosa'});
+                const indexCarta = group.cartas.indexOf(cartaTocada._id);
+
+                if(indexCarta > -1){
+                    var descripcion = "Ya tienes esta carta te damos oro a cambio";
+                    group.oro = group.oro + 700;
+                }else{
+                    var descripcion = cartaTocada.descripcion;
+                    group.cartas.push(cartaTocada._id);
+                }
+
+                group.save();
+            }
+
+            res.render('cards/bundle-opened.hbs', { group, cartaTocada, descripcion });
+        
+        }else if(group.diamantes < 7){
+            req.flash('error_msg', 'No tienes los suficientes diamantes para comprar este sobre!');
+            res.redirect('/ingame/bundles/');
+        }
+    }
+  });
+
 router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
     const card = await Card.findOne({_id: req.params.id});
-    const group = await Group.findOne({name: req.user.group});
+    if(req.user.class == 'SMX-M'){
+        var group = await Group.findOne({name: req.user.group});
+    }else if(req.user.class == 'SMX-T'){
+        var group = await Group.findOne({name: req.user.group + 'T'});
+    }
 
     if(group.oro >= card.precio){
         const estaError = [];
@@ -408,25 +732,109 @@ router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
   });
 
   router.get('/cards/select', isAuthenticated, async (req, res) => {
-    const group = await Group.findOne({name: req.user.group});
+    if(req.user.class == 'SMX-M'){
+        var group = await Group.findOne({name: req.user.group});
+    }else if(req.user.class == 'SMX-T'){
+        var group = await Group.findOne({name: req.user.group + 'T'});
+    }
 
     res.render('cards/cards-select.hbs', { group });
   });
+  router.get('/cards/use/:id', isAuthenticated, async (req, res) => {
+    const card = await Card.findOne({_id: req.params.id});
+    const events = await Events.find();
+    const user = await User.findById(req.user.id);
+
+    if(req.user.class == 'SMX-M'){
+        var group = await Group.findOne({name: req.user.group});
+    }else if(req.user.class == 'SMX-T'){
+        var group = await Group.findOne({name: req.user.group + 'T'});
+
+    }
+    if(card.type == 'Ataque'){
+        res.render('cards/use-cards.hbs', {card, events, user, group});
+    }else if(card.type == 'Defensa'){
+        if(group.Ataqued == false){
+            req.flash('error_msg', 'No estas siendo atacado no puedes defenderte!');
+            res.redirect('/ingame/cards/');
+        }else{
+            res.render('cards/defend-cards.hbs', {card, events, user, group});
+        }
+    }
+  });
 
   router.put('/cards/use/:id', isAuthenticated, async (req, res) => {
+
     const card = await Card.findOne({_id: req.params.id});
-    const group = await Group.findOne({name: req.user.group});
+    const events = await Events.find();
+    const user = await User.findById(req.user.id);
+    if(req.user.class == 'SMX-M'){
+        var group = await Group.findOne({name: req.user.group});
+    }else if(req.user.class == 'SMX-T'){
+        var group = await Group.findOne({name: req.user.group + 'T'});
+    }
 
     const indexCarta = group.cartas.indexOf(req.params.id);
     if(indexCarta > -1){
-        group.cartas.splice(indexCarta);
+
+        if(card.type == 'Ataque'){
+            var desc = group.name + ' ' +'ha usado la carta' + ' ' + card.name + ' contra ' + req.body.groupAttac;
+        }else if(card.type == 'Defensa'){
+            var desc = group.name + ' ' +'ha usado ' + ' ' + card.name + ' ' + '  para defenderse.';
+        }
+
+
+        const groupUsed = group.name;
+        const groupAttaqued = req.body.groupAttac;
+        var cartas = group.cartas;
+        var TierOfAttacked = group.TierOfAttacked;
+        const type = card.type;
+
+
+        if(card.type == 'Ataque'){
+            group.TierOfAttacked = card.tier;
+            var ataque = true;
+            var defensa = false;
+        }else{
+            var ataque = false;
+            var defensa = true;
+        }
+        
+        newEvent = new Events({desc, groupUsed, groupAttaqued, type, class: user.class, ataque, defensa});
+        await newEvent.save();
+        
+
+        if(card.type == 'Defensa'){
+            if(card.tier == group.TierOfAttacked){
+                const Ataqued = group.Ataqued = false;
+                group.cartas.splice(indexCarta);
+
+                group.save({Ataqued, cartas, TierOfAttacked});
+                req.flash('success_msg', 'Has Defendido Con Exito!');
+                res.redirect('/ingame/cards');
+            }else{
+                req.flash('error_msg', 'No has usado una carta de defensa con el tier que toca! Usa Tier: '+group.TierOfAttacked+'');
+                res.redirect('/ingame/cards');
+            }
+
+        }else if(card.type == 'Ataque'){
+            group.cartas.splice(indexCarta);
+            var groupAtacado = await Group.findOne({name: req.body.groupAttac});
+            groupAtacado.Ataqued = true;
+            groupAtacado.save();
+            group.save({cartas, TierOfAttacked});
+            req.flash('success_msg', 'Has atacado Con Exito!');
+            res.redirect('/ingame/cards');
+        }else{
+            console.log('Que coño?')
+        }
     }else{
         req.flash('error_msg', 'No tienes esta carta');
+        res.redirect('/ingame/cards/');
     }
-
-    group.save();
   });
 
+  // ===== CODE CLASS ======= //
   router.get('/code', isAuthenticated, async (req, res) => {
     const user = await User.findOne({_id: req.user.id});
     if(user.class == 'SinAsignar'){
@@ -451,5 +859,43 @@ router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
     res.redirect('/ingame');
   });
 
+// ========= CONSOLA EVENTOS ======= //
 
+router.get('/ingame/events/', isAuthenticated, async (req, res) => {
+    const events = await Events.find();
+    const users = await User.findById(req.user.id);
+
+    newEvent = new Events({desc: 'Duki', groupUsed: 'duki', groupAttaqued: 'dukardo',});
+    await newEvent.save();
+    await Events.find({class: users.class}).sort({date: 'desc'})
+    .then(async documentos => {
+      const contexto = {
+          events: documentos.map(documento => {
+          return {
+              desc: documento.desc,
+              _id: documento._id,
+              type: documento.type,
+              class: documento.class,
+              groupUsed: documento.groupUsed,
+              groupAttaqued: documento.groupAttaqued,
+              date: documento.date,
+              ataque: documento.ataque,
+              defensa: documento.defensa
+          }
+        })
+      }
+      if(req.user.admin == true){
+        res.render('game/consoleEvents.hbs', { events });
+      }else{
+        req.flash('error_msg', 'Your are not admin!');
+        res.redirect('/ingame');
+      }
+    });
+  });
+
+  router.delete('/event/delete/:id', isAuthenticated, async (req, res) => {
+    await Events.findByIdAndDelete(req.params.id);
+    req.flash('success_msg', 'Evento borrado con exito!');
+    res.redirect('/ingame/events');
+  });
 module.exports = router;

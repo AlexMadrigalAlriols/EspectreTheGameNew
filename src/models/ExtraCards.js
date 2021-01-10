@@ -1,16 +1,13 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const CardsSchema = new Schema({
+const ExtraCardsSchema = new Schema({
     name: { type: String, required: true },
-    precio: { type: Number },
     type: { type: String},
     img: { type: String },
-    tier: { type: String },
     descripcion: { type: String },
     inteligencia: { type: String },
     construccion: {type: String }
 });
 
-
-module.exports = mongoose.model('Cartas', CardsSchema);
+module.exports = mongoose.model('ExtraCards', ExtraCardsSchema);

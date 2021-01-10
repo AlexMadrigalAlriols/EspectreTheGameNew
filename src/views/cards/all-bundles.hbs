@@ -23,9 +23,8 @@
                             <img src="{{img}}" width="155px">
                         </div>
                         <div class="ladoG atrasG">
-                        <h6 class="ml-2 mt-1">Descripcion</h6>
-                        <p>{{desc}}</p><hr>
-                        <img src="/img/Construccion.png" class="ml-3"> +3 <img src="/img/Inteligencia.png" class="ml-3"> +1
+                        <h6 class="ml-2 mt-1">{{name}}</h6><hr>
+                        <p>{{desc}}</p>
                         </div>
                     </div> 
                     <center><div style="border-color: #d9d9d9; border-width: 2px; border-style:groove; background-color: #e6e6e6; border-radius: 5px"><div class="cartasDetalles mt-1">Precio: {{precio}} <img src="/img/diamantes.png" width="18px" class="ml-1 mb-1"></div></div></center>
@@ -36,20 +35,8 @@
     <form action="/cards/buybundle/{{_id}}?__method=PUT" method="POST">
         <input type="hidden" name="__method" value="PUT">
 
-        <a href="#"><button class="btn btn-block btn-md mt-2 buybtn">Comprar</button></a></a>
+        <a href="#"><button class="btn btn-block btn-md mt-2 buybtn">Comprar</button></a>
     </form>
 </div>
-{{else}}
-<div class="col-md-4 cartasDisp">
- <div class="mt-5 mx-auto">
-        <div class="card" style="background-color: rgba(0, 0, 0, 0.46);">
-            <div class="card-body">
-               <center><img src="/img/noCartasDisp.png" width="250px">
-               <p style="color: white;">No tienes ninguna carta disponible en el inventario.</p></center>
-            </div>
-        </div>
-    </div>
-</div>
-
 {{/each}}
 </div>
