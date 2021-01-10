@@ -19,6 +19,7 @@ const UserSchema = new Schema({
     rol: { type: String, default: 'Alumno'},
     subido: { type: Boolean, default: false},
     path: { type: String, default: '/uploads/ImageProfile.jpg' },
+    practica: { type: String },
     admin: {type: Boolean, default: false},
     description: { type: String, default: 'CAMBIA LA DESCRIPCIÓN EDITANDO EL PERFIL'},
     date: { type: Date, default: Date.now }

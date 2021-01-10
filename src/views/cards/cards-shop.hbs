@@ -12,6 +12,7 @@
 
 <div class="row container mx-auto" style="align-items: center;">
     {{#each cartas}}
+    {{#if visible}}
     <div class="col-md-2-5 ml-5 mt-4 mb-2">
         <div class="card">
             <div class="card-body">
@@ -39,6 +40,7 @@
         <a href="#"><button class="btn btn-block btn-md mt-2 buybtn">Comprar</button></a></a>
     </form>
 </div>
+{{/if}}
     {{/each}}
 </div>
 </div>

@@ -9,7 +9,8 @@ const CardsSchema = new Schema({
     tier: { type: String },
     descripcion: { type: String },
     inteligencia: { type: String },
-    construccion: {type: String }
+    construccion: {type: String },
+    visible: { type: Boolean, default: false}
 });
 
 

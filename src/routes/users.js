@@ -43,6 +43,8 @@ router.get('/users/all-users/', isAuthenticated, async (req, res) => {
                 group: documento.group,
                 class: documento.class,
                 banner: documento.banner,
+                subido: documento.subido,
+                practica: documento.practica,
                 ProfileImg: documento.path
             }
           })
@@ -224,7 +226,7 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
     }else{
         if(group.Ataqued == true){
             req.flash('error_msg', 'Estas siendo atacado si no te defiendes en 24h perderas recursos!');
-            res.render('layouts/mapa.hbs', { game, user, group });
+            res.redirect('/ingame/cards');
         }else{
             res.render('layouts/mapa.hbs', { game, user, group });
         }
@@ -268,8 +270,10 @@ router.put('/ingame/gameSettings', isAuthenticated, async (req, res, file) => {
     res.redirect('/ingame');
 });
 
-router.post('/ingame', isAuthenticated, async (req, res) => {
+router.post('/ingame', isAuthenticated, async (req, res, file) => {
    const subidoU = await User.findById(req.user._id);
+   console.log(req.file.name);
+   subidoU.practica = '/uploads/' + req.file.filename;
    subidoU.subido = true;
    await subidoU.save();
 
@@ -343,6 +347,8 @@ router.get('/ingame/cards', isAuthenticated, async (req, res) => {
               _id: documento._id,
               precio: documento.precio,
               img: documento.img,
+              construccion: documento.construccion,
+              inteligencia: documento.inteligencia,
               desc: documento.descripcion
           }
         })
@@ -398,6 +404,7 @@ router.get('/ingame/shop', isAuthenticated, async (req, res) => {
               precio: documento.precio,
               img: documento.img,
               desc: documento.descripcion,
+              visible: documento.visible,
               construccion: documento.construccion,
               inteligencia: documento.inteligencia
 
@@ -760,6 +767,10 @@ router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
         }else{
             res.render('cards/defend-cards.hbs', {card, events, user, group});
         }
+    }else if(card.type == 'Event'){
+        res.render('cards/defend-cards.hbs', {card, events, user, group});
+    }else if(card.type == 'Inicial'){
+        res.render('cards/defend-cards.hbs', {card, events, user, group});
     }
   });
 
@@ -774,15 +785,16 @@ router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
         var group = await Group.findOne({name: req.user.group + 'T'});
     }
 
-    const indexCarta = group.cartas.indexOf(req.params.id);
+    const indexCarta = await group.cartas.indexOf(req.params.id);
     if(indexCarta > -1){
 
         if(card.type == 'Ataque'){
             var desc = group.name + ' ' +'ha usado la carta' + ' ' + card.name + ' contra ' + req.body.groupAttac;
         }else if(card.type == 'Defensa'){
             var desc = group.name + ' ' +'ha usado ' + ' ' + card.name + ' ' + '  para defenderse.';
+        }else{
+            var desc = group.name + ' ' +'ha usado ' + ' ' + card.name;
         }
-
 
         const groupUsed = group.name;
         const groupAttaqued = req.body.groupAttac;
@@ -795,7 +807,7 @@ router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
             group.TierOfAttacked = card.tier;
             var ataque = true;
             var defensa = false;
-        }else{
+        }else if(card.type == 'Defensa'){
             var ataque = false;
             var defensa = true;
         }
@@ -825,9 +837,266 @@ router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
             group.save({cartas, TierOfAttacked});
             req.flash('success_msg', 'Has atacado Con Exito!');
             res.redirect('/ingame/cards');
-        }else{
-            console.log('Que coño?')
+
+        }else if(card.type == 'Inicial'){
+            if(card.name == 'Oceania'){
+                group.cartas.splice(indexCarta);
+                const oro = group.oro = group.oro + 3000;
+                const construccion = group.construccion = group.construccion + 5;
+                group.save({oro, construccion, cartas});
+                req.flash('success_msg', 'Has usado la carta con exito!');
+                res.redirect('/ingame/cards/');
+            }else if(card.name == 'North America'){
+                group.cartas.splice(indexCarta);
+                const oro = group.oro = group.oro + 3000;
+                const inteligencia = group.inteligencia = group.inteligencia + 2;
+                group.save({oro, inteligencia, cartas});
+                req.flash('success_msg', 'Has usado la carta con exito!');
+                res.redirect('/ingame/cards/');
+            }else if(card.name == 'Europa'){
+                group.cartas.splice(indexCarta);
+                const oro = group.oro = group.oro + 3500;
+                group.save({oro, cartas});
+                req.flash('success_msg', 'Has usado la carta con exito!');
+                res.redirect('/ingame/cards/');
+            }else if(card.name == 'Asia'){
+                group.cartas.splice(indexCarta);
+                const oro = group.oro = group.oro + 3250;
+                const inteligencia = group.inteligencia = group.inteligencia + 1;
+                group.save({oro, inteligencia, cartas});
+                req.flash('success_msg', 'Has usado la carta con exito!');
+                res.redirect('/ingame/cards/');
+            }else if(card.name == 'África'){
+                group.cartas.splice(indexCarta);
+                const oro = group.oro = group.oro + 3000;
+                const diamantes = group.diamantes = group.diamantes + 1;
+                group.save({oro, diamantes, cartas});
+                req.flash('success_msg', 'Has usado la carta con exito!');
+                res.redirect('/ingame/cards/');
+            }
+        }   
+    }else if(card.type == 'Event'){
+
+        if(req.user.class == 'SMX-M'){
+            var North_America = await Group.findOne({name: 'North_America'});
+            var Sud_America = await Group.findOne({name: 'Sud_America'});
+            var Oceania = await Group.findOne({name: 'Oceania'});
+            var Asia = await Group.findOne({name: 'Asia'});
+            var Africa = await Group.findOne({name: 'Africa'});
+            var Europa = await Group.findOne({name: 'Europa'});
+        }else if(req.user.class == 'SMX-T'){
+            var North_America = await Group.findOne({name: 'North_AmericaT'});
+            var Sud_America = await Group.findOne({name: 'Sud_AmericaT'});
+            var Oceania = await Group.findOne({name: 'OceaniaT'});
+            var Asia = await Group.findOne({name: 'AsiaT'});
+            var Africa = await Group.findOne({name: 'AfricaT'});
+            var Europa = await Group.findOne({name: 'EuropaT'});
         }
+
+        if(card.name == 'Tornado'){
+            if(North_America.construccion <= 5){
+                construccion = North_America.construccion = 0;
+            }else{
+                construccion = North_America.construccion = North_America.construccion - 5; 
+            }
+            if(Sud_America.construccion <= 5){
+                construccion1 = Sud_America.construccion = 0;
+            }else{
+                construccion1 = Sud_America.construccion = Sud_America.construccion - 5;
+            }
+            if(Oceania.construccion <= 5){
+                construccion2 = Oceania.construccion = 0;
+            }else{
+                construccion2 = Oceania.construccion = Oceania.construccion - 5;
+            }
+            if(Asia.construccion <= 5){
+                construccion3 = Asia.construccion = 0;
+            }else{
+                construccion3 = Asia.construccion = Asia.construccion - 5;
+            }
+            if(Africa.construccion <= 5){
+                construccion4 = Africa.construccion = 0;
+            }else{
+                construccion4 = Africa.construccion = Africa.construccion - 5;
+            }
+            if(Europa.construccion <= 5){
+                construccion5 = Europa.construccion = 0;
+            }else{
+                construccion5 = Europa.construccion = Europa.construccion - 5;
+            }
+
+            North_America.save({construccion: construccion});
+            Sud_America.save({construccion: construccion1});
+            Oceania.save({construccion: construccion2});
+            Asia.save({construccion: construccion3});
+            Africa.save({construccion: construccion4});
+            Europa.save({construccion: construccion5});
+
+        }else if(card.name == 'Minas Encontradas'){
+            oro = North_America.oro = North_America.oro + 750; 
+            oro1 = Sud_America.oro = Sud_America.oro + 750;
+            oro2 = Oceania.oro = Oceania.oro + 750;
+            oro3 = Asia.oro = Asia.oro + 750;
+            oro4 = Africa.oro = Africa.oro + 750;
+            oro5 = Europa.oro = Europa.oro + 750;
+
+            North_America.save({oro: oro});
+            Sud_America.save({oro: oro1});
+            Oceania.save({oro: oro2});
+            Asia.save({oro: oro3});
+            Africa.save({oro: oro4});
+            Europa.save({oro: oro5});
+        }else if(card.name == 'Diluvio'){
+            if(North_America.construccion <= 2){
+                construccion = North_America.construccion = 0;
+            }else{
+                construccion = North_America.construccion = North_America.construccion - 2; 
+            }
+            if(Sud_America.construccion <= 2){
+                construccion1 = Sud_America.construccion = 0;
+            }else{
+                construccion1 = Sud_America.construccion = Sud_America.construccion - 2;
+            }
+            if(Oceania.construccion <= 2){
+                construccion2 = Oceania.construccion = 0;
+            }else{
+                construccion2 = Oceania.construccion = Oceania.construccion - 2;
+            }
+            if(Asia.construccion <= 2){
+                construccion3 = Asia.construccion = 0;
+            }else{
+                construccion3 = Asia.construccion = Asia.construccion - 2;
+            }
+            if(Africa.construccion <= 2){
+                construccion4 = Africa.construccion = 0;
+            }else{
+                construccion4 = Africa.construccion = Africa.construccion - 2;
+            }
+            if(Europa.construccion <= 2){
+                construccion5 = Europa.construccion = 0;
+            }else{
+                construccion5 = Europa.construccion = Europa.construccion - 2;
+            }
+
+            North_America.save({construccion: construccion});
+            Sud_America.save({construccion: construccion1});
+            Oceania.save({construccion: construccion2});
+            Asia.save({construccion: construccion3});
+            Africa.save({construccion: construccion4});
+            Europa.save({construccion: construccion5});
+
+        }else if(card.name == 'Caida De Servidores'){
+
+
+            // ========== CONSTRUCCION ===========
+            if(North_America.construccion <= 2){
+                construccion = North_America.construccion = 0;
+            }else{
+                construccion = North_America.construccion = North_America.construccion - 2; 
+            }
+            if(Sud_America.construccion <= 2){
+                construccion1 = Sud_America.construccion = 0;
+            }else{
+                construccion1 = Sud_America.construccion = Sud_America.construccion - 2;
+            }
+            if(Oceania.construccion <= 2){
+                construccion2 = Oceania.construccion = 0;
+            }else{
+                construccion2 = Oceania.construccion = Oceania.construccion - 2;
+            }
+            if(Asia.construccion <= 2){
+                construccion3 = Asia.construccion = 0;
+            }else{
+                construccion3 = Asia.construccion = Asia.construccion - 2;
+            }
+            if(Africa.construccion <= 2){
+                construccion4 = Africa.construccion = 0;
+            }else{
+                construccion4 = Africa.construccion = Africa.construccion - 2;
+            }
+            if(Europa.construccion <= 2){
+                construccion5 = Europa.construccion = 0;
+            }else{
+                construccion5 = Europa.construccion = Europa.construccion - 2;
+            }
+
+
+            // ======== INTELIGENCIA ==========
+            if(North_America.inteligencia <= 2){
+                inteligencia = North_America.inteligencia = 0;
+            }else{
+                inteligencia = North_America.inteligencia = North_America.inteligencia - 2; 
+            }
+            if(Sud_America.inteligencia <= 2){
+                inteligencia1 = Sud_America.inteligencia = 0;
+            }else{
+                inteligencia1 = Sud_America.inteligencia = Sud_America.inteligencia - 2;
+            }
+            if(Oceania.inteligencia <= 2){
+                inteligencia2 = Oceania.inteligencia = 0;
+            }else{
+                inteligencia2 = Oceania.inteligencia = Oceania.inteligencia - 2;
+            }
+            if(Asia.inteligencia <= 2){
+                inteligencia3 = Asia.inteligencia = 0;
+            }else{
+                inteligencia3 = Asia.inteligencia = Asia.inteligencia - 2;
+            }
+            if(Africa.inteligencia <= 2){
+                inteligencia4 = Africa.inteligencia = 0;
+            }else{
+                inteligencia4 = Africa.inteligencia = Africa.inteligencia - 2;
+            }
+            if(Europa.inteligencia <= 2){
+                inteligencia5 = Europa.inteligencia = 0;
+            }else{
+                inteligencia5 = Europa.inteligencia = Europa.inteligencia - 2;
+            }
+            
+
+
+        // =========== ORO ==========
+        if(North_America.oro <= 200){
+            oro = North_America.oro = 0;
+        }else{
+            oro = North_America.oro = North_America.oro - 200; 
+        }
+        if(Sud_America.oro <= 200){
+            oro1 = Sud_America.oro = 0;
+        }else{
+            oro1 = Sud_America.oro = Sud_America.oro - 200;
+        }
+        if(Oceania.oro <= 200){
+            oro2 = Oceania.oro = 0;
+        }else{
+            oro2 = Oceania.oro = Oceania.oro - 200;
+        }
+        if(Asia.oro <= 200){
+            oro3 = Asia.oro = 0;
+        }else{
+            oro3 = Asia.oro = Asia.oro - 200;
+        }
+        if(Africa.oro <= 200){
+            oro4 = Africa.oro = 0;
+        }else{
+            oro4 = Africa.oro = Africa.oro - 200;
+        }
+        if(Europa.oro <= 200){
+            oro5 = Europa.oro = 0;
+        }else{
+            oro5 = Europa.oro = Europa.oro - 200;
+        }
+
+        North_America.save({construccion: construccion, inteligencia: inteligencia , oro: oro});
+        Sud_America.save({construccion: construccion1, inteligencia: inteligencia1 , oro: oro1});
+        Oceania.save({construccion: construccion2, inteligencia: inteligencia2 , oro: oro2});
+        Asia.save({construccion: construccion3, inteligencia: inteligencia3 , oro: oro3});
+        Africa.save({construccion: construccion4, inteligencia: inteligencia4 , oro: oro4});
+        Europa.save({construccion: construccion5, inteligencia: inteligencia5 , oro: oro5});
+    }
+
+        req.flash('success_msg', 'Evento tirado con exito!');
+        res.redirect('/ingame/events/');
     }else{
         req.flash('error_msg', 'No tienes esta carta');
         res.redirect('/ingame/cards/');
@@ -865,8 +1134,6 @@ router.get('/ingame/events/', isAuthenticated, async (req, res) => {
     const events = await Events.find();
     const users = await User.findById(req.user.id);
 
-    newEvent = new Events({desc: 'Duki', groupUsed: 'duki', groupAttaqued: 'dukardo',});
-    await newEvent.save();
     await Events.find({class: users.class}).sort({date: 'desc'})
     .then(async documentos => {
       const contexto = {
@@ -880,6 +1147,7 @@ router.get('/ingame/events/', isAuthenticated, async (req, res) => {
               groupAttaqued: documento.groupAttaqued,
               date: documento.date,
               ataque: documento.ataque,
+              otros: documento.otros,
               defensa: documento.defensa
           }
         })

@@ -9,6 +9,7 @@ const EventsSchema = new Schema({
     ataque: { type: Boolean, default: false },
     defensa: {type: Boolean, default: false},
     date: { type: Date, default: Date.now },
+    otros: { type: Boolean, default: true},
     class: {type: String, default: 'SinAsignar' } 
 });
 

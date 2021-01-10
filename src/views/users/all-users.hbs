@@ -11,12 +11,15 @@
         <h2>{{name}}<span>{{group}} / {{class}}</span></h2><hr style="background-color: white;">
         <p>{{description}}</p>
 
+        {{#if subido}}
+            <a href="{{practica}}" download="{{group}}_de_{{name}}" class="btnvolver btn-block" style="border-color: transparent;width:100%;">Descargar practica</a>
+        {{/if}}
+        <a href="/users/edit-user/{{_id}}" class="info" style="width:100%;">EDIT</a>
         <form action="/users/delete/{{_id}}?__method=DELETE" method="POST">
         <input type="hidden" name="__method" value="DELETE">
 
-        <a href="#" class="follow"><button type="submit" class="btn btn-sm" style="background-color:transparent; color: red;">Delete</button></a>
+        <a href="#" class="follow" style="width:100%;"><button type="submit" class="btn btn-sm" style="background-color:transparent; color: red;">DELETE</button></a>
         </form>
-        <a href="/users/edit-user/{{_id}}" class="info"><i class="far fa-edit"></i></a>
     </figcaption>
 </figure>
 </div>
