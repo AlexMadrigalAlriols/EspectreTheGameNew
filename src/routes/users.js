@@ -217,10 +217,8 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
 
     if(req.user.class == 'SMX-M'){
         var group = await Group.findOne({name: user.group});
-        res.render('layouts/mapa.hbs', { game, user, group });
     }else if(req.user.class == 'SMX-T'){
         var group = await Group.findOne({name: user.group + 'T'});
-        res.render('layouts/mapa.hbs', { game, user, group });
     }else{
         console.log('Primera Vez);
         res.redirect('/code');
