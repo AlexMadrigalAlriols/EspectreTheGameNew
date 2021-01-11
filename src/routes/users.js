@@ -95,15 +95,9 @@ router.get(`/users/edit-user/:id`, isAuthenticated, async (req, res) => {
 });
 
 router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
-    const lastImage = await User.findById(req.user._id);
-
+    const lastImage = await User.findById(req.params.id);
 
     const { name, email, description, group } = req.body;
-
-
-    const groupUserT = await Group.findOne({name: group + 'T'});
-
-    const userG = await User.findById(req.params.id);
 
     if(req.user.class == 'SMX-M'){
         var groupUser = await Group.findOne({name: group});
@@ -119,83 +113,87 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
     }else{
         groupUser.users.push(req.params.id);
         const nameGroup = groupUser.name;
-        
-        if(nameGroup == 'North_America'){
-            var North_America = req.user.North_America = true;
-            var Oceania = req.user.Oceania = false;
-            var Asia = req.user.Asia = false;
-            var Africa = req.user.Africa = false;
-            var Europa = req.user.Europa = false;
-            var SinGroup = req.user.SinGroup = false;
-            var Sud_America = req.user.Sud_America = false;
+        const user = await User.findById(req.params.id);
 
+        if(nameGroup == 'North_America'){
+            user.North_America = true;
+            user.Oceania = false;
+            user.Asia = false;
+            user.Africa = false;
+            user.Europa = false;
+            user.SinGroup = false;
+            user.Sud_America = false;
+            await user.save();
         }else if( nameGroup == 'Sud_America'){
-            var North_America = req.user.North_America = false;
-            var Oceania = req.user.Oceania = false;
-            var Asia = req.user.Asia = false;
-            var Africa = req.user.Africa = false;
-            var Europa = req.user.Europa = false;
-            var SinGroup = req.user.SinGroup = false;
-            var Sud_America = req.user.Sud_America = true;
+            user.North_America = false;
+            user.Oceania = false;
+            user.Asia = false;
+            user.Africa = false;
+            user.Europa = false;
+            user.SinGroup = false;
+            user.Sud_America = true;
+            await user.save();
         }else if( nameGroup == 'Oceania'){
-            var North_America = req.user.North_America = false;
-            var Oceania = req.user.Oceania = true;
-            var Asia = req.user.Asia = false;
-            var Africa = req.user.Africa = false;
-            var Europa = req.user.Europa = false;
-            var SinGroup = req.user.SinGroup = false;
-            var Sud_America = req.user.Sud_America = false;
+            user.North_America = false;
+            user.Oceania = true;
+            user.Asia = false;
+            user.Africa = false;
+            user.Europa = false;
+            user.SinGroup = false;
+            user.Sud_America = false;
+            await user.save();
         }else if( nameGroup == 'Asia'){
-            var North_America = req.user.North_America = false;
-            var Oceania = req.user.Oceania = false;
-            var Asia = req.user.Asia = true;
-            var Africa = req.user.Africa = false;
-            var SinGroup = req.user.SinGroup = false;
-            var Europa = req.user.Europa = false;
-            var Sud_America = req.user.Sud_America = false;
+            user.North_America = false;
+            user.Oceania = false;
+            user.Asia = true;
+            user.Africa = false;
+            user.Europa = false;
+            user.SinGroup = false;
+            user.Sud_America = false;
+            await user.save();
         }else if(nameGroup == 'Europa'){
-            var North_America = req.user.North_America = false;
-            var Oceania = req.user.Oceania = false;
-            var Asia = req.user.Asia = false;
-            var Africa = req.user.Africa = false;
-            var SinGroup = req.user.SinGroup = false;
-            var Europa = req.user.Europa = true;
-            var Sud_America = req.user.Sud_America = false;
+            user.North_America = false;
+            user.Oceania = false;
+            user.Asia = false;
+            user.Africa = false;
+            user.Europa = true;
+            user.SinGroup = false;
+            user.Sud_America = false;
+            await user.save();
         }else if(nameGroup == 'Africa'){
-            var North_America = req.user.North_America = false;
-            var Oceania = req.user.Oceania = false;
-            var Asia = req.user.Asia = false;
-            var Africa = req.user.Africa = true;
-            var SinGroup = req.user.SinGroup = false;
-            var Europa = req.user.Europa = false;
-            var Sud_America = req.user.Sud_America = false;
+            user.North_America = false;
+            user.Oceania = false;
+            user.Asia = false;
+            user.Africa = true;
+            user.Europa = false;
+            user.SinGroup = false;
+            user.Sud_America = false;
+            await user.save();
         }else if(nameGroup == 'SinGroup'){
-            var North_America = req.user.North_America = false;
-            var Oceania = req.user.Oceania = false;
-            var Asia = req.user.Asia = false;
-            var SinGroup = req.user.SinGroup = true;
-            var Africa = req.user.Africa = false;
-            var Europa = req.user.Europa = false;
-            var Sud_America = req.user.Sud_America = false;
+            user.North_America = false;
+            user.Oceania = false;
+            user.Asia = false;
+            user.Africa = false;
+            user.Europa = false;
+            user.SinGroup = true;
+            user.Sud_America = false;
+            await user.save();
         }
 
         await groupUser.save();
     }
 
-    
-
     if(req.file == null) {
         const path = lastImage.path;
-        await User.findByIdAndUpdate(req.params.id, { name, email, description, group, path, North_America, Sud_America, Oceania, Africa, Europa, Asia });
+        await User.findByIdAndUpdate(req.params.id, { name, email, description, group, path});
         req.flash('success_msg', 'Profile Updated');
-        res.redirect('/ingame');
+        res.redirect('/users/all-users/');
     
     }else{
         const path = '/uploads/' + req.file.filename;
-        
-    await User.findByIdAndUpdate(req.params.id, { name, email, description, group, path, North_America, Sud_America, Oceania, Africa, Europa, Asia });
-    req.flash('success_msg', 'Profile Updated');
-    res.redirect('/ingame');
+        await User.findByIdAndUpdate(req.params.id, { name, email, description, group, path});
+        req.flash('success_msg', 'Profile Updated');
+        res.redirect('/users/all-users/');
     }
 
   });
@@ -212,13 +210,14 @@ router.get('/users/logout', (req, res) => {
 });
 
 router.get('/ingame', isAuthenticated, async (req, res) =>{
-    var game = await Game.findById('5fedf15fa1268c39d8229e47');
     var user = await User.findById(req.user.id);
 
     if(req.user.class == 'SMX-M'){
         var group = await Group.findOne({name: user.group});
+        var game = await Game.findById('5fedf15fa1268c39d8229e47');
         res.render('layouts/mapa.hbs', { game, user, group });
     }else if(req.user.class == 'SMX-T'){
+        var game = await Game.findById('5ffc9ddda5b1f82890d99841');
         var group = await Group.findOne({name: user.group + 'T'});
         res.render('layouts/mapa.hbs', { game, user, group });
     }else{
@@ -227,7 +226,11 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
 });
 
 router.get('/ingame/gameSettings', isAuthenticated, async (req, res) => {
-    const game = await Game.findById('5fedf15fa1268c39d8229e47');
+    if(req.user.class == 'SMX-M'){
+        var game = await Game.findById('5fedf15fa1268c39d8229e47');
+    }else if(req.user.class == 'SMX-T'){
+        var game = await Game.findById('5ffc9ddda5b1f82890d99841');
+    }
     var user = await User.findById(req.user.id);
 
     if(req.user.admin == true){
@@ -238,7 +241,12 @@ router.get('/ingame/gameSettings', isAuthenticated, async (req, res) => {
 });
 
 router.put('/ingame/gameSettings', isAuthenticated, async (req, res, file) => {
-    const lastGame = await Game.findById('5fedf15fa1268c39d8229e47');
+    if(req.user.class == 'SMX-M'){
+        var lastGame = await Game.findById('5fedf15fa1268c39d8229e47');
+    }else if(req.user.class == 'SMX-T'){
+        var lastGame = await Game.findById('5ffc9ddda5b1f82890d99841');
+    }
+
     var user = await User.findById(req.user.id);
 
     if(req.file == null){
@@ -1108,14 +1116,23 @@ router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
   });
 
   router.put('/code', isAuthenticated, async (req, res) => {
+
     const user = await User.findOne({_id: req.user.id});
     const codeClass = req.body.codeClass;
 
     if(codeClass == '5ff23sxg'){
         user.class = 'SMX-M';
+        const game = await Game.findById('5fedf15fa1268c39d8229e47');
+        game.players.push(req.user.id);
+        
+        game.save();
         user.save();
     }else if(codeClass == '823jsjdk'){
+        const game = await Game.findById('5ffc9ddda5b1f82890d99841');
         user.class = 'SMX-T';
+        game.players.push(req.user.id);
+
+        game.save();
         user.save();
     }
     
