@@ -285,6 +285,7 @@ router.post('/ingame', isAuthenticated, async (req, res, file) => {
 
 router.get('/ingame/all-groups/', isAuthenticated, async (req, res) => {
     const userId = await User.findById(req.user._id);
+    const group = await Group.find();
     
     await Group.find().sort({name: 'desc'})
       .then(async documentos => {

@@ -1,5 +1,5 @@
 {
-  "name": "notes-app",
+  "name": "espectre-the-game",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -21,6 +21,7 @@
     "mongoose": "^5.11.8",
     "multer": "^1.4.2",
     "multer-gridfs-storage": "^4.2.0",
+    "ngrok": "^3.4.0",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "uuid": "^8.3.2"
