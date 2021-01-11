@@ -186,14 +186,14 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
 
     if(req.file == null) {
         const path = lastImage.path;
-        await User.findByIdAndUpdate(req.params.id, { name, email, description, group, path });
+        await User.findByIdAndUpdate(req.params.id, { name, email, description, group, path, North_America, Sud_America, Oceania, Africa, Europa, Asia });
         req.flash('success_msg', 'Profile Updated');
         res.redirect('/ingame');
     
     }else{
         const path = '/uploads/' + req.file.filename;
         
-    await User.findByIdAndUpdate(req.params.id, { name, email, description, group, path });
+    await User.findByIdAndUpdate(req.params.id, { name, email, description, group, path, North_America, Sud_America, Oceania, Africa, Europa, Asia });
     req.flash('success_msg', 'Profile Updated');
     res.redirect('/ingame');
     }
