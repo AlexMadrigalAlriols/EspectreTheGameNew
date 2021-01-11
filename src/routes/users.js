@@ -219,9 +219,6 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
         var group = await Group.findOne({name: user.group});
     }else if(req.user.class == 'SMX-T'){
         var group = await Group.findOne({name: user.group + 'T'});
-    }else{
-        console.log('Primera Vez);
-        res.redirect('/code');
     }
 
     if(user.class == 'SinAsignar'){
