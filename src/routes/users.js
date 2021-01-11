@@ -224,12 +224,7 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
     if(user.class == 'SinAsignar'){
         res.redirect('/code');
     }else{
-        if(group.Ataqued == true){
-            req.flash('error_msg', 'Estas siendo atacado si no te defiendes en 24h perderas recursos!');
-            res.redirect('/ingame/cards');
-        }else{
-            res.render('layouts/mapa.hbs', { game, user, group });
-        }
+       res.render('layouts/mapa.hbs', { game, user, group });
     }
 });
 
