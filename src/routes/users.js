@@ -217,14 +217,12 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
 
     if(req.user.class == 'SMX-M'){
         var group = await Group.findOne({name: user.group});
+        res.render('layouts/mapa.hbs', { game, user, group });
     }else if(req.user.class == 'SMX-T'){
         var group = await Group.findOne({name: user.group + 'T'});
-    }
-
-    if(user.class == 'SinAsignar'){
-        res.redirect('/code');
+        res.render('layouts/mapa.hbs', { game, user, group });
     }else{
-       res.render('layouts/mapa.hbs', { game, user, group });
+        res.redirect('/code');
     }
 });
 
