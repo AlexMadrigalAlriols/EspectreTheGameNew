@@ -222,7 +222,7 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
         var game = await Game.findById('5fedf15fa1268c39d8229e47');
             if(group.Ataqued == true){
               req.flash('error_msg', 'Estas siendo atacado usa una carta de defensa para defenderte!');
-              res.render('layouts/mapa.hbs', { game, user, group });
+              res.render('cards/all-cards.hbs', { game, user, group });
            }else{
               res.render('layouts/mapa.hbs', { game, user, group });
            }
@@ -231,9 +231,9 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
         var group = await Group.findOne({name: user.group + 'T'});
         if(group.Ataqued == true){
               req.flash('error_msg', 'Estas siendo atacado usa una carta de defensa para defenderte!');
-              res.render('layouts/mapa.hbs', { game, user, group });
-           }else{
               res.render('cards/all-cards.hbs', { game, user, group });
+           }else{
+              res.render('layouts/mapa.hbs', { game, user, group });
            }
     }else{
         res.redirect('/code');
