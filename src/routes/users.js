@@ -220,11 +220,21 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
     if(req.user.class == 'SMX-M'){
         var group = await Group.findOne({name: user.group});
         var game = await Game.findById('5fedf15fa1268c39d8229e47');
-        res.render('layouts/mapa.hbs', { game, user, group });
+            if(group.Ataqued == true){
+              req.flash('error_msg', 'Estas siendo atacado usa una carta de defensa para defenderte!');
+              res.render('layouts/mapa.hbs', { game, user, group });
+           }else{
+              res.render('layouts/mapa.hbs', { game, user, group });
+           }
     }else if(req.user.class == 'SMX-T'){
         var game = await Game.findById('5ffc9ddda5b1f82890d99841');
         var group = await Group.findOne({name: user.group + 'T'});
-        res.render('layouts/mapa.hbs', { game, user, group });
+        if(group.Ataqued == true){
+              req.flash('error_msg', 'Estas siendo atacado usa una carta de defensa para defenderte!');
+              res.render('layouts/mapa.hbs', { game, user, group });
+           }else{
+              res.render('cards/all-cards.hbs', { game, user, group });
+           }
     }else{
         res.redirect('/code');
     }
