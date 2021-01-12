@@ -27,7 +27,11 @@ router.post('/notes/new-note', isAuthenticated, async (req, res) => {
     }else {
         const newNote = new Note({ title, description });
         newNote.user = req.user.id;
-        newNote.group = req.user.group;
+        if(req.user.class == 'SMX-M'){
+            newNote.group = req.user.group;
+        }else if(req.user.class == 'SMX-T'){
+            newNote.group = req.user.group + 'T';
+        }
         await newNote.save();
         req.flash('success_msg', 'Note Added Successfull');
         res.redirect('/notes');
@@ -35,13 +39,19 @@ router.post('/notes/new-note', isAuthenticated, async (req, res) => {
 });
 
 router.get('/notes', isAuthenticated, async (req, res) => {
-    await Note.find({group: req.user.group}).sort({date: 'desc'})
+    if(req.user.class == 'SMX-M'){
+        var group = req.user.group;
+    }else if(req.user.class == 'SMX-T'){
+        var group = req.user.group + 'T';
+    }
+    await Note.find({group: group}).sort({date: 'desc'})
       .then(documentos => {
         const contexto = {
             notes: documentos.map(documento => {
             return {
                 title: documento.title,
                 _id: documento._id,
+                user: documento.user,
                 description: documento.description
             }
           })
