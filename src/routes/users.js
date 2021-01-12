@@ -183,24 +183,73 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
             user.SinGroup = true;
             user.Sud_America = false;
             await user.save();
+        }else if(nameGroup == 'North_AmericaT'){
+            user.North_America = true;
+            user.Oceania = false;
+            user.Asia = false;
+            user.Africa = false;
+            user.Europa = false;
+            user.SinGroup = false;
+            user.Sud_America = false;
+        }else if(nameGroup == 'Sud_AmericaT'){
+            user.North_America = false;
+            user.Oceania = false;
+            user.Asia = false;
+            user.Africa = false;
+            user.Europa = false;
+            user.SinGroup = false;
+            user.Sud_America = true;
+        }else if(nameGroup == 'OceaniaT'){
+            user.North_America = false;
+            user.Oceania = true;
+            user.Asia = false;
+            user.Africa = false;
+            user.Europa = false;
+            user.SinGroup = false;
+            user.Sud_America = false;
+        }else if(nameGroup == 'AfricaT'){
+            user.North_America = false;
+            user.Oceania = false;
+            user.Asia = false;
+            user.Africa = true;
+            user.Europa = false;
+            user.SinGroup = false;
+            user.Sud_America = false;
+        }else if(nameGroup == 'AsiaT'){
+            user.North_America = false;
+            user.Oceania = false;
+            user.Asia = true;
+            user.Africa = false;
+            user.Europa = false;
+            user.SinGroup = false;
+            user.Sud_America = false;
+        }else if(nameGroup == 'EuropaT'){
+            user.North_America = false;
+            user.Oceania = false;
+            user.Asia = false;
+            user.Africa = false;
+            user.Europa = true;
+            user.SinGroup = false;
+            user.Sud_America = false;
         }
 
         await groupUser.save();
     }
 
     if(req.file == null) {
-         user.path = lastImage.path;
-        await user.save();
+        var path = lastImage.path;
+        user.path = path;
         req.flash('success_msg', 'Profile Updated');
         res.redirect('/users/all-users/');
     
     }else{
-        user.path = '/uploads/' + req.file.filename;
-        await user.save();
+        var path = '/uploads/' + req.file.filename;
+        user.path = path;
         req.flash('success_msg', 'Profile Updated');
         res.redirect('/users/all-users/');
     }
 
+    await user.save();
   });
 
   router.delete('/users/delete/:id', isAuthenticated, async (req, res) => {
@@ -221,7 +270,7 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
         var group = await Group.findOne({name: user.group});
         var game = await Game.findById('5fedf15fa1268c39d8229e47');
             if(group.Ataqued == true){
-              req.flash('error_msg', 'Estas siendo atacado usa una carta de defensa para defenderte!');
+              req.flash('attack_msg', 'Estas siendo atacado usa una carta de defensa para defenderte!');
               res.redirect('/ingame/cards/');
            }else{
               res.render('layouts/mapa.hbs', { game, user, group });
@@ -230,7 +279,7 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
         var game = await Game.findById('5ffc9ddda5b1f82890d99841');
         var group = await Group.findOne({name: user.group + 'T'});
         if(group.Ataqued == true){
-              req.flash('error_msg', 'Estas siendo atacado usa una carta de defensa para defenderte!');
+              req.flash('attack_msg', 'Estas siendo atacado usa una carta de defensa para defenderte!');
               res.redirect('/ingame/cards/');
            }else{
               res.render('layouts/mapa.hbs', { game, user, group });
@@ -838,7 +887,28 @@ router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
                 const Ataqued = group.Ataqued = false;
                 group.cartas.splice(indexCarta);
 
-                group.save({Ataqued, cartas, TierOfAttacked});
+                if(card.name == 'Antimisiles'){
+                    var construccion = group.construccion + 2;
+                    var inteligencia = group.inteligencia + 1;
+                }else if(card.name == 'Defensa Militar'){
+                    var inteligencia = group.inteligencia + 1;
+                }else if(card.name == 'Barricadas'){
+                    if(group.construccion >= 2){
+                        var construccion = group.construccion - 2;
+                    }else{
+                        req.flash('error_msg', 'No tienes sufficiente puntos de construcción');
+                        res.redirect('/ingame/cards');
+                    }
+                }else if(card.name == 'Firewall'){
+                    var inteligencia = group.inteligencia + 2;
+                }else if(card.name == 'Equipo de Ciberseguridad'){
+                    var inteligencia = group.inteligencia + 3;
+                }else{
+                    req.flash('error_msg', 'No existe esta carta.');
+                    res.redirect('/ingame/cards');
+                }
+
+                group.save({Ataqued, cartas, TierOfAttacked, construccion, inteligencia});
                 req.flash('success_msg', 'Has Defendido Con Exito!');
                 res.redirect('/ingame/cards');
             }else{
@@ -847,17 +917,113 @@ router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
             }
 
         }else if(card.type == 'Ataque'){
-            group.cartas.splice(indexCarta);
             
             if(req.user.class == 'SMX-M'){
             var groupAtacado = await Group.findOne({name: req.body.groupAttac});
             }else{
             var groupAtacado = await Group.findOne({name: req.body.groupAttac + 'T'});               
             }
-        
+    
             groupAtacado.Ataqued = true;
+            var construccion = 0;
+            if(card.name == 'Ataque Aereo'){
+                if(group.inteligencia >= 1){
+                    var inteligencia = group.inteligencia - 1;
+                }else{
+                    req.flash('error_msg', 'No tienes sufficientes puntos de inteligencia');
+                    res.redirect('/ingame/cards');
+                }
+
+                if(group.construccion >= 2){
+                    var construccion = group.construccion - 2;
+                    group.cartas.splice(indexCarta);
+                }else{
+                    req.flash('error_msg', 'No tienes sufficientes puntos de construccion');
+                    res.redirect('/ingame/cards');
+                }
+            }else if(card.name == 'Ataque Terrestre'){
+                if(group.inteligencia >= 2){
+                    var inteligencia = group.inteligencia - 2;
+                }else{
+                    req.flash('error_msg', 'No tienes sufficientes puntos de inteligencia');
+                    res.redirect('/ingame/cards');
+                }
+
+                if(group.construccion >= 2){
+                    var construccion = group.construccion - 2;
+                    group.cartas.splice(indexCarta);
+                }else{
+                    req.flash('error_msg', 'No tienes sufficientes puntos de construccion');
+                    res.redirect('/ingame/cards');
+                }
+            }else if(card.name == 'Ataque Aliado'){
+                if(group.inteligencia >= 3){
+                    var inteligencia = group.inteligencia - 3;
+                }else{
+                    req.flash('error_msg', 'No tienes sufficientes puntos de inteligencia');
+                    res.redirect('/ingame/cards');
+                }
+
+                if(group.construccion >= 1){
+                    var construccion = group.construccion - 1;
+                    group.cartas.splice(indexCarta);
+                }else{
+                    req.flash('error_msg', 'No tienes sufficientes puntos de construccion');
+                    res.redirect('/ingame/cards');
+                }
+            }else if(card.name == 'Ataque de Phishing'){
+                if(group.inteligencia >= 4){
+                    var inteligencia = group.inteligencia - 4;
+                    group.cartas.splice(indexCarta);
+                }else{
+                    req.flash('error_msg', 'No tienes sufficientes puntos de inteligencia');
+                    res.redirect('/ingame/cards');
+                }
+            }else if(card.name == 'Ingeniería social'){
+                if(group.inteligencia >= 6){
+                    var inteligencia = group.inteligencia - 6;
+                    group.cartas.splice(indexCarta);
+                }else{
+                    req.flash('error_msg', 'No tienes sufficientes puntos de inteligencia');
+                    res.redirect('/ingame/cards');
+                }
+            }else if(card.name == 'Ataque DDOS'){
+                if(group.inteligencia >= 7){
+                    var inteligencia = group.inteligencia - 7;
+                    group.cartas.splice(indexCarta);
+                }else{
+                    req.flash('error_msg', 'No tienes sufficientes puntos de inteligencia');
+                    res.redirect('/ingame/cards');
+                }
+            }else if(card.name == 'Ataque de Bot net'){
+                if(group.inteligencia >= 8){
+                    var inteligencia = group.inteligencia - 8;
+                    group.cartas.splice(indexCarta);
+                }else{
+                    req.flash('error_msg', 'No tienes sufficientes puntos de inteligencia');
+                    res.redirect('/ingame/cards');
+                }
+            }else if(card.name == 'Ataque Spoofing'){
+                if(group.inteligencia >= 5){
+                    var inteligencia = group.inteligencia - 5;
+                    group.cartas.splice(indexCarta);
+                }else{
+                    req.flash('error_msg', 'No tienes sufficientes puntos de inteligencia');
+                    res.redirect('/ingame/cards');
+                }
+            }else if(card.name == 'Ataque de Babosa'){
+                if(group.inteligencia >= 0){
+                    var inteligencia = group.inteligencia - 0;
+                    group.cartas.splice(indexCarta);
+                    
+                }else{
+                    req.flash('error_msg', 'No tienes sufficientes puntos de inteligencia');
+                    res.redirect('/ingame/cards');
+                }
+            }
+
             groupAtacado.save();
-            group.save({cartas, TierOfAttacked});
+            group.save({cartas, TierOfAttacked, construccion, inteligencia});
             req.flash('success_msg', 'Has atacado Con Exito!');
             res.redirect('/ingame/cards');
 

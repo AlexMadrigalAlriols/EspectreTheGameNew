@@ -543,6 +543,10 @@ section {
   content: "\f02d";
 }
 
+.menu li a.note:before {
+  content: "\f249";
+}
+
 .menu li a.shop:before {
   content: "\f54e";
 }
