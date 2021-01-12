@@ -873,7 +873,14 @@ router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
                 group.save({oro, inteligencia, cartas});
                 req.flash('success_msg', 'Has usado la carta con exito!');
                 res.redirect('/ingame/cards/');
-            }else if(card.name == 'África'){
+            }else if(card.name == 'Africa'){
+                group.cartas.splice(indexCarta);
+                const oro = group.oro = group.oro + 3000;
+                const diamantes = group.diamantes = group.diamantes + 1;
+                group.save({oro, diamantes, cartas});
+                req.flash('success_msg', 'Has usado la carta con exito!');
+                res.redirect('/ingame/cards/');
+            }else if(card.name == 'Sud America'){
                 group.cartas.splice(indexCarta);
                 const oro = group.oro = group.oro + 3000;
                 const diamantes = group.diamantes = group.diamantes + 1;
