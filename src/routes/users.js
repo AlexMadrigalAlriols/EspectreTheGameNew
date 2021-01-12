@@ -96,7 +96,8 @@ router.get(`/users/edit-user/:id`, isAuthenticated, async (req, res) => {
 
 router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
     const lastImage = await User.findById(req.params.id);
-
+    var user = await User.findById(req.params.id);
+    
     const { name, email, description, group } = req.body;
 
     if(req.user.class == 'SMX-M'){
@@ -113,7 +114,6 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
     }else{
         groupUser.users.push(req.params.id);
         const nameGroup = groupUser.name;
-        const user = await User.findById(req.params.id);
 
         if(nameGroup == 'North_America'){
             user.North_America = true;
