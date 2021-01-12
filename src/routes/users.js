@@ -185,13 +185,13 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
 
     if(req.file == null) {
         const path = lastImage.path;
-        await User.findByIdAndUpdate(req.params.id, { name, email, description, group, path});
+        await user.save();
         req.flash('success_msg', 'Profile Updated');
         res.redirect('/users/all-users/');
     
     }else{
         const path = '/uploads/' + req.file.filename;
-        await User.findByIdAndUpdate(req.params.id, { name, email, description, group, path});
+        await user.save();
         req.flash('success_msg', 'Profile Updated');
         res.redirect('/users/all-users/');
     }
