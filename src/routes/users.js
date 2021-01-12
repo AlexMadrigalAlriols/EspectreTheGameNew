@@ -848,11 +848,13 @@ router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
 
         }else if(card.type == 'Ataque'){
             group.cartas.splice(indexCarta);
-            if(req.user.class == 'SMX-M){
+            
+            if(req.user.class == 'SMX-M'){
             var groupAtacado = await Group.findOne({name: req.body.groupAttac});
-               }else{
+            }else{
             var groupAtacado = await Group.findOne({name: req.body.groupAttac + 'T'});               
-               }
+            }
+        
             groupAtacado.Ataqued = true;
             groupAtacado.save();
             group.save({cartas, TierOfAttacked});
