@@ -99,7 +99,12 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
     var user = await User.findById(req.params.id);
     
     const { name, email, description, group } = req.body;
-
+    
+    user.name = name;
+    user.email = email;
+    user.description = description;
+    user.group = group;
+    
     if(req.user.class == 'SMX-M'){
         var groupUser = await Group.findOne({name: group});
         var indexGroup = groupUser.users.indexOf(req.params.id);
@@ -184,13 +189,13 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
     }
 
     if(req.file == null) {
-        const path = lastImage.path;
+         user.path = lastImage.path;
         await user.save();
         req.flash('success_msg', 'Profile Updated');
         res.redirect('/users/all-users/');
     
     }else{
-        const path = '/uploads/' + req.file.filename;
+        user.path = '/uploads/' + req.file.filename;
         await user.save();
         req.flash('success_msg', 'Profile Updated');
         res.redirect('/users/all-users/');
