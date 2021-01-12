@@ -16,7 +16,7 @@ const { v4: uuidv4 } = require('uuid');
 
 
 const storage = multer.diskStorage({
-    destination: path.join(__dirname, '/home/espectre/uploads/'),
+    destination: path.join(__dirname, '/public/uploads/'),
     filename: (req, file, cb, filename) => {
         cb(null, uuidv4() + path.extname(file.originalname));
     }
