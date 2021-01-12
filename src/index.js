@@ -13,6 +13,9 @@ const GridFsStorage = require('multer-gridfs-storage');
 const { Z_PARTIAL_FLUSH } = require('zlib');
 const { update } = require('./models/User');
 const { v4: uuidv4 } = require('uuid');
+const fs = require('fs');
+const http = require('http');
+const https = require('https');
 
 
 const storage = multer.diskStorage({
@@ -26,6 +29,17 @@ const storage = multer.diskStorage({
 const app = express();
 require('./database');
 require('./config/passport');
+
+// Certificate
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/yourdomain.com/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/yourdomain.com/cert.pem', 'utf8');
+const ca = fs.readFileSync('/etc/letsencrypt/live/yourdomain.com/chain.pem', 'utf8');
+
+const credentials = {
+	key: privateKey,
+	cert: certificate,
+	ca: ca
+};
 
 // Settings
 app.set('port', process.env.PORT || 80);
@@ -67,6 +81,10 @@ app.use((req, res, next) => {
     next();
 });
 
+// Starting both http & https servers
+const httpServer = http.createServer(app);
+const httpsServer = https.createServer(credentials, app);
+
 
 // Routes
 app.use(require('./routes/index'));
@@ -80,4 +98,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Server is listenning
 app.listen(app.get('port'), () => {
     console.log('Server on port', app.get('port'));
+});
+httpsServer.listen(443, () => {
+	console.log('HTTPS Server running on port 443');
 });
