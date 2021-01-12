@@ -10,7 +10,10 @@ const GroupSchema = new Schema({
     diamantes: { type: Number, default: 0},
     cartas: {type: Array },
     Ataqued: { type: Boolean, default: false},
-    TierOfAttacked: {type: String}
+    TierOfAttacked: {type: String},
+    practica: { type: String },
+    subido: { type: Boolean, default: false},
+    nota: { type: Number, default: 0}
 });
 
 module.exports = mongoose.model('Group', GroupSchema);

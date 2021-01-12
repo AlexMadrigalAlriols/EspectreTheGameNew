@@ -295,7 +295,6 @@ router.get('/ingame/gameSettings', isAuthenticated, async (req, res) => {
     }else if(req.user.class == 'SMX-T'){
         var game = await Game.findById('5ffc9ddda5b1f82890d99841');
     }
-    var user = await User.findById(req.user.id);
 
     if(req.user.admin == true){
         res.render('./game/gameSettings.hbs', {game});
@@ -307,9 +306,24 @@ router.get('/ingame/gameSettings', isAuthenticated, async (req, res) => {
 router.put('/ingame/gameSettings', isAuthenticated, async (req, res, file) => {
     if(req.user.class == 'SMX-M'){
         var lastGame = await Game.findById('5fedf15fa1268c39d8229e47');
+        var group = await Group.findOne({name: req.user.group});
+        var North_America = await Group.findOne({name: 'North_America'});
+        var Sud_America = await Group.findOne({name: 'Sud_America'});
+        var Oceania = await Group.findOne({name: 'Oceania'});
+        var Africa = await Group.findOne({name: 'Africa'});
+        var Europa = await Group.findOne({name: 'Europa'});
+        var Asia = await Group.findOne({name: 'Asia'});
     }else if(req.user.class == 'SMX-T'){
         var lastGame = await Game.findById('5ffc9ddda5b1f82890d99841');
+        var group = await Group.findOne({name: req.user.group + 'T'});
+        var North_America = await Group.findOne({name: 'North_AmericaT'});
+        var Sud_America = await Group.findOne({name: 'Sud_AmericaT'});
+        var Oceania = await Group.findOne({name: 'OceaniaT'});
+        var Africa = await Group.findOne({name: 'AfricaT'});
+        var Europa = await Group.findOne({name: 'EuropaT'});
+        var Asia = await Group.findOne({name: 'AsiaT'});
     }
+ 
 
     var user = await User.findById(req.user.id);
 
@@ -318,8 +332,18 @@ router.put('/ingame/gameSettings', isAuthenticated, async (req, res, file) => {
     }else{
         var periodico  = req.file.filename;
 
-        var subido = user.subido;
-        subido = false;
+        North_America.subido = false;
+        Sud_America.subido = false;
+        Oceania.subido = false;
+        Africa.subido = false;
+        Europa.subido = false;
+        Asia.subido = false;
+        Asia.save();
+        Africa.save();
+        Oceania.save();
+        North_America.save();
+        Sud_America.save();
+        Europa.save();
     }
 
     const year = req.body.year;
@@ -331,17 +355,17 @@ router.put('/ingame/gameSettings', isAuthenticated, async (req, res, file) => {
     }
 
     await Game.findByIdAndUpdate('5fedf15fa1268c39d8229e47', { periodico, year, mapa });
-    await User.findByIdAndUpdate(req.user.id, { subido })
+    await group.save();
     res.redirect('/ingame');
 });
 
 router.post('/ingame', isAuthenticated, async (req, res, file) => {
-   const subidoU = await User.findById(req.user._id);
+   const subidoU = await Group.findOne({name: req.user.group});
    console.log(req.file.name);
    subidoU.practica = '/uploads/' + req.file.filename;
    subidoU.subido = true;
-   await subidoU.save();
 
+   await subidoU.save();
    res.redirect('/ingame');
 });
 
