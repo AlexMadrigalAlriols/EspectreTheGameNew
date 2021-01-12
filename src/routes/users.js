@@ -240,13 +240,13 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
         var path = lastImage.path;
         user.path = path;
         req.flash('success_msg', 'Profile Updated');
-        res.redirect('/users/all-users/');
+        res.redirect('/ingame/');
     
     }else{
         var path = '/uploads/' + req.file.filename;
         user.path = path;
         req.flash('success_msg', 'Profile Updated');
-        res.redirect('/users/all-users/');
+        res.redirect('/ingame/');
     }
 
     await user.save();
