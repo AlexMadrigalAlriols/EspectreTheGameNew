@@ -231,7 +231,7 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
         var group = await Group.findOne({name: user.group + 'T'});
         if(group.Ataqued == true){
               req.flash('error_msg', 'Estas siendo atacado usa una carta de defensa para defenderte!');
-              res.render('cards/all-cards.hbs', { game, user, group });
+              res.redirect('/ingame/cards/');
            }else{
               res.render('layouts/mapa.hbs', { game, user, group });
            }
