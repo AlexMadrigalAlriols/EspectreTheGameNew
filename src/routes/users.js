@@ -807,7 +807,7 @@ router.put('/cards/buybundle/:id', isAuthenticated, async (req, res) => {
             }else if(numRand == 8){
                 var cartaTocada = await Card.findOne({name: 'Ataque de Babosa'});
                 const indexCarta = group.cartas.indexOf(cartaTocada._id);
-
+                
                 if(indexCarta > -1){
                     var descripcion = "Ya tienes esta carta te damos oro a cambio";
                     group.oro = group.oro + 700;
@@ -1075,8 +1075,15 @@ router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
             }else if(card.name == 'Ataque de Babosa'){
                 if(group.inteligencia >= 0){
                     var inteligencia = group.inteligencia - 0;
-                    group.cartas.splice(indexCarta);
-                    
+                    if(req.body.groupAttac.inteligencia < 3){
+                        groupAtacado.Ataqued = true;
+                        var inteligencia = group.inteligencia + 3;
+                        req.body.groupAttac.inteligencia - 3;
+                        group.cartas.splice(indexCarta);
+                    }else{
+                        req.flash('error_msg', 'El equipo atacado no tiene 3 de inteligencia')
+                        res.redirect('/ingame/cards');
+                    }
                 }else{
                     req.flash('error_msg', 'No tienes sufficientes puntos de inteligencia');
                     res.redirect('/ingame/cards');
