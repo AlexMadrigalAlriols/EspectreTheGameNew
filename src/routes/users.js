@@ -98,7 +98,7 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
     const lastImage = await User.findById(req.params.id);
     var user = await User.findById(req.params.id);
     
-    const { name, email, description, group } = req.body;
+    var { name, email, description, group } = req.body;
     
     user.name = name;
     user.email = email;
@@ -107,17 +107,16 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
     
     if(req.user.class == 'SMX-M'){
         var groupUser = await Group.findOne({name: group});
-        var indexGroup = groupUser.users.indexOf(req.params.id);
+        var indexGroup = await groupUser.users.indexOf(req.params.id);
     }else if(req.user.class == 'SMX-T'){
         var groupUser = await Group.findOne({name: group + 'T'});
-        var indexGroup = groupUser.users.indexOf(req.params.id);
+        var indexGroup = await groupUser.users.indexOf(req.params.id);
     }
-
 
     if(indexGroup > -1){
         console.log('Esta en el grupo ya');
     }else{
-        groupUser.users.push(req.params.id);
+        await groupUser.users.push(req.params.id);
         const nameGroup = groupUser.name;
 
         if(nameGroup == 'North_America'){
@@ -237,21 +236,19 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
     }
 
     if(req.file == null) {
-        var path = lastImage.path;
-        user.path = path;
+        user.path = lastImage.path;
 
         await user.save();
         req.flash('success_msg', 'Profile Updated');
         res.redirect('/ingame/');
     }else{
-        var path = '/uploads/' + req.file.filename;
-        user.path = path;
+        user.path = '/uploads/' + req.file.filename;
 
         await user.save();
         req.flash('success_msg', 'Profile Updated');
         res.redirect('/ingame/');
     }
-  });
+});
 
   router.delete('/users/delete/:id', isAuthenticated, async (req, res) => {
     await User.findByIdAndDelete(req.params.id);
@@ -277,7 +274,7 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
     }else if(group.nota == 10){
         group.diamantes = group.diamantes + 3;
     }
-    group.save();
+    await group.save();
 
     req.flash('success_msg', 'Nota puesta con exito!');
     res.redirect('/ingame/all-groups/');
@@ -369,12 +366,13 @@ router.put('/ingame/gameSettings', isAuthenticated, async (req, res, file) => {
         Europa.nota = 0;
         Asia.subido = false;
         Asia.nota = 0;
-        Asia.save();
-        Africa.save();
-        Oceania.save();
-        North_America.save();
-        Sud_America.save();
-        Europa.save();
+
+        await Asia.save();
+        await Africa.save();
+        await Oceania.save();
+        await North_America.save();
+        await Sud_America.save();
+        await Europa.save();
     }
 
     const year = req.body.year;
