@@ -9,6 +9,20 @@
         <hr style="background-color: white;">
         <a href="/ingame/edit-group/{{_id}}" class="info"><i class="far fa-edit"></i></a>
     </figcaption>
+    {{#if subido}}
+    <a href="{{practica}}" download="{{name}}" style="border-color: transparent;"><button class="btnvolver btn-block" >Descargar practica</button></a>
+    <form action="/users/nota/{{_id}}?__method=PUT" method="POST">
+        <input type="hidden" name="__method" value="PUT">
+
+        <div class="form-group p-2">
+        <input type="text" name="nota" value="{{nota}}" class="form-control">
+        </div>
+
+        <div>
+            <a href="#"><button type="submit" class="btn btn-md btn-block btnvolver">Guardar Nota</button></a>
+        </div>
+    </form>
+    {{/if}}
 </figure>
 </div>
     {{/each}}

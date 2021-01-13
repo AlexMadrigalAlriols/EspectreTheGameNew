@@ -239,23 +239,48 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
     if(req.file == null) {
         var path = lastImage.path;
         user.path = path;
+
+        await user.save();
         req.flash('success_msg', 'Profile Updated');
         res.redirect('/ingame/');
-    
     }else{
         var path = '/uploads/' + req.file.filename;
         user.path = path;
+
+        await user.save();
         req.flash('success_msg', 'Profile Updated');
         res.redirect('/ingame/');
     }
-
-    await user.save();
   });
 
   router.delete('/users/delete/:id', isAuthenticated, async (req, res) => {
     await User.findByIdAndDelete(req.params.id);
     req.flash('success_msg', 'User Deleted Successfully');
     res.redirect('/users/all-users');
+  });
+
+  router.put('/users/nota/:id', isAuthenticated, async (req, res) => {
+    if(req.user.class == 'SMX-M'){
+        var group = await Group.findOne({_id: req.params.id});
+    }else if(req.user.class == 'SMX-T'){
+        var group = await Group.findOne({_id: req.params.id});
+    }
+
+    group.nota = req.body.nota;
+    if(group.nota >= 0.00 && group.nota < 5.00){
+        group.diamantes = group.diamantes + 0;
+
+    }else if(group.nota >= 5.00 && group.nota < 7.00){
+        group.diamantes = group.diamantes + 1;
+    }else if(group.nota >= 8.00 && group.nota < 9.00){
+        group.diamantes = group.diamantes + 2;
+    }else if(group.nota == 10){
+        group.diamantes = group.diamantes + 3;
+    }
+    group.save();
+
+    req.flash('success_msg', 'Nota puesta con exito!');
+    res.redirect('/ingame/all-groups/');
   });
 
 router.get('/users/logout', (req, res) => {
@@ -333,11 +358,17 @@ router.put('/ingame/gameSettings', isAuthenticated, async (req, res, file) => {
         var periodico  = req.file.filename;
 
         North_America.subido = false;
+        North_America.nota = 0;
         Sud_America.subido = false;
+        Sud_America.nota = 0;
         Oceania.subido = false;
+        Oceania.nota = 0;
         Africa.subido = false;
+        Africa.nota = 0;
         Europa.subido = false;
+        Europa.nota = 0;
         Asia.subido = false;
+        Asia.nota = 0;
         Asia.save();
         Africa.save();
         Oceania.save();
@@ -360,11 +391,16 @@ router.put('/ingame/gameSettings', isAuthenticated, async (req, res, file) => {
 });
 
 router.post('/ingame', isAuthenticated, async (req, res, file) => {
-   const subidoU = await Group.findOne({name: req.user.group});
-   console.log(req.file.name);
+    if(req.user.class == 'SMX-M'){
+        var subidoU = await Group.findOne({name: req.user.group});
+    }else if(req.user.class == 'SMX-T'){
+        var subidoU = await Group.findOne({name: req.user.group + 'T'}); 
+    }
+   console.log(req.file.filename);
    subidoU.practica = '/uploads/' + req.file.filename;
-   subidoU.subido = true;
 
+   subidoU.subido = true;
+    console.log(subidoU.subido);
    await subidoU.save();
    res.redirect('/ingame');
 });
@@ -386,6 +422,9 @@ router.get('/ingame/all-groups/', isAuthenticated, async (req, res) => {
                 oro: documento.oro,
                 inteligencia: documento.inteligencia,
                 construccion: documento.construccion,
+                subido: documento.subido,
+                practica: documento.practica,
+                nota: documento.nota,
                 diamantes: documento.diamantes
             }
           })

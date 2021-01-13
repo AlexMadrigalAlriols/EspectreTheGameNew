@@ -11,9 +11,6 @@
         <h2>{{name}}<span>{{group}} / {{class}}</span></h2><hr style="background-color: white;">
         <p>{{description}}</p>
 
-        {{#if subido}}
-            <a href="{{practica}}" download="{{group}}_de_{{name}}" class="btnvolver btn-block" style="border-color: transparent;width:100%;">Descargar practica</a>
-        {{/if}}
         <a href="/users/edit-user/{{_id}}" class="info" style="width:100%;">EDIT</a>
         <form action="/users/delete/{{_id}}?__method=DELETE" method="POST">
         <input type="hidden" name="__method" value="DELETE">
