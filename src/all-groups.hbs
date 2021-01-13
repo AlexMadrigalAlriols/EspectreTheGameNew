@@ -1,0 +1,29 @@
+<a href="/ingame"><button class="btn ml-2 mt-2 " style="background-color: #ff6d05; color: #fff;">Volver InGame</button></a>
+<div class="row mx-auto">
+    {{#each groups}}
+<div class="col-md-3 mt-1">
+<figure class="snip1336">
+        <img src="/img/bannerEspectre.png" alt="sample87" />
+    <figcaption>
+        <h2>{{name}}<span><img src="/img/oro.png" width="20px"> {{oro}} | <img src="/img/inteligencia.png" width="20px"> {{inteligencia}} | <img src="/img/construccion.png" width="20px"> {{construccion}} | <img src="/img/diamantes.png" width="20px"> {{diamantes}}</span></h2>
+        <hr style="background-color: white;">
+        <a href="/ingame/edit-group/{{_id}}" class="info"><i class="far fa-edit"></i></a>
+    </figcaption>
+    {{#if subido}}
+    <a href="{{practica}}" download="{{name}}" style="border-color: transparent;"><button class="btnvolver btn-block" >Descargar practica</button></a>
+    <form action="/users/nota/{{_id}}?__method=PUT" method="POST">
+        <input type="hidden" name="__method" value="PUT">
+
+        <div class="form-group p-2">
+        <input type="text" name="nota" value="{{nota}}" class="form-control">
+        </div>
+
+        <div>
+            <a href="#"><button type="submit" class="btn btn-md btn-block btnvolver">Guardar Nota</button></a>
+        </div>
+    </form>
+    {{/if}}
+</figure>
+</div>
+    {{/each}}
+</div>
