@@ -27,6 +27,7 @@ const app = express();
 require('./database');
 require('./config/passport');
 
+
 // Settings
 app.set('port', process.env.PORT || 80);
 app.set('views', path.join(__dirname, 'views'));
@@ -77,7 +78,9 @@ app.use(require('./routes/users'));
 //Static Files
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 // Server is listenning
 app.listen(app.get('port'), () => {
     console.log('Server on port', app.get('port'));
 });
+
