@@ -916,7 +916,11 @@ router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
     if(indexCarta > -1){
 
         if(card.type == 'Ataque'){
-            var desc = group.name + ' ' +'ha usado la carta' + ' ' + card.name + ' contra ' + req.body.groupAttac;
+            if(req.user.class == 'SMX-M'){
+                var desc = group.name + ' ' +'ha usado la carta' + ' ' + card.name + ' contra ' + req.body.groupAttac;
+            }else if(req.user.class == 'SMX-T'){
+                var desc = group.name + ' ' +'ha usado la carta' + ' ' + card.name + ' contra ' + req.body.groupAttac + 'T';                
+            }
         }else if(card.type == 'Defensa'){
             var desc = group.name + ' ' +'ha usado ' + ' ' + card.name + ' ' + '  para defenderse.';
         }else{
