@@ -861,8 +861,16 @@ tr {
   background-color: #ff6d05; 
   color: #fff;
 }
-
 .btnvolver:hover{
+  background-color: #ff8833; 
+}
+
+.btnsignup{
+  background-color: #ff6d05d5; 
+  color: #fff;
+}
+
+.btnsignup:hover{
   background-color: #ff8833; 
 }
 
