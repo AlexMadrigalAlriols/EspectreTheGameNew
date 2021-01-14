@@ -51,7 +51,7 @@ router.get('/notes', isAuthenticated, async (req, res) => {
             return {
                 title: documento.title,
                 _id: documento._id,
-                user: documento.user,
+                group: documento.group,
                 description: documento.description
             }
           })

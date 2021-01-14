@@ -262,7 +262,9 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
   router.put('/users/nota/:id', isAuthenticated, async (req, res) => {
     if(req.user.class == 'SMX-M'){
         var group = await Group.findOne({_id: req.params.id});
+        var game = await Game.findById('5fedf15fa1268c39d8229e47');
     }else if(req.user.class == 'SMX-T'){
+        var game = await Game.findById('5ffc9ddda5b1f82890d99841');
         var group = await Group.findOne({_id: req.params.id});
     }
 
@@ -277,6 +279,18 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
     }else if(group.nota == 10){
         group.diamantes = group.diamantes + 3;
     }
+    group.notas.push(req.body.nota);
+
+    var notaF = 0;
+    for(i=0; i < group.notas.length;){
+        var noteS = notaF + group.notas[i];
+        const notaFi = noteS;
+        console.log(notaFi);
+        i++;
+    }
+
+    group.notaFinal = noteS / game.practicasSubidas;
+
     group.save();
 
     req.flash('success_msg', 'Nota puesta con exito!');
@@ -309,7 +323,7 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
            }else{
               res.render('layouts/mapa.hbs', { game, user, group });
            }
-    }else{
+    }else if(req.user.class == 'SinAsignar'){
         res.redirect('/code');
     }
 });
@@ -369,6 +383,7 @@ router.put('/ingame/gameSettings', isAuthenticated, async (req, res, file) => {
         Europa.nota = 0;
         Asia.subido = false;
         Asia.nota = 0;
+        var practicasSubidas = lastGame.practicasSubidas = lastGame.practicasSubidas + 1;
         Asia.save();
         Africa.save();
         Oceania.save();
@@ -385,7 +400,7 @@ router.put('/ingame/gameSettings', isAuthenticated, async (req, res, file) => {
         var mapa = req.body.mapa;
     }
 
-    await Game.findByIdAndUpdate('5fedf15fa1268c39d8229e47', { periodico, year, mapa });
+    await Game.findByIdAndUpdate('5fedf15fa1268c39d8229e47', { periodico, year, mapa, practicasSubidas });
     await group.save();
     res.redirect('/ingame');
 });
@@ -424,6 +439,7 @@ router.get('/ingame/all-groups/', isAuthenticated, async (req, res) => {
                 construccion: documento.construccion,
                 subido: documento.subido,
                 practica: documento.practica,
+                notaFinal: documento.notaFinal,
                 nota: documento.nota,
                 diamantes: documento.diamantes
             }

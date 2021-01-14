@@ -13,7 +13,9 @@ const GroupSchema = new Schema({
     TierOfAttacked: {type: String},
     practica: { type: String },
     subido: { type: Boolean, default: false},
-    nota: { type: Number, default: 0}
+    notaFinal: {type: String, default: 0},
+    nota: { type: Number, default: 0},
+    notas: { type: Array }
 });
 
 module.exports = mongoose.model('Group', GroupSchema);
