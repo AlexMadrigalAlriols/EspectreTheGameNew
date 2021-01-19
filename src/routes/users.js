@@ -1443,4 +1443,40 @@ router.get('/ingame/events/', isAuthenticated, async (req, res) => {
     req.flash('success_msg', 'Evento borrado con exito!');
     res.redirect('/ingame/events');
   });
+
+// ============ SELECT PLAYER ========= //
+router.get('/ingame/character', isAuthenticated, async (req, res) => {
+    const user = User.findById(req.user.id);
+
+    res.render('tablero/selectplayer.hbs', { user });
+});
+
+router.put('/ingame/character', isAuthenticated, async (req, res) => {
+    var user = await User.findById(req.user.id);
+
+    if(req.body.characterSelect == 'pobre'){
+        user.character = '/img/skins/pobre.png';
+    }else if(req.body.characterSelect == 'chicasexy'){
+        user.character = '/img/skins/chicasexy.png';
+    }else if(req.body.characterSelect == 'princiesa'){
+        user.character = '/img/skins/princesa.png';
+    }else if(req.body.characterSelect == 'monolila'){
+        user.character = '/img/skins/monolila.png';
+    }
+    await user.save();
+    res.redirect('/ingame');
+});
+
+// ============= BOARD GAME =========
+router.get('/ingame/board', isAuthenticated, async (req, res) => {
+    var user = await User.findById(req.user.id);
+
+    if(req.user.class == 'SMX-M'){
+        var group = await Group.findOne({name: req.user.group});
+    }else if(req.user.class == 'SMX-T'){
+        var group = await Group.findOne({name: req.user.group + 'T'});
+    }
+
+    res.render('tablero/board.hbs', { user, group });
+});
 module.exports = router;

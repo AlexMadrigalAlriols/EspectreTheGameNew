@@ -18,6 +18,7 @@ const UserSchema = new Schema({
     banner: {type: String, default: 'https://hipertextual.com/files/2013/11/Wallpaper-Monta%C3%B1as.jpg'},
     rol: { type: String, default: 'Alumno'},
     path: { type: String, default: '/uploads/ImageProfile.jpg' },
+    character: {type: String, default: '/img/skins/pobre.png'},
     admin: {type: Boolean, default: false},
     description: { type: String, default: 'CAMBIA LA DESCRIPCIÓN EDITANDO EL PERFIL'},
     date: { type: Date, default: Date.now }

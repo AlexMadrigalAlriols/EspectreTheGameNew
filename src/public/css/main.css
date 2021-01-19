@@ -900,6 +900,9 @@ tr {
   background-size: cover;
 }
 
+.mazmorra {
+  background-image: url("/img/mazmorra.jpg");
+}
 .btnsucces{
   background-color: green;
   color: white;
@@ -970,4 +973,30 @@ tr {
   from { transform: scale(0.8); }
   to { transform: scale(1); }
 }
+
+.check-colours {
+	overflow:hidden;
+	position:relative;
+  float: right;
+}
+input.check-colour, label.check-colour span {
+	position:absolute;
+	left:-999em;
+}
+label.check-colour {
+	width:25px;
+	height:25px;
+  float:left;
+  position: absolute;
+	cursor:pointer;
+}
+
+
+
+input.check-colour:checked + label {
+	outline:3px solid rgb(46, 46, 46);
+	position:relative;
+  z-index:4;
+}
+.check-colours div{float:left}
 

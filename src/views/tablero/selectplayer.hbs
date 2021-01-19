@@ -1,0 +1,40 @@
+<div class="col-md-6 mx-auto mt-2">
+    <div class="card">
+        <div class="card-header">
+            <h3>Edit {{user.name}} Character</h3>
+        </div>
+        <div class="card-body">
+            <form action="/ingame/character?__method=PUT" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="__method" value="PUT">
+            <div class="check-colours ml-5">
+				<div>
+						<input class="check-colour" type="radio" name="characterSelect" id="monolila" value="monolila">
+						<label for="monolila" class="mr-4 mt-2 gelatine"><img src="/img/skins/monolila.png" width="150px"></label>
+				</div>
+				<div>
+						<input class="check-colour" type="radio" name="characterSelect" id="pobre" value="pobre">
+						<label for="pobre" class="mr-4 mt-2 gelatine"><img src="/img/skins/pobre.png" width="150px"></label>
+				</div>
+				<div>
+						<input class="check-colour" type="radio" name="characterSelect" id="chicasexy" value="chicasexy">
+						<label for="chicasexy" class="mr-4 mt-2 gelatine"><img src="/img/skins/chicasexy.png" width="165px"></label>
+				</div>
+
+                <div>
+						<input class="check-colour" type="radio" name="characterSelect" id="princesa" value="princesa">
+						<label for="princesa" class="mr-4 gelatine"><img src="/img/skins/princesa.png" width="165px"></label>
+				</div>  
+        
+		</div>
+
+
+                <div class="form-group">
+                    <button class="btn btn-block btnvolver" type="submit">
+                    Select
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

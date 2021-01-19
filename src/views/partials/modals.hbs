@@ -12,7 +12,7 @@
 <div class="z-depth-5 main">
     <div class="row">
         <div class="col-sm-6 picture">
-            <center><img class="circle mb-4 responsive-img rounded-circle" src="{{user.path}}"></center>
+            <center><img class="mb-4 responsive-img" src="{{user.character}}"><a href="/ingame/character"><i class="fas fa-edit mt-4"></i></a></center>
             <center>{{user.class}} / {{user.group}}</center>
         </div>
         <div class="col-sm-6 details">
@@ -126,17 +126,19 @@
     </div>
   </div>
 
-  <div class="modal bg-modal" id="sobre0M" tabindex="-1" role="dialog" aria-labelledby="sobre0M" aria-hidden="true">
+  <div class="modal bg-modal" id="entrarMazmorraM" tabindex="-1" role="dialog" aria-labelledby="entrarMazmorraM" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
-         <h3 class="modal-title text-center">Sobre 0</h3>
+         <h3 class="modal-title text-center">Periodico</h3>
         </div>
         <div class="modal-body">
-
+          <center>
+          <hr>
+          <h3>Entrega Actividad</h3></center>
         </div>
         <div class="modal-footer">
-          <button type="button" id="buttoncloseSobre0" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
+          <button type="button" id="entrarMazmorraClose" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
         </div>
       </div>
     </div>
