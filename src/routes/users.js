@@ -1458,7 +1458,7 @@ router.put('/ingame/character', isAuthenticated, async (req, res) => {
         user.character = '/img/skins/pobre.png';
     }else if(req.body.characterSelect == 'chicasexy'){
         user.character = '/img/skins/chicasexy.png';
-    }else if(req.body.characterSelect == 'princiesa'){
+    }else if(req.body.characterSelect == 'princesa'){
         user.character = '/img/skins/princesa.png';
     }else if(req.body.characterSelect == 'monolila'){
         user.character = '/img/skins/monolila.png';
