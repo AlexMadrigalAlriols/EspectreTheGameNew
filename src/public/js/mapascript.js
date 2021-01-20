@@ -43,6 +43,15 @@ document.getElementById('buttoncloseN').addEventListener("click", function() {
 	document.getElementById('ModalNamerica').style.display = "none";
 });
 
+// Periodico
+document.getElementById('periodicoButt').addEventListener("click", function() {
+	document.getElementById('periodicoM').style.display = "flex";
+});
+
+document.getElementById('buttonclosePeriodico').addEventListener("click", function() {
+	document.getElementById('periodicoM').style.display = "none";
+});
+
 // Mazmorra
 document.getElementById('boardButt').addEventListener("click", function() {
 	document.getElementById('entrarMazmorraM').style.display = "flex";
@@ -52,12 +61,4 @@ document.getElementById('entrarMazmorraClose').addEventListener("click", functio
 	document.getElementById('entrarMazmorraM').style.display = "none";
 });
 
-// Periodico
-document.getElementById('periodicoButt').addEventListener("click", function() {
-	document.getElementById('periodicoM').style.display = "flex";
-});
-
-document.getElementById('buttonclosePeriodico').addEventListener("click", function() {
-	document.getElementById('periodicoM').style.display = "none";
-});
 

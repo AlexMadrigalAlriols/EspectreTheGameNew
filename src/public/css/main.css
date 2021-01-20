@@ -558,6 +558,9 @@ section {
 .menu li a.about:before {
   content: "\f007";
 }
+.menu li a.game:before {
+  content: "\f7a2";
+}
 
 .menu li a.home:before {
   content: "\f039";
@@ -974,6 +977,37 @@ tr {
   to { transform: scale(1); }
 }
 
+.characterboard {
+  position: absolute;
+  margin-top: 20rem;
+  margin-left: 25rem;
+  animation: characterboard 1s forwards;
+}
+.characterboard:hover {
+  animation: charactercolor;
+}
+
+@keyframes charactercolor {
+  from {
+    background-image: url("/img/skins/chicasexy.png");
+  }
+
+  to {
+    background-image: url("/img/skins/princesa.png");
+  }
+}
+
+@keyframes characterboard {
+  from {
+    opacity: 0;
+    margin-left: 0rem;
+  }
+  to {
+    opacity: 1;
+    margin-left: 45rem;
+  }
+}
+
 .check-colours {
 	overflow:hidden;
 	position:relative;
@@ -990,8 +1024,6 @@ label.check-colour {
   position: absolute;
 	cursor:pointer;
 }
-
-
 
 input.check-colour:checked + label {
 	outline:3px solid rgb(46, 46, 46);

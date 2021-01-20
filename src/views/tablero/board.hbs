@@ -1,28 +1,15 @@
 
 <ul class="menu" style="z-index: 1000000;">
   <li><img src="/img/LogoEspectre.png" width="60px" class="ml-2 mt-1 elastic-spin"></li>
-  <li title="about"><a href="#" class="active about" id="button" >about</a></li>
+  <li title="about"><a href="/ingame" class="active game">about</a></li>
   <li title="archive"><a href="/ingame/cards/" class="archive">archive</a></li>
-  <li title="shop"><a href="/cards/select/" class="shop">shop</a></li>
-  <li title="contact"><a href="#" id="periodicoButt" class="contact">contact</a></li>
-  <li title="note"><a href="/notes/" class="note">note</a></li>
-
-  {{#if user.admin}}
-  <li title="contact"><a href="#" id="adminpanel" class="fas fa-users-cog"></a></li>
-  {{else}}
-  <li id="adminpanel">&nbsp;</li>
-  {{/if}}
-  <li>&nbsp;</li>
-  <li>&nbsp;</li>
-  <li>&nbsp;</li>
-  <li title="contact"><a href="/users/logout" id="logout" class="fas fa-sign-out-alt"></a></li>
 </ul>
 
 <div class="mx-auto text-center mt-4">
     <div>
-    <img src="{{user.character}}" width="170px" style="position: absolute; margin-top: 22rem; margin-left: 25rem;">
+    <img src="{{user.character}}" width="170px" class="characterboard">
 
-    <button style="position: absolute; margin-top: 13rem; margin-left: 30rem;">Entrar</button>
+    <button id="boardButt" style="position: absolute; margin-top: 13rem; margin-left: 30rem;">Entrar</button>
     <img src="/img/mazmorra.jpg" style="border-color: black; border-width: 3px; border-style:solid;">
     </div>
 </div>
