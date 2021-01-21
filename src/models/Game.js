@@ -9,7 +9,7 @@ const GameSchema = new Schema({
     year: { type: Number, default: 1800 },
     events: { type: Array },
     practicasSubidas: {type: Number, default: 0 },
-    practicaActual: { type: String }
+    actividadActual: { type: String }
 });
 
 module.exports = mongoose.model('Game', GameSchema);

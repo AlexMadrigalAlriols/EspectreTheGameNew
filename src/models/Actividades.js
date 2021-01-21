@@ -5,7 +5,8 @@ const ActividadesSchema = new Schema({
     name: { type: String, required: true },
     descripcion: { type: String },
     recursosAdicionales: { type: String },
-    class: { type: String }  
+    class: { type: String },
+    boss: { type: String }
 });
 
 module.exports = mongoose.model('Actividades', ActividadesSchema);

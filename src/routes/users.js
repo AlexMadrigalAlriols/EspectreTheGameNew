@@ -1490,9 +1490,45 @@ router.get('/ingame/boardgame', isAuthenticated, async (req, res) => {
         var game = await Game.findById('5ffc9ddda5b1f82890d99841');
         var group = await Group.findOne({name: user.group + 'T'});
     }
-    
-    var actividad = await Actividades.findOne({ _id: game.practicaActual });
+    const actividad = await Actividades.findOne({_id: game.actividadActual});
+    console.log(game.actividadActual);
 
     res.render('tablero/boardgame.hbs', {user, group, actividad});
 });
+
+router.get('/ingame/edit-activity', isAuthenticated, async (req, res) => {
+    var user = await User.findById(req.user.id);
+    if(req.user.class == 'SMX-M'){
+        var group = await Group.findOne({name: user.group});
+        var game = await Game.findById('5fedf15fa1268c39d8229e47');
+    }else if(req.user.class == 'SMX-T'){
+        var game = await Game.findById('5ffc9ddda5b1f82890d99841');
+        var group = await Group.findOne({name: user.group + 'T'});
+    }
+
+    res.render('game/actividadesSettings.hbs', {user, group});
+});
+
+router.put('/ingame/edit-activity', isAuthenticated, async (req, res, file) => {
+    var user = await User.findById(req.user.id);
+    if(req.user.class == 'SMX-M'){
+        var group = await Group.findOne({name: user.group});
+        var game = await Game.findById('5fedf15fa1268c39d8229e47');
+    }else if(req.user.class == 'SMX-T'){
+        var game = await Game.findById('5ffc9ddda5b1f82890d99841');
+        var group = await Group.findOne({name: user.group + 'T'});
+    }
+
+    const name = req.body.name;
+    const newActivity = new Actividades({name, descripcion: req.body.descripcion, recursosAdicionales: req.file.filename, boss: req.body.bossSelect, class: req.user.class});
+    await newActivity.save();
+    
+    group.actividadActual = newActivity._id;
+    console.log(newActivity._id);
+    await group.save();
+
+    console.log(req.body.bossSelect);
+    res.redirect('/ingame/edit-activity');
+});
+
 module.exports = router;

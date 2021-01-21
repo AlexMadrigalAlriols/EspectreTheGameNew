@@ -936,11 +936,24 @@ tr {
   margin-left: 20rem;
   margin-top: 4rem;
   width: 800px;
-  height: 100px;
-  text-align: center;
+  height: 130px;
   color: black;
 }
 
+@media only screen and (max-width: 1125px) {
+.cajaactividad {
+  background-color: rgba(255, 255, 255, 0.342);
+  border-style: solid;
+  border-width: 2px;
+  border-color: black;
+  position: absolute;
+  margin-left: 13rem;
+  margin-top: 4rem;
+  width: 800px;
+  height: 130px;
+  color: black;
+}
+}
 .btnsucces{
   background-color: green;
   color: white;
