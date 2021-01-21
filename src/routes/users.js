@@ -12,6 +12,7 @@ const ExtraCards = require('../models/ExtraCards');
 const Cartas = require('../models/Cartas');
 const Bundle = require('../models/Bundle');
 const Events = require('../models/Events');
+const Actividades = require('../models/Actividades');
 
 
 router.get('/users/signin', (req, res) => {
@@ -1478,5 +1479,20 @@ router.get('/ingame/board', isAuthenticated, async (req, res) => {
     }
 
     res.render('tablero/board.hbs', { user, group });
+});
+
+router.get('/ingame/boardgame', isAuthenticated, async (req, res) => {
+    var user = await User.findById(req.user.id);
+    if(req.user.class == 'SMX-M'){
+        var group = await Group.findOne({name: user.group});
+        var game = await Game.findById('5fedf15fa1268c39d8229e47');
+    }else if(req.user.class == 'SMX-T'){
+        var game = await Game.findById('5ffc9ddda5b1f82890d99841');
+        var group = await Group.findOne({name: user.group + 'T'});
+    }
+    
+    var actividad = await Actividades.findOne({ _id: game.practicaActual });
+
+    res.render('tablero/boardgame.hbs', {user, group, actividad});
 });
 module.exports = router;
