@@ -906,6 +906,27 @@ tr {
 .mazmorra {
   background-image: url("/img/mazmorra.jpg");
 }
+
+.door {
+  position: absolute;
+  margin-left: 40%;
+  margin-top: 8%;
+  background-image: url('../img/puerta.png');
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+}
+
+.door:hover{ animation: changeBg 4s;}
+
+@keyframes changeBg{
+   0%  {background-image: url("../img/puerta.png");}
+   25% {background-image: url("../img/uerta1.png");}
+   50% {background-image: url("../img/puerta2.png");}
+   75% {background-image: url("../img/puerta2.png");}
+   100% {background-image: url("../img/puerta2.png");}
+}
+
 .btnsucces{
   background-color: green;
   color: white;
@@ -982,19 +1003,6 @@ tr {
   margin-top: 20rem;
   margin-left: 25rem;
   animation: characterboard 1s forwards;
-}
-.characterboard:hover {
-  animation: charactercolor;
-}
-
-@keyframes charactercolor {
-  from {
-    background-image: url("/img/skins/chicasexy.png");
-  }
-
-  to {
-    background-image: url("/img/skins/princesa.png");
-  }
 }
 
 @keyframes characterboard {
