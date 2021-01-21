@@ -1524,10 +1524,8 @@ router.put('/ingame/edit-activity', isAuthenticated, async (req, res, file) => {
     await newActivity.save();
     
     group.actividadActual = newActivity._id;
-    console.log(newActivity._id);
     await group.save();
 
-    console.log(req.body.bossSelect);
     res.redirect('/ingame/edit-activity');
 });
 
