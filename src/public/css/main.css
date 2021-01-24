@@ -31,13 +31,39 @@ button:focus {
     width: 30%;
 }
 
+.logoEspectre{
+  animation: logomain 2s forwards;
+}
+
+
+@keyframes logomain{
+    0% {
+      margin-top: -100%;
+    }
+
+    100% {
+      margin-top: 0;
+    }
+}
+
+.carousel-item {
+  margin-top: -6rem;
+  height: 100vh;
+  min-height: 300px;
+  background: no-repeat center center scroll;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  transition: .5s;
+}
+
 @media (min-width: 768px) {
     .flex-md-equal > * {
       -ms-flex: 1;
       flex: 1;
     }
   }
-  
   .overflow-hidden { overflow: hidden; }
   
   .poweredbybubble{
@@ -328,13 +354,14 @@ section {
     position: fixed;
     bottom: 0;
     width: 40px;
-    margin-left: 20px;
+    margin-left: 95%;
     margin-bottom: 25px;
     border: black;
     border-width: 2px;
     border-style: solid;
     border-radius: 20px;
   }
+
   .descripciones {
       margin-left: 60%;
       margin-right: -60%;
@@ -971,7 +998,9 @@ tr {
   50% { transform: scale(1.1, 0.9); }
   75% { transform: scale(0.95, 1.05); }
 }
-
+.nav-item:hover{
+  text-decoration: overline;
+}
 .elastic-spin:hover {
   animation: elastic-spin 1s ease;
 }
