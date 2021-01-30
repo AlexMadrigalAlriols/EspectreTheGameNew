@@ -1,7 +1,10 @@
-<div class="fsubir float-lg-right fixed-bottom">
-<a href="#videoId"><img src="/img/flechas.svg"></a>
+<div class="float-lg-right fixed-bottom">
+
+   <div class="circuloflecha" title="Top of Page">
+<i class="fas fa-sort-up" style="font-size: 30px; margin-top: 2rem;"></i>
+ </div>
 </div>
-<nav class="navbar navbar-expand-lg" style="z-index: 9999999;">
+<nav id="navTop"class="navbar navbar-expand-lg container navbar-dark" style="z-index: 999999;">
 
 <div class="container" style="font-size: 14px;">
     <div class="container-fluid">
@@ -56,6 +59,19 @@
 </nav>
 <header>
   <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+  <div style="position: absolute; z-index: 999999; margin-left: 95%; margin-top: 12%;">
+    <a href="#"><div class="circulo">
+      <i class="fab fa-instagram" style="margin-left: 12px; margin-top:10px; font-size: 30px"></i>
+    </div></a>
+
+    <a href="#"><div class="circulo mt-4">
+      <i class="fab fa-twitter" style="margin-left: 12px; margin-top:10px; font-size: 30px"></i>
+    </div></a>
+
+    <a href="#"><div class="circulo mt-4">
+      <i class="fab fa-facebook" style="margin-left: 12px; margin-top:10px; font-size: 30px"></i>
+    </div></a>
+  </div>
   <ol class="carousel-indicators">
     <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></li>
     <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></li>
@@ -65,10 +81,13 @@
     <div class="carousel-inner">
       <!-- Slide One - Set the background image for this slide in the line below -->
       <div class="carousel-item active" style="background-image: url('https://img.8wallpapers.com/uploads/2018/10/1935fcc1b7374461b43b52ad.jpg')">
+          <img src="/img/sentado.png" style="position: absolute; margin-left: 5%; margin-top: 33%; float: left;" width="150px" class="d-none d-md-block">
 
         <div class="carousel-caption d-none d-md-block">
-          <img src="/Img/LogoEspectre.png" width="350px" class="logoEspectre">
+          <img src="/img/aguantando.png" style="position: absolute; margin-left: 29%; margin-top: 25%; float: left;" width="100px">
+          <img src="/img/LogoEspectre.png" width="350px" class="logoEspectre">
           <h2 class="display-4" style="background: -webkit-linear-gradient(white, #ff7f22); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Espectre The Game</h2>
+
           <p class="lead"><a href="/users/signup"><button class="btnvolver" style="border-color: transparent; border-radius:5px;">Empieza la Aventura</button></a></p>
         </div>
 
@@ -76,7 +95,7 @@
       <!-- Slide Two - Set the background image for this slide in the line below -->
       <div class="carousel-item" style="background-image: url('https://cdna.artstation.com/p/assets/images/images/027/352/878/4k/tyler-edlin-castle-for-web.jpg?1591286884')">
         <div class="carousel-caption d-none d-md-block">
-          <h2 class="display-4">Second Slide</h2>
+          <h2 class="display-5">¿Tu escuela aun no usa Espectre?</h2>
           <p class="lead">This is a description for the second slide.</p>
         </div>
       </div>
@@ -215,7 +234,3 @@ style="background-image: url(/img/bg-1.png)">
 </div>
 </div>
 
-<script type="text/javascript">
-    var video = document.getElementById("videoId");
-    video.play(); 
-</script>

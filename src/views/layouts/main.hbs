@@ -46,7 +46,7 @@
         {{{ body }}}
     </main>
 
-</body>
+</body> 
 
 <script src="/plugins/aos/aos.js"></script>
 <script src="/src/public/js/bootstrap-modal.js"></script>
@@ -60,6 +60,23 @@
         contenedor.style.opacity = '0';
         document.body.style.overflowY= "visible";}, 0);
     }
+
+    $(function () {
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 100) {
+            $('.circuloflecha').fadeIn();
+        } else {
+            $('.circuloflecha').fadeOut();
+        }
+    });
+
+    // scroll body to 0px on click
+    $('.circuloflecha').click(function () {
+        $('body,html').animate({
+            scrollTop: 0}, 1600);
+        return false;
+    });
+});
 </script>
 <script>
     AOS.init();

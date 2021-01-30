@@ -1519,6 +1519,8 @@ router.put('/ingame/edit-activity', isAuthenticated, async (req, res, file) => {
         var group = await Group.findOne({name: user.group + 'T'});
     }
 
+
+
     const name = req.body.name;
     const newActivity = new Actividades({name, descripcion: req.body.descripcion, recursosAdicionales: req.file.filename, boss: req.body.bossSelect, class: req.user.class});
     await newActivity.save();
