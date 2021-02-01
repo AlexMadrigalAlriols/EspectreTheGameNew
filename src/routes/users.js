@@ -1491,9 +1491,20 @@ router.get('/ingame/boardgame', isAuthenticated, async (req, res) => {
         var group = await Group.findOne({name: user.group + 'T'});
     }
     const actividad = await Actividades.findOne({_id: game.actividadActual});
-    console.log(game.actividadActual);
 
     res.render('tablero/boardgame.hbs', {user, group, actividad});
+});
+router.get('/ingame/boardactivity', isAuthenticated, async (req, res) => {
+    var user = await User.findById(req.user.id);
+    if(req.user.class == 'SMX-M'){
+        var group = await Group.findOne({name: user.group});
+        var game = await Game.findById('5fedf15fa1268c39d8229e47');
+    }else if(req.user.class == 'SMX-T'){
+        var game = await Game.findById('5ffc9ddda5b1f82890d99841');
+        var group = await Group.findOne({name: user.group + 'T'});
+    }
+
+    res.render('tablero/entregaPractica.hbs', {user, group});
 });
 
 router.get('/ingame/edit-activity', isAuthenticated, async (req, res) => {
@@ -1520,10 +1531,49 @@ router.put('/ingame/edit-activity', isAuthenticated, async (req, res, file) => {
     }
 
 
+        North_America.subido = false;
+        North_America.nota = 0;
+        Sud_America.subido = false;
+        Sud_America.nota = 0;
+        Oceania.subido = false;
+        Oceania.nota = 0;
+        Africa.subido = false;
+        Africa.nota = 0;
+        Europa.subido = false;
+        Europa.nota = 0;
+        Asia.subido = false;
+        Asia.nota = 0;
+
+        await Asia.save();
+        await Africa.save();
+        await Oceania.save();
+        await North_America.save();
+        await Sud_America.save();
+        await Europa.save();
 
     const name = req.body.name;
     const newActivity = new Actividades({name, descripcion: req.body.descripcion, recursosAdicionales: req.file.filename, boss: req.body.bossSelect, class: req.user.class});
     await newActivity.save();
+    
+    group.actividadActual = newActivity._id;
+    await group.save();
+
+    res.redirect('/ingame/edit-activity');
+});
+
+router.put('/ingame/boardactivity', isAuthenticated, async (req, res, file) => {
+    var user = await User.findById(req.user.id);
+    if(req.user.class == 'SMX-M'){
+        var group = await Group.findOne({name: user.group});
+        var game = await Game.findById('5fedf15fa1268c39d8229e47');
+    }else if(req.user.class == 'SMX-T'){
+        var game = await Game.findById('5ffc9ddda5b1f82890d99841');
+        var group = await Group.findOne({name: user.group + 'T'});
+    }
+
+    group.practica = req.file.filename;
+    group.subido = true;
+    await group.save();
     
     group.actividadActual = newActivity._id;
     await group.save();

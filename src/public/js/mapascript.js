@@ -52,13 +52,10 @@ document.getElementById('buttonclosePeriodico').addEventListener("click", functi
 	document.getElementById('periodicoM').style.display = "none";
 });
 
-// Mazmorra
-document.getElementById('boardButt').addEventListener("click", function() {
-	document.getElementById('entrarMazmorraM').style.display = "flex";
+document.getElementById('entregaBoard').addEventListener("click", function() {
+	document.getElementById('ModalBoard').style.display = "flex";
 });
 
-document.getElementById('entrarMazmorraClose').addEventListener("click", function() {
-	document.getElementById('entrarMazmorraM').style.display = "none";
+document.getElementById('buttoncloseModal').addEventListener("click", function() {
+	document.getElementById('ModalBoard').style.display = "none";
 });
-
-

@@ -6,14 +6,16 @@
 </ul>
 
 <div class="mx-auto text-center mt-4">
-    <div>
-    <img src="{{user.character}}" width="170px" class="characterboard">
-    <div class="cajaactividad">
-    <p style="margin-bottom: -3px;">{{actividad.name}}</p>
+
+<div class="row justify-content-center">
+  <div class="cajaactividad">
+    <p style="margin-bottom: -3px;"><u>{{actividad.name}}</u></p>
     <p>{{actividad.descripcion}}</p>
-    </div>
-    <button class="btnvolver" style="position: absolute; margin-left:33rem; margin-top:20rem;">hey</button>
+  </div>
+</div>
+    <img src="{{user.character}}" width="170px" class="characterboard">
+    <a href="/ingame/boardactivity"><button class="btnvolver" style="position: absolute; margin-left:33rem; margin-top:20rem;">hey</button></a>
     <img src="{{actividad.boss}}" style="position: absolute; margin-top: 15rem; margin-left: 5rem;" width="200px">
     <img src="/img/mazmorra.jpg" style="border-color: black; border-width: 3px; border-style:solid;">
-    </div>
+
 </div>

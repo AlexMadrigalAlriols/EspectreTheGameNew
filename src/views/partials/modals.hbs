@@ -128,7 +128,7 @@
     </div>
   </div>
 
-  <div class="modal bg-modal" id="entrarMazmorraM" tabindex="-1" role="dialog" aria-labelledby="entrarMazmorraM" aria-hidden="true">
+<div class="modal bg-modal" id="ModalBoard" tabindex="-1" role="dialog" aria-labelledby="ModalBoard" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -136,13 +136,30 @@
         </div>
         <div class="modal-body">
           <center>
+          <img src="/uploads/{{game.periodico}}" width="400px">
           <hr>
           <h3>Entrega Actividad</h3></center>
+          {{#if group.subido}}
+          <div>
+            <img src="/img/tick.png" class="rounded-circle mx-auto d-block m-3 logo" style="width: 60px;">
+            <p>Ya has realizado la entrega de esta Actividad</p>
+            <center><h5>Tu nota es: {{group.nota}}</h5></center>
+          </div>
+          {{else}}
+          <form action="" method="POST" enctype="multipart/form-data">
+            <div class="input-group mb-2">
+              <label class="input-group-text" for="inputGroupFile01">Upload</label>
+              <input type="file" name="file" class="form-control" id="inputGroupFile01">
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-block btnvolver">Subir</button>
+            </div>
+          </form>
+          {{/if}}
         </div>
         <div class="modal-footer">
-          <button type="button" id="entrarMazmorraClose" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
+          <button type="button" id="buttoncloseModal" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
         </div>
       </div>
     </div>
   </div>
-
