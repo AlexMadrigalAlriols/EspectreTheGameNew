@@ -1570,15 +1570,13 @@ router.put('/ingame/boardactivity', isAuthenticated, async (req, res, file) => {
         var game = await Game.findById('5ffc9ddda5b1f82890d99841');
         var group = await Group.findOne({name: user.group + 'T'});
     }
-
+    group.comentarios = req.body.comments;
     group.practica = req.file.filename;
     group.subido = true;
-    await group.save();
     
-    group.actividadActual = newActivity._id;
     await group.save();
 
-    res.redirect('/ingame/edit-activity');
+    res.redirect('/ingame/boardgame');
 });
 
 module.exports = router;

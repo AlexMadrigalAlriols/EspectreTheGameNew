@@ -15,6 +15,7 @@ const GroupSchema = new Schema({
     subido: { type: Boolean, default: false},
     notaFinal: {type: String, default: 0},
     nota: { type: Number, default: 0},
+    comentarios: { type: String },
     notas: { type: Array }
 });
 
