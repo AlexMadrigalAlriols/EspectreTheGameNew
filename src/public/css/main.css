@@ -37,11 +37,6 @@ button:focus {
     width: 30%;
 }
 
-.logoEspectre{
-  margin-top: 0;
-  animation: logomain 2s forwards;
-}
-
 
 @keyframes logomain{
     0% {
@@ -171,7 +166,7 @@ button:focus {
 
   
     .mapafondo {
-      background-color: #242424;
+
       position: absolute;
       overflow: auto;
       width: 100% 100%;
@@ -567,7 +562,6 @@ section {
 
 .menu li a:before {
   font-family: FontAwesome;
-  speak: none;
   text-indent: 0em;
   position: absolute;
   top: 0;
@@ -594,7 +588,7 @@ section {
 }
 
 .menu li a.contact:before {
-  content: "\f003";
+  content: "\f84c";
 }
 
 .menu li a.about:before {
@@ -628,7 +622,6 @@ section {
   }
   .menu li {
     display: inline-block;
-    float: left;
   }
   .menu-bar li a {
     width: 100%;
@@ -985,6 +978,19 @@ tr {
   height: 170px;
   color: black;
 }
+.cajanota {
+  background-color: rgba(255, 255, 255, 0.342);
+  border-style: solid;
+  border-width: 2px;
+  border-color: black;
+  position: absolute;
+  text-align: center;
+  margin-top: 20rem;
+  padding: 1rem;
+  width: 200px;
+  height: 75px;
+  color: black;
+}
 .nav-item:hover{
   text-decoration: overline;
 }
@@ -1107,7 +1113,25 @@ tr {
 .characterboard {
   position: absolute;
   margin-top: 20rem;
-  margin-left: 25rem;
+  margin-left: 2rem;
+  animation: characterboard 1s forwards;
+}
+
+@keyframes characterboard {
+  from {
+    opacity: 0;
+    margin-left: 0rem;
+  }
+  to {
+    opacity: 1;
+    margin-left: 13rem;
+  }
+}
+
+.characterboard2 {
+  position: absolute;
+  margin-top: 20rem;
+  margin-left: 45rem;
   animation: characterboard 1s forwards;
 }
 
@@ -1121,7 +1145,6 @@ tr {
     margin-left: 45rem;
   }
 }
-
 .door {
   position: absolute;
   margin-left: 40%;
@@ -1161,5 +1184,56 @@ input.check-colour:checked + label {
 	position:relative;
   z-index:4;
 }
+figure {
+min-width: 100%;
+min-height: 100%;
+}
+
 .check-colours div{float:left}
 
+.logoEspectre{
+  margin-top: 0;
+  animation: logomain 2s forwards;
+}
+.carouselMain{
+  margin-bottom: 6rem;
+}
+
+@media (max-width: 1440px) {
+  .logoEspectre{
+    width: 350px;
+    margin-bottom: -1rem;
+    animation: logomain 2s forwards;
+  }
+
+  .carouselMain{
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 1024px){
+  .descripcionesinversa{
+    align-items: center;
+
+    margin-bottom: 15%;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .apartadosdiscleft{
+    display:none;
+  }
+}
+.board__menu{
+  position: fixed;
+  top: 0rem;
+  right: -100%;
+  width: 30%;
+  height: 100%;
+  padding: 2rem;
+  background-color: white;
+  transition: .5s;
+}
+
+.showBoard{
+  right: 0;
+}

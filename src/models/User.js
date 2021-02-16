@@ -20,6 +20,8 @@ const UserSchema = new Schema({
     path: { type: String, default: '/uploads/ImageProfile.jpg' },
     character: {type: String, default: '/img/skins/pobre.png'},
     admin: {type: Boolean, default: false},
+    practica: {type: String },
+    comentarios: {type: String},
     description: { type: String, default: 'CAMBIA LA DESCRIPCIÓN EDITANDO EL PERFIL'},
     date: { type: Date, default: Date.now }
 });

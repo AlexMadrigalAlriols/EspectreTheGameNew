@@ -1,4 +1,5 @@
 
+<body style="overflow-y: hidden;">
 <ul class="menu" style="z-index: 1000000;">
   <li><img src="/img/LogoEspectre.png" width="60px" class="ml-2 mt-1 elastic-spin"></li>
   <li title="about"><a href="/ingame" class="active game">about</a></li>
@@ -9,7 +10,46 @@
     <div>
     <img src="{{user.character}}" width="170px" class="characterboard">
 
-    <a href="/ingame/boardgame"><div class="door"></div></a>
+    <a href="#" id="nav-toggle">
+    <div class="door"></div></a>
+
     <img src="/img/mazmorra.jpg" style="border-color: black; border-width: 3px; border-style:solid;">
     </div>
 </div>
+<div class="board__menu" id="nav-menu">
+    <a href="#" id="nav-toggle2"><span><i class="fas fa-times" style="position:absolute; top: 15px; right: 15px; font-size:20px;"></i></span></a>
+    <h4 style="float: left; color: #242424;"><b>Actividades</b></h4></br>
+    <hr>
+    {{#each actividades}}
+    <p style="display: inline-block;">{{name}}</p>
+        <a href="/ingame/boardgame/{{_id}}"><button style="float: right; right: 0; display:inline-block;" class="btn-primary">Entrar</button></a>
+    <hr>
+
+    {{/each}}
+</div>
+<script type="text/javascript">
+  const showMenu = (toggleId, navId) =>{
+    const toggle = document.getElementById(toggleId),
+        nav = document.getElementById(navId)
+
+        if(toggle && nav){
+            toggle.addEventListener('click', ()=>{
+                nav.classList.toggle('showBoard')
+            })
+        }
+}
+showMenu('nav-toggle', 'nav-menu')
+
+  const showMenu2 = (toggleId, navId) =>{
+    const toggle = document.getElementById(toggleId),
+        nav = document.getElementById(navId)
+
+        if(toggle && nav){
+            toggle.addEventListener('click', ()=>{
+                nav.classList.toggle('showBoard')
+            })
+        }
+}
+showMenu2('nav-toggle2', 'nav-menu')
+</script>
+</body>

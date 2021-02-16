@@ -1,7 +1,7 @@
 <a href="/ingame"><button class="btn ml-2 mt-2 " style="background-color: #ff6d05; color: #fff;">Volver InGame</button></a>
 <div class="row mx-auto">
     {{#each groups}}
-<div class="col-md-3 mt-1">
+<div class="col-md-3 mt-1 mb-5">
 <figure class="snip1336">
         <img src="/img/bannerEspectre.png" alt="sample87" />
     <figcaption>
@@ -10,6 +10,7 @@
         <hr style="background-color: white;">
         <a href="/ingame/edit-group/{{_id}}" class="info" style="width: 100%;"><i class="far fa-edit"></i></a>
     </figcaption>
+    <a href="/group/{{name}}">Practicas</a>
     {{#if subido}}
     <a href="{{practica}}" download="{{name}}" style="border-color: transparent;"><button class="btnvolver" style="border-color: transparent; width: 85%; margin-left: 8%; margin-bottom: 5px;">Descargar practica</button></a>
     <form action="/users/nota/{{_id}}?__method=PUT" method="POST">

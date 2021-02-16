@@ -1,3 +1,5 @@
+
+
 document.getElementById('button').addEventListener("click", function() {
 	document.querySelector('.modal').style.display = "flex";
 });
@@ -38,6 +40,9 @@ document.getElementById('adminpanel').addEventListener("click", function() {
 document.getElementById('buttoncloseAdmin').addEventListener("click", function() {
 	document.getElementById('adminPanel').style.display = "none";
 });
+document.getElementById('buttoncloseAdmin2').addEventListener("click", function() {
+	document.getElementById('adminPanel').style.display = "none";
+});
 
 document.getElementById('buttoncloseN').addEventListener("click", function() {
 	document.getElementById('ModalNamerica').style.display = "none";
@@ -52,10 +57,3 @@ document.getElementById('buttonclosePeriodico').addEventListener("click", functi
 	document.getElementById('periodicoM').style.display = "none";
 });
 
-document.getElementById('entregaBoard').addEventListener("click", function() {
-	document.getElementById('ModalBoard').style.display = "flex";
-});
-
-document.getElementById('buttoncloseModal').addEventListener("click", function() {
-	document.getElementById('ModalBoard').style.display = "none";
-});

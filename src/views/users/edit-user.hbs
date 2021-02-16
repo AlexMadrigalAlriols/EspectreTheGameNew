@@ -2,9 +2,10 @@
     <div class="card">
         <div class="card-header">
             <h3>Edit {{user.name}}</h3>
-            <img class="rounded-circle mx-auto d-block logo" src="{{user.path}}">
+            <img class="mx-auto d-block" src="{{user.character}}" width="130px">
         </div>
         <div class="card-body">
+            <h5>Basic Information</h5>
             <form action="/users/edit-user/{{user._id}}?__method=PUT" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="__method" value="PUT">
                 <div class="form-group">
@@ -28,6 +29,7 @@
                     <option value="Asia">Asia</option>                                            
                 </select> </br>
                 {{/if}}
+                <h5>Banner</h5>
                 <div class="input-group mb-4">
                     <input type="file" name="file" class="form-control" id="inputGroupFile02" value="{{user.path}}">
                     <label class="input-group-text" for="inputGroupFile02">EXPLORE</label>

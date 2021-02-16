@@ -1,4 +1,3 @@
-
 <div class="row card-group">
 <div class="col-md-6 h-100" style="float: left; min-height:100%; padding:25px;"> 
     <div class="card">
@@ -7,15 +6,15 @@
             <h3>New Activity</h3>
         </div>
         <div class="card-body">
-            <form action="/ingame/edit-activity?__method=PUT" method="POST" enctype="multipart/form-data">
+            <form action="/ingame/new-activity?__method=PUT" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="__method" value="PUT">
                 <h5>Name</h5>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" name="name" value="" aria-label="Sizing example input" placeholder="Some name to your activity" aria-describedby="inputGroup-sizing-default">
+                    <input type="text" class="form-control" name="name" value="" aria-label="Sizing example input" placeholder="Some name to your activity" aria-describedby="inputGroup-sizing-default" minlength="1" required>
                 </div>
                 <h5>Description</h5>
                 <div class="input-group mb-3">
-                    <textarea name="descripcion" id="descripcion" class="form-control" placeholder="Put some description to your activity"></textarea>
+                    <textarea name="descripcion" id="descripcion" class="form-control" placeholder="Put some description to your activity" maxlength="40"></textarea>
                 </div>
 
                 <h5>Recursos Adicionales</h5>
@@ -23,7 +22,15 @@
                     <label class="input-group-text" for="inputGroupFile02">EXPLORE</label>
                     <input type="file" name="file" class="form-control" id="inputGroupFile02">
                 </div>
-                
+                <h5>Type</h5>
+                <div class="mb-3" style="display:inline-block;">
+                   <input type="radio" name="typeActivity" id="individual" value="individual" style="display: inline-block;" required>
+                    <label for="individual" style="display: inline-block; margin-top: -0.3rem;" class="ml-2">individual</label>
+                </div>
+                <div class="mb-3" style="display:inline-block;">
+                   <input type="radio" name="typeActivity" id="group" value="group" style="display: inline-block;">
+                    <label for="group" style="display: inline-block; margin-top: -0.3rem;" class="ml-2">group</label>
+                </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-block btnvolver">
                         Create Activity
@@ -43,23 +50,27 @@
         <div class="card-body card-img-overlay">
             <div class="check-colours ml-5 mt-5">
 				<div>
-						<input class="check-colour" type="radio" name="bossSelect" id="monolila" value="/img/skins/monolila.png">
-						<label for="monolila" class="mr-4 mt-2 gelatine"><img src="/img/skins/monolila.png" width="150px"></label>
+						<input class="check-colour" type="radio" name="bossSelect" id="monolila" value="/img/bosses/bruja.png">
+						<label for="monolila" class="mr-4 mt-2 gelatine"><img src="/img/bosses/bruja.png" width="140px"></label>
 				</div>
 				<div>
-						<input class="check-colour" type="radio" name="bossSelect" id="pobre" value="/img/skins/pobre.png">
-						<label for="pobre" class="mr-4 mt-2 gelatine"><img src="/img/skins/pobre.png" width="150px"></label>
+						<input class="check-colour" type="radio" name="bossSelect" id="pobre" value="/img/bosses/oni.png">
+						<label for="pobre" class="mr-4 mt-2 gelatine"><img src="/img/bosses/oni.png" width="140px"></label>
 				</div>
 				<div>
-						<input class="check-colour" type="radio" name="bossSelect" id="chicasexy" value="/img/skins/chicasexy.png">
-						<label for="chicasexy" class="mr-4 mt-2 gelatine"><img src="/img/skins/chicasexy.png" width="165px"></label>
+						<input class="check-colour" type="radio" name="bossSelect" id="chicasexy" value="/img/bosses/hada.png">
+						<label for="chicasexy" class="mr-4 mt-2 gelatine"><img src="/img/bosses/hada.png" width="150px"></label>
 				</div>
 
                 <div>
-						<input class="check-colour" type="radio" name="bossSelect" id="princesa" value="/img/skins/princesa.png">
-						<label for="princesa" class="mr-4 gelatine"><img src="/img/skins/princesa.png" width="165px"></label>
+						<input class="check-colour" type="radio" name="bossSelect" id="dragon" value="/img/bosses/dragon.png">
+						<label for="dragon" class="mr-4 mt-2 gelatine" style="display: inline-block;"><img src="/img/bosses/dragon.png" style="display: inline-block;" width="200px"></label>
 				</div>  
         
+                <div>
+						<input class="check-colour" type="radio" name="bossSelect" id="angelcaido" value="/img/bosses/angelcaido.png">
+						<label for="angelcaido" class="mr-4 mt-2 gelatine"><img src="/img/bosses/angelcaido.png" style="display: inline-block;" width="150px"></label>
+				</div>  
 		</div>
                 
             </form>

@@ -8,8 +8,9 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
-<div class="z-depth-5 main">
+        <img>
+        <div class="modal-body" style="background-image: url({{user.banner}});">
+<div class="z-depth-5 main" style="background-color: rgba(255, 255, 255, 0.800);">
     <div class="row">
         <div class="col-sm-6 picture">
             <center><img class="mb-4 responsive-img" src="{{user.character}}"><a href="/ingame/character"><i class="fas fa-edit mt-4"></i></a></center>
@@ -19,7 +20,7 @@
             <center>
                 <p class="name"><b>{{user.name}}</b></p>
                 <hr>
-                <p>{{user.description}}</p>
+                <p >{{user.description}}</p>
             <div class="p-2">
                 <a href="/users/all-users/"><button class="btn btn-sm btn-block btnvolver">All Users</button></a>
             </div>
@@ -41,7 +42,7 @@
     </table>
     <center><a href="/users/edit-user/{{user.id}}" class="waves-effect waves-light btn edit btnvolver p-2">Edit Profile</a></center>
 </div>
-        <div class="modal-footer">
+        <div class="modal-footer" style="background-color: rgba(255, 255, 255, 0.800);">
           <button type="button" id="buttonclose" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
         </div>
       </div>
@@ -69,7 +70,7 @@
   </div>
 
   <div class="modal bg-modal" id="adminPanel" tabindex="-1" role="dialog" aria-labelledby="AdminPanel" aria-hidden="true">
-    <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-dialog modal-md" style="width: 20%;" role="document">
       <div class="modal-content">
         <div class="modal-header">
          <h3 class="modal-title text-center">Admin Panel</h3>
@@ -83,10 +84,10 @@
           <hr>
           <a href="/ingame/events/"><button class="btn btn-primary btn-block">Events Console</button></a>
           <hr>
-          <a href="/ingame/edit-activity/"><button class="btn btn-primary btn-block">Actividades Modify</button></a>
+          <a href="#" id="buttoncloseAdmin"><button class="btn btn-primary btn-block">Actividades Modify</button></a>
         </div>
         <div class="modal-footer">
-          <button type="button" id="buttoncloseAdmin" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
+          <button type="button" id="buttoncloseAdmin2" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
         </div>
       </div>
     </div>

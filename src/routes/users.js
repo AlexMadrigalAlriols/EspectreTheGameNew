@@ -12,6 +12,7 @@ const ExtraCards = require('../models/ExtraCards');
 const Cartas = require('../models/Cartas');
 const Bundle = require('../models/Bundle');
 const Events = require('../models/Events');
+const Entregas = require('../models/Entregas');
 const Actividades = require('../models/Actividades');
 
 
@@ -50,6 +51,7 @@ router.get('/users/all-users/', isAuthenticated, async (req, res) => {
             }
           })
         }
+
         const userAdmin = userId.admin;
         const users = contexto.users;
         res.render('users/all-users.hbs', {users, userAdmin });
@@ -104,13 +106,18 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
     user.name = name;
     user.email = email;
     user.description = description;
-    user.group = group;
+    if(req.user.admin == true){
+        user.group = group;
+    }else{
+        user.group = req.user.group;
+    }
+
     
     if(req.user.class == 'SMX-M'){
-        var groupUser = await Group.findOne({name: group});
+        var groupUser = await Group.findOne({name: req.user.group});
         var indexGroup = await groupUser.users.indexOf(req.params.id);
     }else if(req.user.class == 'SMX-T'){
-        var groupUser = await Group.findOne({name: group + 'T'});
+        var groupUser = await Group.findOne({name: req.user.group + 'T'});
         var indexGroup = await groupUser.users.indexOf(req.params.id);
     }
 
@@ -237,13 +244,13 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
     }
 
     if(req.file == null) {
-        user.path = lastImage.path;
+        user.banner = req.user.banner;
 
         await user.save();
         req.flash('success_msg', 'Profile Updated');
         res.redirect('/ingame/');
     }else{
-        user.path = '/uploads/' + req.file.filename;
+        user.banner = '/uploads/' + req.file.filename;
 
         await user.save();
         req.flash('success_msg', 'Profile Updated');
@@ -287,16 +294,37 @@ router.get('/users/logout', (req, res) => {
 });
 
 router.get('/ingame', isAuthenticated, async (req, res) =>{
-    var user = await User.findById(req.user.id);
+    var user = await User.findById(req.user._id);
 
-    if(req.user.class == 'SMX-M'){
-        var group = await Group.findOne({name: user.group});
-        var game = await Game.findById('5fedf15fa1268c39d8229e47');
-            if(group.Ataqued == true){
-              req.flash('attack_msg', 'Estas siendo atacado usa una carta de defensa para defenderte!');
-              res.redirect('/ingame/cards/');
+    if(req.user.class == 'SMX-M'){    
+            var group = await Group.findOne({name: user.group});
+            var game = await Game.findById('5fedf15fa1268c39d8229e47');  
+            if(group.Ataqued == true){ 
+            req.flash('attack_msg', 'Estas siendo atacado usa una carta de defensa para defenderte!');
+            res.redirect('/ingame/cards/');
+
+
            }else{
-              res.render('layouts/mapa.hbs', { game, user, group });
+            await Actividades.find({class: req.user.class}).sort({date: 'desc'})
+            .then(async documentos => {
+              const contexto = {
+                actividad: documentos.map(documento => {
+                  return {
+                      name: documento.name,
+                      _id: documento._id,
+                      descripcion: documento.descripcion,
+                      entregados: documento.entregados,
+                      class: documento.class,
+                  }
+                })
+              }
+              var user = await User.findById(req.user._id);
+              var group = await Group.findOne({name: user.group});
+              var game = await Game.findById('5fedf15fa1268c39d8229e47');   
+              var actividades = contexto.actividad;
+              res.render('layouts/mapa.hbs', { game, user, group, actividades });
+            });
+
            }
     }else if(req.user.class == 'SMX-T'){
         var game = await Game.findById('5ffc9ddda5b1f82890d99841');
@@ -305,7 +333,25 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
               req.flash('attack_msg', 'Estas siendo atacado usa una carta de defensa para defenderte!');
               res.redirect('/ingame/cards/');
            }else{
-              res.render('layouts/mapa.hbs', { game, user, group });
+            await Actividades.find({class: req.user.class}).sort({date: 'desc'})
+            .then(async documentos => {
+              const contexto = {
+                actividad: documentos.map(documento => {
+                  return {
+                      name: documento.name,
+                      _id: documento._id,
+                      descripcion: documento.descripcion,
+                      entregados: documento.entregados,
+                      class: documento.class,
+                  }
+                })
+              }
+              var user = await User.findById(req.user._id);
+              var game = await Game.findById('5ffc9ddda5b1f82890d99841');
+              var group = await Group.findOne({name: user.group + 'T'});
+              var actividades = contexto.actividad;
+              res.render('layouts/mapa.hbs', { game, user, group, actividades });
+            });
            }
     }else{
         res.redirect('/code');
@@ -395,11 +441,11 @@ router.post('/ingame', isAuthenticated, async (req, res, file) => {
     }else if(req.user.class == 'SMX-T'){
         var subidoU = await Group.findOne({name: req.user.group + 'T'}); 
     }
-   console.log(req.file.filename);
+
    subidoU.practica = '/uploads/' + req.file.filename;
 
    subidoU.subido = true;
-    console.log(subidoU.subido);
+
    await subidoU.save();
    res.redirect('/ingame');
 });
@@ -424,9 +470,10 @@ router.get('/ingame/all-groups/', isAuthenticated, async (req, res) => {
                 subido: documento.subido,
                 practica: documento.practica,
                 nota: documento.nota,
+                notaFinal: documento.notaFinal,
                 diamantes: documento.diamantes
             }
-          })
+          })       
         }
         const userAdmin = userId.admin;
         var groups = contexto.groups;
@@ -1473,15 +1520,30 @@ router.get('/ingame/board', isAuthenticated, async (req, res) => {
     var user = await User.findById(req.user.id);
 
     if(req.user.class == 'SMX-M'){
-        var group = await Group.findOne({name: req.user.group});
+        var group = await Group.findOne({name: req.user.group});  
     }else if(req.user.class == 'SMX-T'){
         var group = await Group.findOne({name: req.user.group + 'T'});
     }
+    await Actividades.find({class: req.user.class}).sort({date: 'desc'})
+    .then(async documentos => {
+      const contexto = {
+        actividad: documentos.map(documento => {
+          return {
+              name: documento.name,
+              _id: documento._id,
+              descripcion: documento.descripcion,
+              entregados: documento.entregados,
+              class: documento.class,
+          }
+        })
+      }
+      var actividades = contexto.actividad;
+      res.render('tablero/board.hbs', { user, group,actividades });
+    });
 
-    res.render('tablero/board.hbs', { user, group });
 });
 
-router.get('/ingame/boardgame', isAuthenticated, async (req, res) => {
+router.get('/ingame/boardgame/:id', isAuthenticated, async (req, res) => {
     var user = await User.findById(req.user.id);
     if(req.user.class == 'SMX-M'){
         var group = await Group.findOne({name: user.group});
@@ -1490,12 +1552,26 @@ router.get('/ingame/boardgame', isAuthenticated, async (req, res) => {
         var game = await Game.findById('5ffc9ddda5b1f82890d99841');
         var group = await Group.findOne({name: user.group + 'T'});
     }
-    const actividad = await Actividades.findOne({_id: game.actividadActual});
+    const actividad = await Actividades.findOne({_id: req.params.id});
+    if(actividad.individual){
+        var indexEntrega = await Entregas.findOne({user: req.user._id, actividad: actividad._id});
+    }else{
+        var indexEntrega = await Entregas.findOne({group: group._id, actividad: actividad._id});
+    }
 
-    res.render('tablero/boardgame.hbs', {user, group, actividad});
+    if(indexEntrega == null){
+        var entregado = false;
+        var entrega = "";
+    }else{
+        var entregado = true;
+        var entrega = indexEntrega;
+    }
+
+    res.render('tablero/boardgame.hbs', {user, group, actividad, entregado, entrega});
 });
-router.get('/ingame/boardactivity', isAuthenticated, async (req, res) => {
+router.get('/ingame/boardactivity/:id', isAuthenticated, async (req, res) => {
     var user = await User.findById(req.user.id);
+    var practica = await Actividades.findById(req.params.id);
     if(req.user.class == 'SMX-M'){
         var group = await Group.findOne({name: user.group});
         var game = await Game.findById('5fedf15fa1268c39d8229e47');
@@ -1504,10 +1580,53 @@ router.get('/ingame/boardactivity', isAuthenticated, async (req, res) => {
         var group = await Group.findOne({name: user.group + 'T'});
     }
 
-    res.render('tablero/entregaPractica.hbs', {user, group});
+    res.render('tablero/entregaPractica.hbs', {user, group, practica});
 });
 
-router.get('/ingame/edit-activity', isAuthenticated, async (req, res) => {
+router.get('/ingame/edit-activity/:id', isAuthenticated, async (req, res) => {
+    var user = await User.findById(req.user.id);
+    if(req.user.class == 'SMX-M'){
+        var group = await Group.findOne({name: user.group});
+        var game = await Game.findById('5fedf15fa1268c39d8229e47');
+    }else if(req.user.class == 'SMX-T'){
+        var game = await Game.findById('5ffc9ddda5b1f82890d99841');
+        var group = await Group.findOne({name: user.group + 'T'});
+    }
+    const actividad = await Actividades.findById(req.params.id);
+    res.render('game/editActividades.hbs', {user, group, actividad});
+});
+
+router.put('/ingame/edit-activity/:id', isAuthenticated, async (req, res, file) => {
+    var user = await User.findById(req.user.id);
+    var actividad = await Actividades.findById(req.params.id);
+    if(req.file == null){
+        actividad.recursosAdicionales = actividad.recursosAdicionales;
+    }else{
+        actividad.recursosAdicionales = req.file.filename;
+    }
+    if(req.body.typeActivity == 'individual'){
+        var individual = true;
+    }else{
+        var individual = false;
+    }
+
+    if(req.body.bossSelect != null){
+        actividad.boss = req.body.bossSelect;
+        actividad.dragon = false;
+    }
+
+    if(req.body.bossSelect == '/img/bosses/dragon.png'){
+        actividad.dragon = true;
+    }
+
+    actividad.name = req.body.name;
+    actividad.descripcion = req.body.descripcion;
+    actividad.individual = individual;
+    await actividad.save();
+
+    res.redirect('/ingame/boardgame/' + actividad._id);
+});
+router.get('/ingame/new-activity/', isAuthenticated, async (req, res) => {
     var user = await User.findById(req.user.id);
     if(req.user.class == 'SMX-M'){
         var group = await Group.findOne({name: user.group});
@@ -1520,49 +1639,39 @@ router.get('/ingame/edit-activity', isAuthenticated, async (req, res) => {
     res.render('game/actividadesSettings.hbs', {user, group});
 });
 
-router.put('/ingame/edit-activity', isAuthenticated, async (req, res, file) => {
-    var user = await User.findById(req.user.id);
-    if(req.user.class == 'SMX-M'){
-        var group = await Group.findOne({name: user.group});
-        var game = await Game.findById('5fedf15fa1268c39d8229e47');
-    }else if(req.user.class == 'SMX-T'){
-        var game = await Game.findById('5ffc9ddda5b1f82890d99841');
-        var group = await Group.findOne({name: user.group + 'T'});
+  router.delete('/ingame/activity/:id', isAuthenticated, async (req, res) => {
+    await Actividades.findByIdAndDelete(req.params.id);
+    req.flash('success_msg', 'Activity Deleted Successfully');
+    res.redirect('/ingame');
+  });
+
+  router.delete('/ingame/activity/delete/:id', isAuthenticated, async (req, res) => {
+    await Entregas.findByIdAndDelete(req.params.id);
+    req.flash('success_msg', 'Entrega Deleted Successfully');
+    res.redirect('/ingame');
+  });
+
+router.put('/ingame/new-activity', isAuthenticated, async (req, res, file) => {
+    if(req.file == null){
+        var recursosAdicionales = "sinRecursos";
+    }else{
+        var recursosAdicionales = req.file.filename;
     }
 
-
-        North_America.subido = false;
-        North_America.nota = 0;
-        Sud_America.subido = false;
-        Sud_America.nota = 0;
-        Oceania.subido = false;
-        Oceania.nota = 0;
-        Africa.subido = false;
-        Africa.nota = 0;
-        Europa.subido = false;
-        Europa.nota = 0;
-        Asia.subido = false;
-        Asia.nota = 0;
-
-        await Asia.save();
-        await Africa.save();
-        await Oceania.save();
-        await North_America.save();
-        await Sud_America.save();
-        await Europa.save();
-
-    const name = req.body.name;
-    const newActivity = new Actividades({name, descripcion: req.body.descripcion, recursosAdicionales: req.file.filename, boss: req.body.bossSelect, class: req.user.class});
+    if(req.body.typeActivity == 'individual'){
+        var individual = true;
+    }else{
+        var individual = false;
+    }
+    const newActivity = new Actividades({name: req.body.name, descripcion: req.body.descripcion, recursosAdicionales, individual ,boss: req.body.bossSelect, class: req.user.class});
     await newActivity.save();
-    
-    group.actividadActual = newActivity._id;
-    await group.save();
 
-    res.redirect('/ingame/edit-activity');
+    res.redirect('/ingame/boardgame/' + newActivity._id);
 });
 
-router.put('/ingame/boardactivity', isAuthenticated, async (req, res, file) => {
+router.put('/ingame/boardactivity/:id', isAuthenticated, async (req, res, file) => {
     var user = await User.findById(req.user.id);
+    var practica = await Actividades.findById(req.params.id);
     if(req.user.class == 'SMX-M'){
         var group = await Group.findOne({name: user.group});
         var game = await Game.findById('5fedf15fa1268c39d8229e47');
@@ -1570,13 +1679,51 @@ router.put('/ingame/boardactivity', isAuthenticated, async (req, res, file) => {
         var game = await Game.findById('5ffc9ddda5b1f82890d99841');
         var group = await Group.findOne({name: user.group + 'T'});
     }
-    group.comentarios = req.body.comments;
-    group.practica = req.file.filename;
-    group.subido = true;
+    if(practica.individual){
+        const newEntrega = new Entregas({user: req.user._id, actividad: req.params.id, comentarios: req.body.comments, entrega: req.file.filename, actividadname: practica.name});
+        await newEntrega.save();
+        await practica.entregados.push(newEntrega._id);
+    }else{
+        const newEntrega = new Entregas({group: group._id, actividad: req.params.id, comentarios: req.body.comments, entrega: req.file.filename});
+        await newEntrega.save();
+        await practica.entregados.push(newEntrega._id);
+    }
     
-    await group.save();
+    await practica.save();
 
-    res.redirect('/ingame/boardgame');
+
+    res.redirect('/ingame/boardgame/' + req.params.id);
+});
+
+router.put('/entrega/:id', isAuthenticated, async (req, res, file) => {
+    var entrega = await Entregas.findById(req.params.id);
+
+    entrega.nota = req.body.nota;
+    entrega.save();
+    res.redirect('/ingame');
+});
+
+router.get(`/group/:name`, isAuthenticated, async (req, res) => {
+    var user = await User.findById(req.user.id);
+    var group = await Group.findOne({name: req.params.name});
+
+    await Entregas.find({group: group._id}).sort({date: 'desc'})
+    .then(async documentos => {
+      const contexto = {
+        entregas: documentos.map(documento => {
+          return {
+              nota: documento.nota,
+              _id: documento._id,
+              entrega: documento.entrega,
+              comentarios: documento.comentarios,
+              actividadname: documento.actividadname,
+              actividad: documento.actividad,
+          }
+        })
+      }
+      var entregas = contexto.entregas;
+      res.render('groups/actividades.hbs', { user, group,entregas });
+    });
 });
 
 module.exports = router;
