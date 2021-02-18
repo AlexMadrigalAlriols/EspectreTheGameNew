@@ -1781,15 +1781,27 @@ router.put('/ingame/boardactivity/:id', isAuthenticated, async (req, res, file) 
 
 router.put('/entrega/:id', isAuthenticated, async (req, res, file) => {
     var entrega = await Entregas.findById(req.params.id);
-    var user = await User.findById(entrega.user);
 
-    if(req.user.class == 'SMX-M'){
-        var group = await Group.findOne({name: user.group});
-    }else if(req.user.class == 'SMX-T'){
-        var group = await Group.findOne({name: user.group + 'T'});
+    if(entrega.user != undefined){
+        var user = await User.findById(entrega.user);
+
+        if(req.user.class == 'SMX-M'){
+            var group = await Group.findOne({name: user.group});
+        }else if(req.user.class == 'SMX-T'){
+            var group = await Group.findOne({name: user.group + 'T'});
+        }
+    }else{
+        var group = await Group.findById(entrega.group);
+
+        if(req.user.class == 'SMX-M'){
+            var group = await Group.findOne({_id: entrega.group});
+        }else if(req.user.class == 'SMX-T'){
+            var group = await Group.findOne({_id: entrega.group});
+        }
     }
 
     entrega.nota = req.body.nota;
+
     if(entrega.nota >= 0.00 && entrega.nota < 5.00){
         group.diamantes = group.diamantes + 0;
 
