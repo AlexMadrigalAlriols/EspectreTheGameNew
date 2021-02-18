@@ -1,4 +1,4 @@
-<h4 style="position:absolute; left: 5rem;">Año: {{game.year}}</h4>
+<h4 style="position:absolute; left: 6rem;">Año: {{game.year}}</h4>
 <div class="p-5 p-md-8 mapafondo" style="margin-top: 4rem;">
   <div><img class="mapainteractuable" src="{{game.mapa}}" usemap="#image-map"></div>
   
@@ -13,6 +13,7 @@
     <area type="button" id="button4" onclick="continenteModal();" href="#" coords="269,246,77,42" shape="rect">
     <area type="button" id="button5" onclick="continenteModal();" href="#" coords="269,246,77,42" shape="rect">
 </map>
+
 {{/if}}
 {{#if user.Oceania}}
   <map name="image-map">

@@ -6,9 +6,11 @@ const ActividadesSchema = new Schema({
     descripcion: { type: String },
     recursosAdicionales: { type: String },
     class: { type: String },
-    boss: { type: String },
+    boss: { type: String, default: '/img/bosses/angelcaido.png'},
     individual: { type: Boolean, default: false},
     entregados: {type: Array },
+    diamax: { type: Number },
+    mesmax: {type: Number },
     dragon: { type: Boolean, default: false}
 });
 

@@ -14,7 +14,7 @@ const Bundle = require('../models/Bundle');
 const Events = require('../models/Events');
 const Entregas = require('../models/Entregas');
 const Actividades = require('../models/Actividades');
-
+const Skins = require('../models/Skins');
 
 router.get('/users/signin', (req, res) => {
     res.render('users/signin.hbs');
@@ -47,7 +47,7 @@ router.get('/users/all-users/', isAuthenticated, async (req, res) => {
                 banner: documento.banner,
                 subido: documento.subido,
                 practica: documento.practica,
-                ProfileImg: documento.path
+                character: documento.character
             }
           })
         }
@@ -57,6 +57,46 @@ router.get('/users/all-users/', isAuthenticated, async (req, res) => {
         res.render('users/all-users.hbs', {users, userAdmin });
       });
   });
+
+  router.get('/users/search/:id', isAuthenticated, async (req, res) => {
+    const userId = await User.findById(req.user._id);
+    const user = await User.findOne({_id: req.params.id});
+    
+    await User.find({email: user.email}).sort({name: 'desc'})
+      .then(async documentos => {
+        const contexto = {
+            users: documentos.map(documento => {
+            return {
+                name: documento.name,
+                _id: documento._id,
+                email: documento.email,
+                description: documento.description,
+                group: documento.group,
+                class: documento.class,
+                banner: documento.banner,
+                subido: documento.subido,
+                practica: documento.practica,
+                character: documento.character
+            }
+          })
+        }
+
+        const userAdmin = userId.admin;
+        const users = contexto.users;
+        res.render('users/all-users.hbs', {users, userAdmin });
+      });
+  });
+
+  router.post('/user/search/', async (req, res) => {
+    const user = await User.findOne({email: req.body.email});
+
+    if(user == null){
+        req.flash('error_msg', 'No se ha encontrado nadie con ese email.')
+        res.redirect('/users/all-users');
+    }else{
+        res.redirect('/users/search/' + user._id);
+    }
+});
 
 router.post('/users/signup', async (req, res) => {
     const { name, email, rol, password, confirm_password } = req.body;
@@ -246,6 +286,7 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
     if(req.file == null) {
         user.banner = req.user.banner;
 
+
         await user.save();
         req.flash('success_msg', 'Profile Updated');
         res.redirect('/ingame/');
@@ -297,12 +338,15 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
     var user = await User.findById(req.user._id);
 
     if(req.user.class == 'SMX-M'){    
-            var group = await Group.findOne({name: user.group});
-            var game = await Game.findById('5fedf15fa1268c39d8229e47');  
-            if(group.Ataqued == true){ 
-            req.flash('attack_msg', 'Estas siendo atacado usa una carta de defensa para defenderte!');
-            res.redirect('/ingame/cards/');
-
+            if(req.user.SinGroup == true){
+                req.flash('success_msg', 'Tienes que esperar para que tu profesor te coloque en un grupo.')
+                res.redirect('/');
+            }else{
+                var group = await Group.findOne({name: user.group});
+                var game = await Game.findById('5fedf15fa1268c39d8229e47');  
+                if(group.Ataqued == true){ 
+                req.flash('attack_msg', 'Estas siendo atacado usa una carta de defensa para defenderte!');
+                res.redirect('/ingame/cards/');
 
            }else{
             await Actividades.find({class: req.user.class}).sort({date: 'desc'})
@@ -324,11 +368,15 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
               var actividades = contexto.actividad;
               res.render('layouts/mapa.hbs', { game, user, group, actividades });
             });
-
-           }
+        }
+    }
     }else if(req.user.class == 'SMX-T'){
         var game = await Game.findById('5ffc9ddda5b1f82890d99841');
         var group = await Group.findOne({name: user.group + 'T'});
+        if(req.user.SinGroup == true){
+            req.flash('success_msg', 'Tienes que esperar para que tu profesor te coloque en un grupo.')
+            res.redirect('/');
+        }else{
         if(group.Ataqued == true){
               req.flash('attack_msg', 'Estas siendo atacado usa una carta de defensa para defenderte!');
               res.redirect('/ingame/cards/');
@@ -353,6 +401,7 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
               res.render('layouts/mapa.hbs', { game, user, group, actividades });
             });
            }
+        }
     }else{
         res.redirect('/code');
     }
@@ -1421,7 +1470,7 @@ router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
 
   // ===== CODE CLASS ======= //
   router.get('/code', isAuthenticated, async (req, res) => {
-    const user = await User.findOne({_id: req.user.id});
+    const user = await User.findById(req.user.id);
     if(user.class == 'SinAsignar'){
         res.render('users/classCode.hbs', { user });
     }else{
@@ -1496,21 +1545,29 @@ router.get('/ingame/events/', isAuthenticated, async (req, res) => {
 router.get('/ingame/character', isAuthenticated, async (req, res) => {
     const user = User.findById(req.user.id);
 
-    res.render('tablero/selectplayer.hbs', { user });
+    await Skins.find({usuarios: req.user.id})
+    .then(async documentos => {
+      const contexto = {
+        skins: documentos.map(documento => {
+          return {
+              name: documento.name,
+              _id: documento._id,
+              img: documento.img,
+              usuarios: documento.usuarios
+          }
+        })
+      }
+      var skins = contexto.skins;
+      res.render('tablero/selectplayer.hbs', { skins, user });
+    });
+
 });
 
 router.put('/ingame/character', isAuthenticated, async (req, res) => {
     var user = await User.findById(req.user.id);
 
-    if(req.body.characterSelect == 'pobre'){
-        user.character = '/img/skins/pobre.png';
-    }else if(req.body.characterSelect == 'chicasexy'){
-        user.character = '/img/skins/chicasexy.png';
-    }else if(req.body.characterSelect == 'princesa'){
-        user.character = '/img/skins/princesa.png';
-    }else if(req.body.characterSelect == 'monolila'){
-        user.character = '/img/skins/monolila.png';
-    }
+
+    user.character = req.body.characterSelect;
     await user.save();
     res.redirect('/ingame');
 });
@@ -1534,6 +1591,8 @@ router.get('/ingame/board', isAuthenticated, async (req, res) => {
               descripcion: documento.descripcion,
               entregados: documento.entregados,
               class: documento.class,
+              diamax: documento.diamax,
+              mesmax: documento.mesmax
           }
         })
       }
@@ -1567,7 +1626,25 @@ router.get('/ingame/boardgame/:id', isAuthenticated, async (req, res) => {
         var entrega = indexEntrega;
     }
 
-    res.render('tablero/boardgame.hbs', {user, group, actividad, entregado, entrega});
+    const date = new Date();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    var pasadolimite = false;
+    if(actividad.mesmax != 0 && actividad.diamax != 0){
+        if(actividad.mesmax == month){
+            if(actividad.diamax < day){
+                var pasadolimite = true;
+            }else{
+                var pasadolimite = false;
+            }
+        }else if(actividad.mesmax < month){
+            var pasadolimite = true;
+        }
+    }else{
+        var pasadolimite = false;
+    }
+
+    res.render('tablero/boardgame.hbs', {user, group, actividad, entregado, entrega, pasadolimite});
 });
 router.get('/ingame/boardactivity/:id', isAuthenticated, async (req, res) => {
     var user = await User.findById(req.user.id);
@@ -1622,6 +1699,8 @@ router.put('/ingame/edit-activity/:id', isAuthenticated, async (req, res, file) 
     actividad.name = req.body.name;
     actividad.descripcion = req.body.descripcion;
     actividad.individual = individual;
+    actividad.diamax = req.body.diamax;
+    actividad.mesmax = req.body.mesmax;
     await actividad.save();
 
     res.redirect('/ingame/boardgame/' + actividad._id);
@@ -1662,8 +1741,8 @@ router.put('/ingame/new-activity', isAuthenticated, async (req, res, file) => {
         var individual = true;
     }else{
         var individual = false;
-    }
-    const newActivity = new Actividades({name: req.body.name, descripcion: req.body.descripcion, recursosAdicionales, individual ,boss: req.body.bossSelect, class: req.user.class});
+    } 
+    const newActivity = new Actividades({name: req.body.name, descripcion: req.body.descripcion, recursosAdicionales, individual ,boss: req.body.bossSelect, class: req.user.class, diamax: req.body.diamax, mesmax: req.body.mesmax});
     await newActivity.save();
 
     res.redirect('/ingame/boardgame/' + newActivity._id);
@@ -1679,12 +1758,17 @@ router.put('/ingame/boardactivity/:id', isAuthenticated, async (req, res, file) 
         var game = await Game.findById('5ffc9ddda5b1f82890d99841');
         var group = await Group.findOne({name: user.group + 'T'});
     }
+    if(req.file == undefined){
+        var entrega = "";
+    }else{
+        var entrega = req.file.filename;
+    }
     if(practica.individual){
-        const newEntrega = new Entregas({user: req.user._id, actividad: req.params.id, comentarios: req.body.comments, entrega: req.file.filename, actividadname: practica.name});
+        const newEntrega = new Entregas({user: req.user._id, actividad: req.params.id, comentarios: req.body.comments, entrega: entrega, actividadname: practica.name});
         await newEntrega.save();
         await practica.entregados.push(newEntrega._id);
     }else{
-        const newEntrega = new Entregas({group: group._id, actividad: req.params.id, comentarios: req.body.comments, entrega: req.file.filename});
+        const newEntrega = new Entregas({group: group._id, actividad: req.params.id, comentarios: req.body.comments, entrega: entrega, actividadname: practica.name});
         await newEntrega.save();
         await practica.entregados.push(newEntrega._id);
     }
@@ -1697,33 +1781,94 @@ router.put('/ingame/boardactivity/:id', isAuthenticated, async (req, res, file) 
 
 router.put('/entrega/:id', isAuthenticated, async (req, res, file) => {
     var entrega = await Entregas.findById(req.params.id);
+    var user = await User.findById(entrega.user);
+
+    if(req.user.class == 'SMX-M'){
+        var group = await Group.findOne({name: user.group});
+    }else if(req.user.class == 'SMX-T'){
+        var group = await Group.findOne({name: user.group + 'T'});
+    }
 
     entrega.nota = req.body.nota;
+    if(entrega.nota >= 0.00 && entrega.nota < 5.00){
+        group.diamantes = group.diamantes + 0;
+
+    }else if(entrega.nota >= 5.00 && entrega.nota < 7.00){
+        
+        group.diamantes = group.diamantes + 1;
+    }else if(entrega.nota >= 8.00 && entrega.nota < 9.00){
+
+        group.diamantes = group.diamantes + 2;
+    }else if(entrega.nota == 10){
+        group.diamantes = group.diamantes + 3;
+    }
+    await group.save();
     entrega.save();
-    res.redirect('/ingame');
+    if(entrega.individual){
+        req.flash('success_msg', 'Nota puesta con exito!');
+        res.redirect('/users/all-users/');
+    }else{
+        req.flash('success_msg', 'Nota puesta con exito!');
+        res.redirect('/ingame/all-groups/');
+    }
 });
 
 router.get(`/group/:name`, isAuthenticated, async (req, res) => {
-    var user = await User.findById(req.user.id);
-    var group = await Group.findOne({name: req.params.name});
-
-    await Entregas.find({group: group._id}).sort({date: 'desc'})
-    .then(async documentos => {
-      const contexto = {
-        entregas: documentos.map(documento => {
-          return {
-              nota: documento.nota,
-              _id: documento._id,
-              entrega: documento.entrega,
-              comentarios: documento.comentarios,
-              actividadname: documento.actividadname,
-              actividad: documento.actividad,
+    if(req.user.admin){
+        var user = await User.findById(req.user.id);
+        var group = await Group.findOne({name: req.params.name});
+    
+        await Entregas.find({group: group._id}).sort({date: 'desc'})
+        .then(async documentos => {
+          const contexto = {
+            entregas: documentos.map(documento => {
+              return {
+                  nota: documento.nota,
+                  _id: documento._id,
+                  entrega: documento.entrega,
+                  comentarios: documento.comentarios,
+                  actividadname: documento.actividadname,
+                  actividad: documento.actividad,
+              }
+            })
           }
-        })
-      }
-      var entregas = contexto.entregas;
-      res.render('groups/actividades.hbs', { user, group,entregas });
-    });
+          var entregas = contexto.entregas;
+          res.render('groups/actividades.hbs', { user, group,entregas });
+        });
+    }else{
+        req.flash('error_msg', 'You are not admin!');
+        res.redirect('/ingame');
+    }
+
+});
+
+router.get(`/user/:id`, isAuthenticated, async (req, res) => {
+    if(req.user.admin){
+        var user = await User.findById(req.user.id);
+        var group = await Group.findOne({name: req.params.name});
+    
+        await Entregas.find({user: req.params.id}).sort({date: 'desc'})
+        .then(async documentos => {
+          const contexto = {
+            entregas: documentos.map(documento => {
+              return {
+                  nota: documento.nota,
+                  _id: documento._id,
+                  entrega: documento.entrega,
+                  comentarios: documento.comentarios,
+                  actividadname: documento.actividadname,
+                  actividad: documento.actividad,
+              }
+            })
+          }
+          var entregas = contexto.entregas;
+          res.render('users/actividades.hbs', { user, group,entregas });
+        });
+    }else{
+        req.flash('error_msg', 'You are not admin!');
+        res.redirect('/ingame');
+    }
+
 });
 
 module.exports = router;

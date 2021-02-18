@@ -38,8 +38,9 @@
         <div id="carga"></div>
     </div>
     <main>
-        {{> messages }}
-        <div style="z-index: 10000;">
+
+        <div style="z-index: 10000; position:absolute;" class="w-100">
+           {{> messages }}
            {{> errors }}
         </div>
         {{> modals }}

@@ -1,14 +1,15 @@
 
 <body style="overflow-y: hidden;">
 <ul class="menu" style="z-index: 1000000;">
-  <li><img src="/img/LogoEspectre.png" width="60px" class="ml-2 mt-1 elastic-spin"></li>
-  <li title="about"><a href="/ingame" class="active game">about</a></li>
-  <li title="archive"><a href="/ingame/cards/" class="archive">archive</a></li>
+    <li><img src="/img/LogoEspectre.png" width="60px" class="ml-2 mt-1 elastic-spin"></li>
+    <li title="about"><a href="/ingame" class="active game">about</a></li>
+    <li title="archive"><a href="/ingame/cards/" class="archive">archive</a></li>
+    <li title="note"><a href="/notes/" class="note">note</a></li>
 </ul>
 
 <div class="mx-auto text-center mt-4">
     <div>
-    <img src="{{user.character}}" width="170px" class="characterboard">
+    <img src="{{user.character}}" width="170px" class="characterboard2">
 
     <a href="#" id="nav-toggle">
     <div class="door"></div></a>
@@ -21,7 +22,10 @@
     <h4 style="float: left; color: #242424;"><b>Actividades</b></h4></br>
     <hr>
     {{#each actividades}}
-    <p style="display: inline-block;">{{name}}</p>
+    <div style="display: inline-block;">
+    <p style="display: inline-flex;">{{name}}</p></br>
+    <p style="display: inline-flex;color:orange;">Fecha Limite: {{diamax}} / {{mesmax}} / 2021</p>
+    </div>
         <a href="/ingame/boardgame/{{_id}}"><button style="float: right; right: 0; display:inline-block;" class="btn-primary">Entrar</button></a>
     <hr>
 

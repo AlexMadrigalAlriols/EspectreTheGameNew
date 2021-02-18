@@ -857,14 +857,14 @@ tr {
   opacity: 1;
 }
 .snip1336 .profile {
-  border-radius: 50%;
   position: absolute;
   bottom: 100%;
   left: 25px;
   z-index: 1;
-  max-width: 90px;
+  width: 100px;
   opacity: 1;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+
+
 }
 .snip1336 .follow {
   margin-right: 4%;
@@ -1132,10 +1132,10 @@ tr {
   position: absolute;
   margin-top: 20rem;
   margin-left: 45rem;
-  animation: characterboard 1s forwards;
+  animation: characterboard2 1s forwards;
 }
 
-@keyframes characterboard {
+@keyframes characterboard2 {
   from {
     opacity: 0;
     margin-left: 0rem;
@@ -1165,7 +1165,7 @@ tr {
 .check-colours {
 	overflow:hidden;
 	position:relative;
-  float: right;
+  float: left;
 }
 input.check-colour, label.check-colour span {
 	position:absolute;
@@ -1181,8 +1181,10 @@ label.check-colour {
 
 input.check-colour:checked + label {
 	outline:3px solid rgb(46, 46, 46);
+  border: rgb(46, 46, 46);
+  border-style: solid;
 	position:relative;
-  z-index:4;
+  z-index:9999999999;
 }
 figure {
 min-width: 100%;

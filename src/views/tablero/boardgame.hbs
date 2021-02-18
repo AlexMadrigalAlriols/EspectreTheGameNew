@@ -19,7 +19,7 @@
 
 
 
-  {{#if entregado}}
+    {{#if entregado}}
   <img src="{{user.character}}" width="170px" class="characterboard">
   <div class="row justify-content-center">
     <div class="cajanota" style="z-index: 9999999;">
@@ -28,13 +28,23 @@
     </div>
   </div>
   {{else}}
+  {{#if pasadolimite}}
+    <img src="{{user.character}}" width="170px" class="characterboard">
+    <div class="row justify-content-center">
+    <div class="cajanota" style="z-index: 999999999;">
+      Limite de entrega excedido</br>
+    </div>
+  </div>
+  {{else}}
     <img src="{{user.character}}" width="170px" class="characterboard2">
     <a href="/ingame/boardactivity/{{actividad._id}}">
-    <button class="btn-primary btn-lg" style="position: absolute; margin-left:30rem; margin-top:20rem;z-index: 9999999;">
+    <button class="btn-primary btn-lg" style="position: absolute; margin-left:28rem; margin-top:20rem;z-index: 9999999;">
       Entregar
     </button>
     </a>
   {{/if}}
+{{/if}}
+
   {{#if actividad.dragon}}
     <img src="{{actividad.boss}}" style="position: absolute; margin-top: 14rem; margin-left: 1rem;" width="475px">
   {{else}}
