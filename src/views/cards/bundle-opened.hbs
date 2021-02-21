@@ -18,7 +18,12 @@
                <center><img src="{{cartaTocada.img}}" width="275px" class="pulse">
                <p style="color: white;" class="mt-3">{{descripcion}}</p></center>
             </div>
-            <a href="/ingame/cards"><button class="btn bt-lg mr-2 mb-2 btnsucces btn-block">Use</button></a>
+            {{#if esSkin}}
+                <a href="/ingame/character"><button class="btn bt-lg mr-2 mb-2 btnsucces btn-block">Use Skin</button></a>
+            {{else}}
+                 <a href="/ingame/cards"><button class="btn bt-lg mr-2 mb-2 btnsucces btn-block">Use</button></a>
+            {{/if}}
+
         </div>
     </div>
 </div>

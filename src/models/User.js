@@ -22,6 +22,11 @@ const UserSchema = new Schema({
     admin: {type: Boolean, default: false},
     practica: {type: String },
     comentarios: {type: String},
+    logros: {type: Array},
+    level: { type: Number},
+    exp: {type: String},
+    logrosconseguidos: {type: String, default: 0},
+    cartasusadas: {type: String, default: 0},
     description: { type: String, default: 'CAMBIA LA DESCRIPCIÓN EDITANDO EL PERFIL'},
     date: { type: Date, default: Date.now }
 });

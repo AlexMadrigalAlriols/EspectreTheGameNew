@@ -15,6 +15,7 @@ const Events = require('../models/Events');
 const Entregas = require('../models/Entregas');
 const Actividades = require('../models/Actividades');
 const Skins = require('../models/Skins');
+const Logros = require('../models/Logros');
 
 router.get('/users/signin', (req, res) => {
     res.render('users/signin.hbs');
@@ -642,6 +643,7 @@ router.get('/ingame/shop', isAuthenticated, async (req, res) => {
 });
 
 router.put('/cards/buybundle/:id', isAuthenticated, async (req, res) => {
+    var esSkin = false;
     const bundle = await Bundle.findOne({_id: req.params.id});
 
     if(req.user.class == 'SMX-M'){
@@ -699,7 +701,7 @@ router.put('/cards/buybundle/:id', isAuthenticated, async (req, res) => {
             }
             
             var descripcion = cartaTocada.descripcion;
-            res.render('cards/bundle-opened.hbs', { group, cartaTocada,descripcion });
+            res.render('cards/bundle-opened.hbs', { group, cartaTocada,descripcion, esSkin });
         }else if(group.diamantes < 3){
             req.flash('error_msg', 'No tienes los suficientes diamantes para comprar este sobre!');
             res.redirect('/ingame/bundles/');
@@ -789,7 +791,7 @@ router.put('/cards/buybundle/:id', isAuthenticated, async (req, res) => {
                 group.save();
             }   
             console.log(cartaTocada._id);
-            res.render('cards/bundle-opened.hbs', { group, cartaTocada, descripcion });
+            res.render('cards/bundle-opened.hbs', { group, cartaTocada, descripcion, esSkin });
         }else if(group.diamantes < 5){
             req.flash('error_msg', 'No tienes los suficientes diamantes para comprar este sobre!');
             res.redirect('/ingame/bundles/');
@@ -916,9 +918,28 @@ router.put('/cards/buybundle/:id', isAuthenticated, async (req, res) => {
                 group.save();
             }
 
-            res.render('cards/bundle-opened.hbs', { group, cartaTocada, descripcion });
+            res.render('cards/bundle-opened.hbs', { group, cartaTocada, descripcion, esSkin });
         
         }else if(group.diamantes < 7){
+            req.flash('error_msg', 'No tienes los suficientes diamantes para comprar este sobre!');
+            res.redirect('/ingame/bundles/');
+        }
+    }else if(bundle.name == 'Sobre Skins'){
+        if(group.diamantes >= 3){
+            group.diamantes = group.diamantes - 3;
+            var numRand = Math.floor(Math.random() * 15);
+            var cartaTocada = await Skins.findOne({__v: numRand});
+
+            var user = await User.findById(req.user._id);
+
+            var descripcion = "Te ha tocado la Skins de " + cartaTocada.name;
+            cartaTocada.usuarios.push(user._id);
+            cartaTocada.save();
+
+            var esSkin = true;
+
+            res.render('cards/bundle-opened.hbs', { group, cartaTocada, descripcion, esSkin });
+        }else if(group.diamantes < 3){
             req.flash('error_msg', 'No tienes los suficientes diamantes para comprar este sobre!');
             res.redirect('/ingame/bundles/');
         }
@@ -1011,7 +1032,8 @@ router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
 
     const indexCarta = await group.cartas.indexOf(req.params.id);
     if(indexCarta > -1){
-
+        user.cartasusadas = user.cartasusadas + 1;
+        await user.save();
         if(card.type == 'Ataque'){
             if(req.user.class == 'SMX-M'){
                 var desc = group.name + ' ' +'ha usado la carta' + ' ' + card.name + ' contra ' + req.body.groupAttac;
@@ -1079,7 +1101,7 @@ router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
             }
 
         }else if(card.type == 'Ataque'){
-            
+
             if(req.user.class == 'SMX-M'){
             var groupAtacado = await Group.findOne({name: req.body.groupAttac});
             }else{
@@ -1576,6 +1598,7 @@ router.put('/ingame/character', isAuthenticated, async (req, res) => {
 router.get('/ingame/board', isAuthenticated, async (req, res) => {
     var user = await User.findById(req.user.id);
 
+
     if(req.user.class == 'SMX-M'){
         var group = await Group.findOne({name: req.user.group});  
     }else if(req.user.class == 'SMX-T'){
@@ -1597,7 +1620,20 @@ router.get('/ingame/board', isAuthenticated, async (req, res) => {
         })
       }
       var actividades = contexto.actividad;
-      res.render('tablero/board.hbs', { user, group,actividades });
+      var logro = await Logros.findById("60316aa1437b6f1a940b4eb8");
+      var indexLogro = await user.logros.indexOf(logro._id);
+
+      if(indexLogro == -1){
+        user.logros.push(logro._id);
+        user.logrosconseguidos = user.logrosconseguidos + 1;
+        user.save();
+        req.flash('success_msg', 'Has conseguido el Logro: ' + logro.name);
+        res.redirect('/ingame/board');
+      }else{
+        res.render('tablero/board.hbs', { user, group,actividades });
+      }
+
+
     });
 
 });
@@ -1883,4 +1919,29 @@ router.get(`/user/:id`, isAuthenticated, async (req, res) => {
 
 });
 
+// ===================== LOGROS ===========================
+router.get('/ingame/logros', isAuthenticated, async (req, res) => {
+    if(req.user.class == 'SMX-M'){
+        var group = await Group.findOne({name: req.user.group});
+    }else if(req.user.class == 'SMX-T'){
+        var group = await Group.findOne({name: req.user.group + 'T'});
+    }
+    await Logros.find().sort({date: 'desc'})
+    .then(async documentos => {
+      const contexto = {
+          logros: documentos.map(documento => {
+          return {
+              name: documento.name,
+              _id: documento._id,
+              recompensaexp: documento.recompensaexp,
+              img: documento.img,
+              recompensa: documento.recompensa
+          }
+        })
+      }
+      var logros = contexto.logros;
+      var userId = await User.findById(req.user._id);
+      res.render('logros/all-logros.hbs', { logros, userId, group });
+    });
+});
 module.exports = router;

@@ -22,7 +22,7 @@
                 <hr>
                 <p >{{user.description}}</p>
             <div class="p-2">
-                <a href="/users/all-users/"><button class="btn btn-sm btn-block btnvolver">All Users</button></a>
+                <a href="/users/all-users/"><button class="btn btn-sm btn-block btnvolver">All Users <i class="fas fa-users"></i></button></a>
             </div>
             </center>                     
         </div>
@@ -31,16 +31,18 @@
       <hr>
         <tr>
             <td>
-                <p><b>0</b></p>
-                <p>Paises Derribados</p>
+                <p><b>{{user.cartasusadas}}</b></p>
+                <p>Cartas Usadas</p>
             </td>
             <td>
-                <p><b>0</b></p>
-                <p>Ataques con exito</p>
+                <p><b>{{user.logrosconseguidos}}</b></p>
+                <p>Logros Conseguidos</p>
+                    <center><a href="/ingame/logros" class="waves-effect waves-light btn edit btnvolver p-2 btn-sm">Logros <i class="fas fa-trophy"></i></a></center>   
             </td>
         </tr>
+
     </table>
-    <center><a href="/users/edit-user/{{user.id}}" class="waves-effect waves-light btn edit btnvolver p-2">Edit Profile</a></center>
+    <center><a href="/users/edit-user/{{user.id}}" class="waves-effect waves-light btn edit btnvolver p-2">Edit Profile <i class="far fa-edit"></i></a></center>
 </div>
         <div class="modal-footer" style="background-color: rgba(255, 255, 255, 0.800);">
           <button type="button" id="buttonclose" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
