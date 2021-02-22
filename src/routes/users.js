@@ -1767,6 +1767,14 @@ router.get('/ingame/new-activity/', isAuthenticated, async (req, res) => {
   });
 
 router.put('/ingame/new-activity', isAuthenticated, async (req, res, file) => {
+    if(req.user.class == 'SMX-M'){
+        var group = await Group.findOne({name: user.group});
+        var game = await Game.findById('5fedf15fa1268c39d8229e47');
+    }else if(req.user.class == 'SMX-T'){
+        var game = await Game.findById('5ffc9ddda5b1f82890d99841');
+        var group = await Group.findOne({name: user.group + 'T'});
+    }
+
     if(req.file == null){
         var recursosAdicionales = "sinRecursos";
     }else{
@@ -1780,6 +1788,8 @@ router.put('/ingame/new-activity', isAuthenticated, async (req, res, file) => {
     } 
     const newActivity = new Actividades({name: req.body.name, descripcion: req.body.descripcion, recursosAdicionales, individual ,boss: req.body.bossSelect, class: req.user.class, diamax: req.body.diamax, mesmax: req.body.mesmax});
     await newActivity.save();
+    game.practicasSubidas = game.practicasSubidas + 1;
+    game.save();
 
     res.redirect('/ingame/boardgame/' + newActivity._id);
 });
@@ -1823,7 +1833,9 @@ router.put('/entrega/:id', isAuthenticated, async (req, res, file) => {
 
         if(req.user.class == 'SMX-M'){
             var group = await Group.findOne({name: user.group});
+            var game = await Game.findById('5fedf15fa1268c39d8229e47');
         }else if(req.user.class == 'SMX-T'){
+            var game = await Game.findById('5ffc9ddda5b1f82890d99841');
             var group = await Group.findOne({name: user.group + 'T'});
         }
     }else{
@@ -1852,6 +1864,10 @@ router.put('/entrega/:id', isAuthenticated, async (req, res, file) => {
     }
     await group.save();
     entrega.save();
+    group.notaFinal = group.notaFinal + req.body.nota / game.practicasSubidas;
+    console.log(group.notaFinal);
+    group.save();
+    
     if(entrega.individual){
         req.flash('success_msg', 'Nota puesta con exito!');
         res.redirect('/users/all-users/');
