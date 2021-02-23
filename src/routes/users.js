@@ -335,7 +335,7 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
                 var group = await Group.findOne({name: user.group}); 
                 user.groupid = group._id;
                 await user.save();
-                var group = await Group.findOne({_id: req.user.groupid});
+                var group = await Group.findOne({_id: user.groupid});
 
                 if(group.Ataqued == true){ 
                 req.flash('attack_msg', 'Estas siendo atacado usa una carta de defensa para defenderte!');
