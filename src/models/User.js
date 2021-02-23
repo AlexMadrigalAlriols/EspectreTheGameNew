@@ -24,6 +24,7 @@ const UserSchema = new Schema({
     comentarios: {type: String},
     logros: {type: Array},
     level: { type: Number},
+    groupid: {type: String},
     exp: {type: String},
     logrosconseguidos: {type: String, default: 0},
     cartasusadas: {type: String, default: 0},

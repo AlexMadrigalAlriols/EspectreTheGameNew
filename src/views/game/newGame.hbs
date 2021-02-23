@@ -1,0 +1,39 @@
+<div class="col-md-6 mx-auto mt-2">
+    <div class="card">
+        <div class="card-header">
+            <h3>Edit {{user.name}}</h3>
+            <img class="mx-auto d-block logo" src="/img/LogoEspectre.png" width="60px">
+        </div>
+        <div class="card-body">
+            <h5>Basic Information</h5>
+            <form action="/newclass/{{user._id}}" method="POST">
+                <div class="form-group">
+                    <input type="text" name="name" class="form-control" placeholder="Class Name" aria-describedby="passwordHelpBlock2">
+                    <small id="passwordHelpBlock2" class="form-text text-muted">
+                    Ej. Sistemas Microinformaticos, Islas Oscuras, Clase De Informatica.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="classtag" class="form-control" placeholder="Class TAG" aria-describedby="passwordHelpBlock">
+                    <small id="passwordHelpBlock" class="form-text text-muted">
+                    Ej. SMX-M, GEAD, SMX-T.
+                    </small>
+                </div>
+            <h5>Class Code</h5>
+                <div class="form-group">
+                    <input type="text" name="code" class="form-control" placeholder="Class TAG" aria-describedby="passwordHelpBlock" readonly value="{{code}}">
+                    <small id="passwordHelpBlock" class="form-text text-muted">
+                    Please write down this code. Your Students will need it to enter the class.
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-block btnvolver"  type="submit">
+                    Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

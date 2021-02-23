@@ -152,15 +152,8 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
     }else{
         user.group = req.user.group;
     }
-
-    
-    if(req.user.class == 'SMX-M'){
-        var groupUser = await Group.findOne({name: req.user.group});
-        var indexGroup = await groupUser.users.indexOf(req.params.id);
-    }else if(req.user.class == 'SMX-T'){
-        var groupUser = await Group.findOne({name: req.user.group + 'T'});
-        var indexGroup = await groupUser.users.indexOf(req.params.id);
-    }
+    var groupUser = await Group.findOne({_id: req.user.groupid});
+    var indexGroup = await groupUser.users.indexOf(req.params.id);
 
     if(indexGroup > -1){
         console.log('Esta en el grupo ya');
@@ -307,11 +300,7 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
   });
 
   router.put('/users/nota/:id', isAuthenticated, async (req, res) => {
-    if(req.user.class == 'SMX-M'){
-        var group = await Group.findOne({_id: req.params.id});
-    }else if(req.user.class == 'SMX-T'){
-        var group = await Group.findOne({_id: req.params.id});
-    }
+    var group = await Group.findOne({_id: req.params.id});
 
     group.nota = req.body.nota;
     if(group.nota >= 0.00 && group.nota < 5.00){
@@ -337,83 +326,50 @@ router.get('/users/logout', (req, res) => {
 
 router.get('/ingame', isAuthenticated, async (req, res) =>{
     var user = await User.findById(req.user._id);
-
-    if(req.user.class == 'SMX-M'){    
+    var userclass = await Game.findOne({classtag: user.class});
+    if(userclass != null){
             if(req.user.SinGroup == true){
                 req.flash('success_msg', 'Tienes que esperar para que tu profesor te coloque en un grupo.')
                 res.redirect('/');
             }else{
-                var group = await Group.findOne({name: user.group});
-                var game = await Game.findById('5fedf15fa1268c39d8229e47');  
+                var group = await Group.findOne({name: user.group}); 
+                user.groupid = group._id;
+                await user.save();
+                var group = await Group.findOne({_id: req.user.groupid});
+
                 if(group.Ataqued == true){ 
                 req.flash('attack_msg', 'Estas siendo atacado usa una carta de defensa para defenderte!');
                 res.redirect('/ingame/cards/');
 
-           }else{
-            await Actividades.find({class: req.user.class}).sort({date: 'desc'})
-            .then(async documentos => {
-              const contexto = {
-                actividad: documentos.map(documento => {
-                  return {
-                      name: documento.name,
-                      _id: documento._id,
-                      descripcion: documento.descripcion,
-                      entregados: documento.entregados,
-                      class: documento.class,
-                  }
-                })
-              }
-              var user = await User.findById(req.user._id);
-              var group = await Group.findOne({name: user.group});
-              var game = await Game.findById('5fedf15fa1268c39d8229e47');   
-              var actividades = contexto.actividad;
-              res.render('layouts/mapa.hbs', { game, user, group, actividades });
-            });
+                }else{
+                    await Actividades.find({class: req.user.class}).sort({date: 'desc'})
+                    .then(async documentos => {
+                    const contexto = {
+                        actividad: documentos.map(documento => {
+                        return {
+                            name: documento.name,
+                            _id: documento._id,
+                            descripcion: documento.descripcion,
+                            entregados: documento.entregados,
+                            class: documento.class,
+                        }
+                        })
+                    }
+                    var user = await User.findById(req.user._id);
+                    var group = await Group.findOne({_id: req.user.groupid});
+                    var game = await Game.findOne({classtag: user.class}); 
+                    var actividades = contexto.actividad;
+                    res.render('layouts/mapa.hbs', { game, user, group, actividades });
+                    });
         }
     }
-    }else if(req.user.class == 'SMX-T'){
-        var game = await Game.findById('5ffc9ddda5b1f82890d99841');
-        var group = await Group.findOne({name: user.group + 'T'});
-        if(req.user.SinGroup == true){
-            req.flash('success_msg', 'Tienes que esperar para que tu profesor te coloque en un grupo.')
-            res.redirect('/');
-        }else{
-        if(group.Ataqued == true){
-              req.flash('attack_msg', 'Estas siendo atacado usa una carta de defensa para defenderte!');
-              res.redirect('/ingame/cards/');
-           }else{
-            await Actividades.find({class: req.user.class}).sort({date: 'desc'})
-            .then(async documentos => {
-              const contexto = {
-                actividad: documentos.map(documento => {
-                  return {
-                      name: documento.name,
-                      _id: documento._id,
-                      descripcion: documento.descripcion,
-                      entregados: documento.entregados,
-                      class: documento.class,
-                  }
-                })
-              }
-              var user = await User.findById(req.user._id);
-              var game = await Game.findById('5ffc9ddda5b1f82890d99841');
-              var group = await Group.findOne({name: user.group + 'T'});
-              var actividades = contexto.actividad;
-              res.render('layouts/mapa.hbs', { game, user, group, actividades });
-            });
-           }
-        }
     }else{
         res.redirect('/code');
     }
 });
 
 router.get('/ingame/gameSettings', isAuthenticated, async (req, res) => {
-    if(req.user.class == 'SMX-M'){
-        var game = await Game.findById('5fedf15fa1268c39d8229e47');
-    }else if(req.user.class == 'SMX-T'){
-        var game = await Game.findById('5ffc9ddda5b1f82890d99841');
-    }
+    var game = await Game.findOne({classtag: req.user.class});
 
     if(req.user.admin == true){
         res.render('./game/gameSettings.hbs', {game});
@@ -423,54 +379,8 @@ router.get('/ingame/gameSettings', isAuthenticated, async (req, res) => {
 });
 
 router.put('/ingame/gameSettings', isAuthenticated, async (req, res, file) => {
-    if(req.user.class == 'SMX-M'){
-        var lastGame = await Game.findById('5fedf15fa1268c39d8229e47');
-        var group = await Group.findOne({name: req.user.group});
-        var North_America = await Group.findOne({name: 'North_America'});
-        var Sud_America = await Group.findOne({name: 'Sud_America'});
-        var Oceania = await Group.findOne({name: 'Oceania'});
-        var Africa = await Group.findOne({name: 'Africa'});
-        var Europa = await Group.findOne({name: 'Europa'});
-        var Asia = await Group.findOne({name: 'Asia'});
-    }else if(req.user.class == 'SMX-T'){
-        var lastGame = await Game.findById('5ffc9ddda5b1f82890d99841');
-        var group = await Group.findOne({name: req.user.group + 'T'});
-        var North_America = await Group.findOne({name: 'North_AmericaT'});
-        var Sud_America = await Group.findOne({name: 'Sud_AmericaT'});
-        var Oceania = await Group.findOne({name: 'OceaniaT'});
-        var Africa = await Group.findOne({name: 'AfricaT'});
-        var Europa = await Group.findOne({name: 'EuropaT'});
-        var Asia = await Group.findOne({name: 'AsiaT'});
-    }
- 
-
-    var user = await User.findById(req.user.id);
-
-    if(req.file == null){
-        var periodico = lastGame.periodico;
-    }else{
-        var periodico  = req.file.filename;
-
-        North_America.subido = false;
-        North_America.nota = 0;
-        Sud_America.subido = false;
-        Sud_America.nota = 0;
-        Oceania.subido = false;
-        Oceania.nota = 0;
-        Africa.subido = false;
-        Africa.nota = 0;
-        Europa.subido = false;
-        Europa.nota = 0;
-        Asia.subido = false;
-        Asia.nota = 0;
-
-        await Asia.save();
-        await Africa.save();
-        await Oceania.save();
-        await North_America.save();
-        await Sud_America.save();
-        await Europa.save();
-    }
+    var lastGame = await Game.findOne({classtag: req.user.class});
+    var group = await Group.findOne({_id: req.user.groupid});
 
     const year = req.body.year;
 
@@ -480,24 +390,9 @@ router.put('/ingame/gameSettings', isAuthenticated, async (req, res, file) => {
         var mapa = req.body.mapa;
     }
 
-    await Game.findByIdAndUpdate('5fedf15fa1268c39d8229e47', { periodico, year, mapa });
+    await Game.findByIdAndUpdate(lastGame._id, { year, mapa });
     await group.save();
     res.redirect('/ingame');
-});
-
-router.post('/ingame', isAuthenticated, async (req, res, file) => {
-    if(req.user.class == 'SMX-M'){
-        var subidoU = await Group.findOne({name: req.user.group});
-    }else if(req.user.class == 'SMX-T'){
-        var subidoU = await Group.findOne({name: req.user.group + 'T'}); 
-    }
-
-   subidoU.practica = '/uploads/' + req.file.filename;
-
-   subidoU.subido = true;
-
-   await subidoU.save();
-   res.redirect('/ingame');
 });
 
 
@@ -558,11 +453,9 @@ router.put('/ingame/edit-group/:id', isAuthenticated, async (req, res) => {
 // =========== CARDS ========== //
 
 router.get('/ingame/cards', isAuthenticated, async (req, res) => {
-    if(req.user.class == 'SMX-M'){
-        var group = await Group.findOne({name: req.user.group});
-    }else if(req.user.class == 'SMX-T'){
-        var group = await Group.findOne({name: req.user.group + 'T'});
-    }
+
+    var group = await Group.findOne({_id: req.user.groupid});
+
     await Cartas.find({_id: group.cartas}).sort({date: 'desc'})
     .then(async documentos => {
       const contexto = {
@@ -585,11 +478,7 @@ router.get('/ingame/cards', isAuthenticated, async (req, res) => {
 });
 
 router.get('/ingame/bundles', isAuthenticated, async (req, res) => {
-    if(req.user.class == 'SMX-M'){
-        var group = await Group.findOne({name: req.user.group});
-    }else if(req.user.class == 'SMX-T'){
-        var group = await Group.findOne({name: req.user.group + 'T'});
-    }
+    var group = await Group.findOne({_id: req.user.groupid});
 
     await Bundle.find().sort({date: 'desc'})
     .then(async documentos => {
@@ -613,12 +502,8 @@ router.get('/ingame/bundles', isAuthenticated, async (req, res) => {
 });
 
 router.get('/ingame/shop', isAuthenticated, async (req, res) => {
-    if(req.user.class == 'SMX-M'){
-        var group = await Group.findOne({name: req.user.group});
-    }else if(req.user.class == 'SMX-T'){
-        var group = await Group.findOne({name: req.user.group + 'T'});
-    }
-
+    var group = await Group.findOne({_id: req.user.groupid});
+    
     await Cartas.find().sort({date: 'desc'})
     .then(async documentos => {
       const contexto = {
@@ -646,11 +531,7 @@ router.put('/cards/buybundle/:id', isAuthenticated, async (req, res) => {
     var esSkin = false;
     const bundle = await Bundle.findOne({_id: req.params.id});
 
-    if(req.user.class == 'SMX-M'){
-        var group = await Group.findOne({name: req.user.group});
-    }else if(req.user.class == 'SMX-T'){
-        var group = await Group.findOne({name: req.user.group + 'T'});
-    }
+    var group = await Group.findOne({_id: req.user.groupid});
 
 // ============== SOBRE RECURSOS ===========
     if(bundle.name == 'Sobre Recursos'){
@@ -948,11 +829,7 @@ router.put('/cards/buybundle/:id', isAuthenticated, async (req, res) => {
 
 router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
     const card = await Card.findOne({_id: req.params.id});
-    if(req.user.class == 'SMX-M'){
-        var group = await Group.findOne({name: req.user.group});
-    }else if(req.user.class == 'SMX-T'){
-        var group = await Group.findOne({name: req.user.group + 'T'});
-    }
+    var group = await Group.findOne({_id: req.user.groupid});
 
     if(group.oro >= card.precio){
         const estaError = [];
@@ -984,25 +861,18 @@ router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
   });
 
   router.get('/cards/select', isAuthenticated, async (req, res) => {
-    if(req.user.class == 'SMX-M'){
-        var group = await Group.findOne({name: req.user.group});
-    }else if(req.user.class == 'SMX-T'){
-        var group = await Group.findOne({name: req.user.group + 'T'});
-    }
+    var group = await Group.findOne({_id: req.user.groupid});
 
     res.render('cards/cards-select.hbs', { group });
   });
+
   router.get('/cards/use/:id', isAuthenticated, async (req, res) => {
     const card = await Card.findOne({_id: req.params.id});
     const events = await Events.find();
     const user = await User.findById(req.user.id);
 
-    if(req.user.class == 'SMX-M'){
-        var group = await Group.findOne({name: req.user.group});
-    }else if(req.user.class == 'SMX-T'){
-        var group = await Group.findOne({name: req.user.group + 'T'});
+    var group = await Group.findOne({_id: req.user.groupid});
 
-    }
     if(card.type == 'Ataque'){
         res.render('cards/use-cards.hbs', {card, events, user, group});
     }else if(card.type == 'Defensa'){
@@ -1024,22 +894,15 @@ router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
     const card = await Card.findOne({_id: req.params.id});
     const events = await Events.find();
     const user = await User.findById(req.user.id);
-    if(req.user.class == 'SMX-M'){
-        var group = await Group.findOne({name: req.user.group});
-    }else if(req.user.class == 'SMX-T'){
-        var group = await Group.findOne({name: req.user.group + 'T'});
-    }
+
+    var group = await Group.findOne({_id: req.user.groupid});
 
     const indexCarta = await group.cartas.indexOf(req.params.id);
     if(indexCarta > -1){
         user.cartasusadas = user.cartasusadas + 1;
         await user.save();
         if(card.type == 'Ataque'){
-            if(req.user.class == 'SMX-M'){
                 var desc = group.name + ' ' +'ha usado la carta' + ' ' + card.name + ' contra ' + req.body.groupAttac;
-            }else if(req.user.class == 'SMX-T'){
-                var desc = group.name + ' ' +'ha usado la carta' + ' ' + card.name + ' contra ' + req.body.groupAttac + 'T';                
-            }
         }else if(card.type == 'Defensa'){
             var desc = group.name + ' ' +'ha usado ' + ' ' + card.name + ' ' + '  para defenderse.';
         }else{
@@ -1101,12 +964,8 @@ router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
             }
 
         }else if(card.type == 'Ataque'){
-
-            if(req.user.class == 'SMX-M'){
-            var groupAtacado = await Group.findOne({name: req.body.groupAttac});
-            }else{
-            var groupAtacado = await Group.findOne({name: req.body.groupAttac + 'T'});               
-            }
+            var game = await Game.findOne({classtag: req.user.class});
+            var groupAtacado = await Group.findOne({name: req.body.groupAttac, game: game._id});
     
             groupAtacado.Ataqued = true;
             var construccion = 0;
@@ -1494,7 +1353,12 @@ router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
   router.get('/code', isAuthenticated, async (req, res) => {
     const user = await User.findById(req.user.id);
     if(user.class == 'SinAsignar'){
-        res.render('users/classCode.hbs', { user });
+        if(user.rol == 'Student'){
+            var teacher = false;
+        }else{
+            var teacher = true;
+        }
+        res.render('users/classCode.hbs', { user, teacher });
     }else{
         res.redirect('/ingame');
     }
@@ -1504,24 +1368,18 @@ router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
 
     const user = await User.findOne({_id: req.user.id});
     const codeClass = req.body.codeClass;
-
-    if(codeClass == '5ff23sxg'){
-        user.class = 'SMX-M';
-        const game = await Game.findById('5fedf15fa1268c39d8229e47');
-        game.players.push(req.user.id);
+    var game = await Game.findOne({classtag: req.user.class});
+    if(codeClass == game.code){
+        user.class = game.classtag;
+        game.players.push(req.user._id);
         
         game.save();
         user.save();
-    }else if(codeClass == '823jsjdk'){
-        const game = await Game.findById('5ffc9ddda5b1f82890d99841');
-        user.class = 'SMX-T';
-        game.players.push(req.user.id);
-
-        game.save();
-        user.save();
+        res.redirect('/ingame');
+    }else{
+        req.flash('error_msg', 'No existe ninguna clase con este codigo!');
+        res.redirect('/code');
     }
-    
-    res.redirect('/ingame');
   });
 
 // ========= CONSOLA EVENTOS ======= //
@@ -1588,7 +1446,6 @@ router.get('/ingame/character', isAuthenticated, async (req, res) => {
 router.put('/ingame/character', isAuthenticated, async (req, res) => {
     var user = await User.findById(req.user.id);
 
-
     user.character = req.body.characterSelect;
     await user.save();
     res.redirect('/ingame');
@@ -1597,13 +1454,8 @@ router.put('/ingame/character', isAuthenticated, async (req, res) => {
 // ============= BOARD GAME =========
 router.get('/ingame/board', isAuthenticated, async (req, res) => {
     var user = await User.findById(req.user.id);
+    var group = await Group.findOne({_id: req.user.groupid});  
 
-
-    if(req.user.class == 'SMX-M'){
-        var group = await Group.findOne({name: req.user.group});  
-    }else if(req.user.class == 'SMX-T'){
-        var group = await Group.findOne({name: req.user.group + 'T'});
-    }
     await Actividades.find({class: req.user.class}).sort({date: 'desc'})
     .then(async documentos => {
       const contexto = {
@@ -1632,21 +1484,14 @@ router.get('/ingame/board', isAuthenticated, async (req, res) => {
       }else{
         res.render('tablero/board.hbs', { user, group,actividades });
       }
-
-
     });
 
 });
 
 router.get('/ingame/boardgame/:id', isAuthenticated, async (req, res) => {
     var user = await User.findById(req.user.id);
-    if(req.user.class == 'SMX-M'){
-        var group = await Group.findOne({name: user.group});
-        var game = await Game.findById('5fedf15fa1268c39d8229e47');
-    }else if(req.user.class == 'SMX-T'){
-        var game = await Game.findById('5ffc9ddda5b1f82890d99841');
-        var group = await Group.findOne({name: user.group + 'T'});
-    }
+    var group = await Group.findOne({_id: req.user.groupid}); 
+
     const actividad = await Actividades.findOne({_id: req.params.id});
     if(actividad.individual){
         var indexEntrega = await Entregas.findOne({user: req.user._id, actividad: actividad._id});
@@ -1685,33 +1530,22 @@ router.get('/ingame/boardgame/:id', isAuthenticated, async (req, res) => {
 router.get('/ingame/boardactivity/:id', isAuthenticated, async (req, res) => {
     var user = await User.findById(req.user.id);
     var practica = await Actividades.findById(req.params.id);
-    if(req.user.class == 'SMX-M'){
-        var group = await Group.findOne({name: user.group});
-        var game = await Game.findById('5fedf15fa1268c39d8229e47');
-    }else if(req.user.class == 'SMX-T'){
-        var game = await Game.findById('5ffc9ddda5b1f82890d99841');
-        var group = await Group.findOne({name: user.group + 'T'});
-    }
+    var group = await Group.findOne({_id: req.user.groupid}); 
 
     res.render('tablero/entregaPractica.hbs', {user, group, practica});
 });
 
 router.get('/ingame/edit-activity/:id', isAuthenticated, async (req, res) => {
     var user = await User.findById(req.user.id);
-    if(req.user.class == 'SMX-M'){
-        var group = await Group.findOne({name: user.group});
-        var game = await Game.findById('5fedf15fa1268c39d8229e47');
-    }else if(req.user.class == 'SMX-T'){
-        var game = await Game.findById('5ffc9ddda5b1f82890d99841');
-        var group = await Group.findOne({name: user.group + 'T'});
-    }
+    var group = await Group.findOne({_id: req.user.groupid}); 
+
     const actividad = await Actividades.findById(req.params.id);
     res.render('game/editActividades.hbs', {user, group, actividad});
 });
 
 router.put('/ingame/edit-activity/:id', isAuthenticated, async (req, res, file) => {
-    var user = await User.findById(req.user.id);
     var actividad = await Actividades.findById(req.params.id);
+
     if(req.file == null){
         actividad.recursosAdicionales = actividad.recursosAdicionales;
     }else{
@@ -1741,15 +1575,10 @@ router.put('/ingame/edit-activity/:id', isAuthenticated, async (req, res, file) 
 
     res.redirect('/ingame/boardgame/' + actividad._id);
 });
+
 router.get('/ingame/new-activity/', isAuthenticated, async (req, res) => {
     var user = await User.findById(req.user.id);
-    if(req.user.class == 'SMX-M'){
-        var group = await Group.findOne({name: user.group});
-        var game = await Game.findById('5fedf15fa1268c39d8229e47');
-    }else if(req.user.class == 'SMX-T'){
-        var game = await Game.findById('5ffc9ddda5b1f82890d99841');
-        var group = await Group.findOne({name: user.group + 'T'});
-    }
+    var group = await Group.findOne({_id: req.user.groupid}); 
 
     res.render('game/actividadesSettings.hbs', {user, group});
 });
@@ -1767,13 +1596,7 @@ router.get('/ingame/new-activity/', isAuthenticated, async (req, res) => {
   });
 
 router.put('/ingame/new-activity', isAuthenticated, async (req, res, file) => {
-    if(req.user.class == 'SMX-M'){
-        var group = await Group.findOne({name: user.group});
-        var game = await Game.findById('5fedf15fa1268c39d8229e47');
-    }else if(req.user.class == 'SMX-T'){
-        var game = await Game.findById('5ffc9ddda5b1f82890d99841');
-        var group = await Group.findOne({name: user.group + 'T'});
-    }
+    var game = await Game.findOne({classtag: req.user.class});
 
     if(req.file == null){
         var recursosAdicionales = "sinRecursos";
@@ -1797,13 +1620,8 @@ router.put('/ingame/new-activity', isAuthenticated, async (req, res, file) => {
 router.put('/ingame/boardactivity/:id', isAuthenticated, async (req, res, file) => {
     var user = await User.findById(req.user.id);
     var practica = await Actividades.findById(req.params.id);
-    if(req.user.class == 'SMX-M'){
-        var group = await Group.findOne({name: user.group});
-        var game = await Game.findById('5fedf15fa1268c39d8229e47');
-    }else if(req.user.class == 'SMX-T'){
-        var game = await Game.findById('5ffc9ddda5b1f82890d99841');
-        var group = await Group.findOne({name: user.group + 'T'});
-    }
+    var group = await Group.findOne({_id: req.user.groupid}); 
+
     if(req.file == undefined){
         var entrega = "";
     }else{
@@ -1830,22 +1648,10 @@ router.put('/entrega/:id', isAuthenticated, async (req, res, file) => {
 
     if(entrega.user != undefined){
         var user = await User.findById(entrega.user);
-
-        if(req.user.class == 'SMX-M'){
-            var group = await Group.findOne({name: user.group});
-            var game = await Game.findById('5fedf15fa1268c39d8229e47');
-        }else if(req.user.class == 'SMX-T'){
-            var game = await Game.findById('5ffc9ddda5b1f82890d99841');
-            var group = await Group.findOne({name: user.group + 'T'});
-        }
+        var group = await Group.findOne({_id: req.user.groupid}); 
+        var game = await Game.fidnOnE({classtag: req.user.class});
     }else{
-        var group = await Group.findById(entrega.group);
-
-        if(req.user.class == 'SMX-M'){
-            var group = await Group.findOne({_id: entrega.group});
-        }else if(req.user.class == 'SMX-T'){
-            var group = await Group.findOne({_id: entrega.group});
-        }
+        var group = await Group.findOne({_id: entrega.group});
     }
 
     entrega.nota = req.body.nota;
@@ -1865,7 +1671,7 @@ router.put('/entrega/:id', isAuthenticated, async (req, res, file) => {
     await group.save();
     entrega.save();
     group.notaFinal = group.notaFinal + req.body.nota / game.practicasSubidas;
-    console.log(group.notaFinal);
+
     group.save();
     
     if(entrega.individual){
@@ -1877,10 +1683,10 @@ router.put('/entrega/:id', isAuthenticated, async (req, res, file) => {
     }
 });
 
-router.get(`/group/:name`, isAuthenticated, async (req, res) => {
+router.get(`/group/:id`, isAuthenticated, async (req, res) => {
     if(req.user.admin){
         var user = await User.findById(req.user.id);
-        var group = await Group.findOne({name: req.params.name});
+        var group = await Group.findOne({name: req.params.id});
     
         await Entregas.find({group: group._id}).sort({date: 'desc'})
         .then(async documentos => {
@@ -1909,7 +1715,7 @@ router.get(`/group/:name`, isAuthenticated, async (req, res) => {
 router.get(`/user/:id`, isAuthenticated, async (req, res) => {
     if(req.user.admin){
         var user = await User.findById(req.user.id);
-        var group = await Group.findOne({name: req.params.name});
+        var group = await Group.findOne({_id: req.user.groupid});
     
         await Entregas.find({user: req.params.id}).sort({date: 'desc'})
         .then(async documentos => {
@@ -1937,11 +1743,8 @@ router.get(`/user/:id`, isAuthenticated, async (req, res) => {
 
 // ===================== LOGROS ===========================
 router.get('/ingame/logros', isAuthenticated, async (req, res) => {
-    if(req.user.class == 'SMX-M'){
-        var group = await Group.findOne({name: req.user.group});
-    }else if(req.user.class == 'SMX-T'){
-        var group = await Group.findOne({name: req.user.group + 'T'});
-    }
+    var group = await Group.findOne({_id: req.user.groupid});
+
     await Logros.find().sort({date: 'desc'})
     .then(async documentos => {
       const contexto = {
@@ -1959,5 +1762,40 @@ router.get('/ingame/logros', isAuthenticated, async (req, res) => {
       var userId = await User.findById(req.user._id);
       res.render('logros/all-logros.hbs', { logros, userId, group });
     });
+});
+
+  // ===== NEW CLASS ======= //
+  router.get('/newclass', isAuthenticated, async (req, res) => {
+    const user = await User.findById(req.user.id);
+    if(user.rol == 'Teacher'){
+        const numRand = Math.floor(Math.random() * 18);
+        const numRand2 = Math.floor(Math.random() * 12);
+        const numRand3 = Math.floor(Math.random() * 19);
+        const code = numRand + "D" + numRand2 + "H" + numRand3 + "L";
+
+        const game = await Game.findOne({code: code});
+
+        if(game == null){
+            res.render('game/newGame.hbs', { user, code });
+        }else{
+            const numRand = Math.floor(Math.random() * 18);
+            const numRand2 = Math.floor(Math.random() * 12);
+            const numRand3 = Math.floor(Math.random() * 19);
+            const code = numRand + "F" + numRand2 + "H" + numRand3 + "T";
+            res.render('game/newGame.hbs', { user, code });
+        }
+    }
+  });
+
+  router.post('/newclass/:id', isAuthenticated, async (req, res) => {
+    var user = await User.findById(req.params.id);
+    const {name, code, classtag} = req.body;
+    const newClass = new Game({name, code, classtag, admin: req.params.id});
+    newClass.players.push(req.params.id);
+    await newClass.save();
+    user.class = classtag;
+    user.group = 'Creador';
+    user.save();
+    res.redirect('/ingame');
 });
 module.exports = router;
