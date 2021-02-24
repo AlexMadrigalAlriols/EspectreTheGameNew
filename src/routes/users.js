@@ -1795,8 +1795,8 @@ router.get('/ingame/logros', isAuthenticated, async (req, res) => {
     const newClass = new Game({name, code, classtag, admin: req.params.id});
     newClass.players.push(req.params.id);
     user.class = classtag;
-    user.group = 'Creador';
-    user.Creador = true;
+    user.group = 'Game Master';
+    user.Oceania = true;
     user.admin = true;
     user.SinGroup = false;
     // ========== CREAR GRUPOS PARA NEW CLASS ==============
@@ -1827,9 +1827,6 @@ router.get('/ingame/logros', isAuthenticated, async (req, res) => {
     const newGroup5 = new Group({name: "Sud_America", cartas: carta5, game: newClass._id});
     await newGroup5.save();
 
-    // === Sud America ===
-    const newGroup6 = new Group({name: "Creador", game: newClass._id});
-    await newGroup6.save();
 
     await newClass.groups.push(newGroup._id);
     await newClass.groups.push(newGroup1._id);
