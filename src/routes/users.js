@@ -334,7 +334,7 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
                 req.flash('success_msg', 'Tienes que esperar para que tu profesor te coloque en un grupo.')
                 res.redirect('/');
             }else{
-                var group = await Group.findOne({name: user.group}); 
+                var group = await Group.findOne({game: userclass._id}); 
                 user.groupid = group._id;
                 await user.save();
                 var group = await Group.findOne({_id: user.groupid});
@@ -457,7 +457,7 @@ router.put('/ingame/edit-group/:id', isAuthenticated, async (req, res) => {
 router.get('/ingame/cards', isAuthenticated, async (req, res) => {
 
     var group = await Group.findOne({_id: req.user.groupid});
-
+    console.log(group);
     await Cartas.find({_id: group.cartas}).sort({date: 'desc'})
     .then(async documentos => {
       const contexto = {
