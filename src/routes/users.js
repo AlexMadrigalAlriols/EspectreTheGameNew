@@ -44,6 +44,7 @@ router.get('/users/all-users/', isAuthenticated, async (req, res) => {
                 email: documento.email,
                 description: documento.description,
                 group: documento.group,
+                groupid: documento.groupid,
                 class: documento.class,
                 banner: documento.banner,
                 subido: documento.subido,
@@ -73,6 +74,7 @@ router.get('/users/all-users/', isAuthenticated, async (req, res) => {
                 email: documento.email,
                 description: documento.description,
                 group: documento.group,
+                groupid: documento.groupid,
                 class: documento.class,
                 banner: documento.banner,
                 subido: documento.subido,
@@ -400,9 +402,9 @@ router.put('/ingame/gameSettings', isAuthenticated, async (req, res, file) => {
 
 router.get('/ingame/all-groups/', isAuthenticated, async (req, res) => {
     const userId = await User.findById(req.user._id);
-    const group = await Group.find();
-    
-    await Group.find().sort({name: 'desc'})
+    const game = await Game.findOne({classtag: userId.class});
+
+    await Group.find({game: game._id}).sort({name: 'desc'})
       .then(async documentos => {
         const contexto = {
             groups: documentos.map(documento => {
@@ -1390,7 +1392,7 @@ router.get('/ingame/events/', isAuthenticated, async (req, res) => {
 
     await Events.find({class: users.class}).sort({date: 'desc'})
     .then(async documentos => {
-      const contexto = {
+      var contexto = {
           events: documentos.map(documento => {
           return {
               desc: documento.desc,
@@ -1407,6 +1409,7 @@ router.get('/ingame/events/', isAuthenticated, async (req, res) => {
         })
       }
       if(req.user.admin == true){
+        var events = contexto.events;
         res.render('game/consoleEvents.hbs', { events });
       }else{
         req.flash('error_msg', 'Your are not admin!');
@@ -1440,7 +1443,6 @@ router.get('/ingame/character', isAuthenticated, async (req, res) => {
       var skins = contexto.skins;
       res.render('tablero/selectplayer.hbs', { skins, user });
     });
-
 });
 
 router.put('/ingame/character', isAuthenticated, async (req, res) => {
@@ -1715,7 +1717,7 @@ router.get(`/group/:id`, isAuthenticated, async (req, res) => {
 router.get(`/user/:id`, isAuthenticated, async (req, res) => {
     if(req.user.admin){
         var user = await User.findById(req.user.id);
-        var group = await Group.findOne({_id: req.user.groupid});
+        var group = await Group.findOne({_id: user.groupid});
     
         await Entregas.find({user: req.params.id}).sort({date: 'desc'})
         .then(async documentos => {
@@ -1792,10 +1794,51 @@ router.get('/ingame/logros', isAuthenticated, async (req, res) => {
     const {name, code, classtag} = req.body;
     const newClass = new Game({name, code, classtag, admin: req.params.id});
     newClass.players.push(req.params.id);
-    await newClass.save();
     user.class = classtag;
     user.group = 'Creador';
-    user.save();
+    user.Creador = true;
+    user.admin = true;
+    user.SinGroup = false;
+    // ========== CREAR GRUPOS PARA NEW CLASS ==============
+    // ===== OCEANIA ====
+    const cartas = ['5ffb2e2fcd2b9a11c4a4bbae'];
+    const newGroup = new Group({name: "Oceania", cartas, game: newClass._id});
+    await newGroup.save();
+    // === ASIA ====
+    const carta1 = ['5ffb2e47cd2b9a11c4a4bbb0'];
+    const newGroup1 = new Group({name: "Asia", cartas: carta1, game: newClass._id});
+    await newGroup1.save();
+    // === Africa ===
+    const carta2 = ['5ffb2e67cd2b9a11c4a4bbb1'];
+    const newGroup2 = new Group({name: "Africa", cartas: carta2, game: newClass._id});
+    await newGroup2.save();
+    // === Europa ===
+    const carta3 = ['5ffb2e3ccd2b9a11c4a4bbaf'];
+    const newGroup3 = new Group({name: "Europa", cartas: carta3, game: newClass._id});
+    await newGroup3.save();
+
+    // === North America ===
+    const carta4 = ['5ffb2d59cd2b9a11c4a4bbac'];
+    const newGroup4 = new Group({name: "North_America", cartas: carta4, game: newClass._id});
+    await newGroup4.save();
+
+    // === Sud America ===
+    const carta5 = ['5ffb2e13cd2b9a11c4a4bbad'];
+    const newGroup5 = new Group({name: "Sud_America", cartas: carta5, game: newClass._id});
+    await newGroup5.save();
+
+    // === Sud America ===
+    const newGroup6 = new Group({name: "Creador", game: newClass._id});
+    await newGroup6.save();
+
+    await newClass.groups.push(newGroup._id);
+    await newClass.groups.push(newGroup1._id);
+    await newClass.groups.push(newGroup2._id);
+    await newClass.groups.push(newGroup3._id);
+    await newClass.groups.push(newGroup4._id);
+    await newClass.groups.push(newGroup5._id);
+    await newClass.save();
+    await user.save();
     res.redirect('/ingame');
 });
 module.exports = router;

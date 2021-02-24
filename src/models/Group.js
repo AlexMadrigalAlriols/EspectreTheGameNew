@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const GroupSchema = new Schema({
     name: { type: String},
     users: {type: Array },
-    oro:   {type: Number, default: 3000},
+    oro:   {type: Number, default: 0},
     inteligencia: { type: Number, default: 0},
     construccion: { type: Number, default: 0},
     diamantes: { type: Number, default: 0},

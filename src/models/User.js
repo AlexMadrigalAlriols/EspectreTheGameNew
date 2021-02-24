@@ -13,6 +13,7 @@ const UserSchema = new Schema({
     Europa: { type: Boolean, default: false},
     Oceania: { type: Boolean, default: false},
     SinGroup: { type: Boolean, default: true},
+    Creador: { type: Boolean, default: false},
     Asia: { type: Boolean, default: false},
     class: {type: String, default: 'SinAsignar'},
     banner: {type: String, default: 'https://hipertextual.com/files/2013/11/Wallpaper-Monta%C3%B1as.jpg'},
