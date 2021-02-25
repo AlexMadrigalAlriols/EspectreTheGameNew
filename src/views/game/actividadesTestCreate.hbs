@@ -3,7 +3,7 @@
     <div class="card" style="min-height: 100%;">
         <div class="card-header">
             <a href="/ingame"><button class="btn ml-2 mt-2 mr-4" style="background-color: #ff6d05; color: #fff; float: left;">Volver InGame</button></a>
-            <h3>New Activity</h3>
+            <h3>New Test</h3>
         </div>
         <div class="card-body">
             <form action="/ingame/new-activity?__method=PUT" method="POST" enctype="multipart/form-data">
@@ -14,7 +14,7 @@
                     <label for="entrega" style="display: inline-block; margin-top: -0.3rem;" class="ml-2">Entrega</label>
                 </div>
                 <div class="mb-3" style="display:inline-block;">
-                   <a href="/"><input type="radio" name="estest" id="test" value="entrega" style="display: inline-block;"></a>
+                   <a href="/"><input type="radio" name="estest" id="test" value="entrega" style="display: inline-block;" checked></a>
                     <label for="test" style="display: inline-block; margin-top: -0.3rem;" class="ml-2">Test</label>
                 </div>
 
@@ -27,11 +27,6 @@
                     <textarea name="descripcion" id="descripcion" class="form-control" placeholder="Put some description to your activity" maxlength="200"></textarea>
                 </div>
 
-                <h5>Recursos Adicionales</h5>
-                <div class="input-group mb-4">
-                    <label class="input-group-text" for="inputGroupFile02">EXPLORE</label>
-                    <input type="file" name="file" class="form-control" id="inputGroupFile02">
-                </div>
                 <h5>Type</h5>
                 <div class="mb-3" style="display:inline-block;">
                    <input type="radio" name="typeActivity" id="individual" value="individual" style="display: inline-block;" required>
@@ -51,7 +46,14 @@
                     <span class="input-group-text">/</span>
                     <input type="text" class="form-control" name="yearmax" placeholder="Año maximo" aria-label="Año maximo" readonly value="2021">
                 </div>
-
+                
+                <h5>Preguntas</h5>
+                <p>Aqui puedes añadir todas las preguntas y respuestas que quieras.</p>
+                <hr>
+                <h6>Pregunta 1</h6>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="pregunta1" value="" aria-label="Sizing example input" placeholder="Pregunta 1" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-block btnvolver">
                         Create Activity
@@ -102,7 +104,7 @@
 </div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script>
-$('input[id="test"]').on('click', function() {
-     window.location = "/ingame/new-test";
+$('input[id="entrega"]').on('click', function() {
+     window.location = "/ingame/new-activity";
 });
 </script>

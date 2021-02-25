@@ -10,6 +10,12 @@ const ActividadesSchema = new Schema({
     individual: { type: Boolean, default: false},
     entregados: {type: Array },
     diamax: { type: Number },
+    preguntas: {type: Array},
+    respuesta1: {type: Array},
+    respuesta2: {type: Array},
+    respuesta3: {type: Array},
+    respuesta4: {type: Array},
+    estest: {type: Boolean},
     mesmax: {type: Number },
     dragon: { type: Boolean, default: false}
 });

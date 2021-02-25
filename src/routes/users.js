@@ -1615,12 +1615,23 @@ router.put('/ingame/new-activity', isAuthenticated, async (req, res, file) => {
     }else{
         var individual = false;
     } 
-    const newActivity = new Actividades({name: req.body.name, descripcion: req.body.descripcion, recursosAdicionales, individual ,boss: req.body.bossSelect, class: req.user.class, diamax: req.body.diamax, mesmax: req.body.mesmax});
+    if(req.body.estest == 'test'){
+        var estest = true;
+    }else{
+        var estest = false;
+    }
+    const newActivity = new Actividades({name: req.body.name, descripcion: req.body.descripcion, recursosAdicionales, individual ,boss: req.body.bossSelect, estest, class: req.user.class, diamax: req.body.diamax, mesmax: req.body.mesmax});
     await newActivity.save();
     game.practicasSubidas = game.practicasSubidas + 1;
     game.save();
 
     res.redirect('/ingame/boardgame/' + newActivity._id);
+});
+router.get('/ingame/new-test/', isAuthenticated, async (req, res) => {
+    var user = await User.findById(req.user.id);
+    var group = await Group.findOne({_id: req.user.groupid}); 
+
+    res.render('game/actividadesTestCreate.hbs', {user, group});
 });
 
 router.put('/ingame/boardactivity/:id', isAuthenticated, async (req, res, file) => {
@@ -1798,8 +1809,6 @@ router.put('/logro/:id', isAuthenticated, async (req, res, file) => {
         req.flash('error_msg', 'Aun no tienes ese logro completado!');
         res.redirect('/ingame/logros');
     }
-
-
 });
 
   // ===== NEW CLASS ======= //
