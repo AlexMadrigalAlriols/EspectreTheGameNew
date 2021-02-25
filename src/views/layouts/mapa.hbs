@@ -1,13 +1,15 @@
 
-{{!-- <div class="container" style=" width:40%; margin-top:2rem;">   
+<div class="container" style=" width:40%; margin-top:2rem;">   
       <i style="margin-left: -5rem; color: white; position: absolute; margin-top: 0.2rem;">Level {{user.level}}</i> 
   <div class="progress2 progress-moved">
-    <div class="progress-bar2" style="width:15%;">
+    <div class="progress-bar2" style="width:{{user.exp}}%;">
     </div>                       
   </div> 
-</div> --}}
-<h4 style="position:absolute; left: 6rem;">Año: {{game.year}}</h4>
+</div> 
 
+<h4 style="position:absolute; left: 6rem; margin-top: -3rem;">Año: {{game.year}}</h4>
+
+<div class="container">
 <div class="p-5 p-md-8 mapafondo" style="margin-top: 6rem;">
   <div><img class="mapainteractuable" src="{{game.mapa}}" usemap="#image-map"></div>
   
@@ -100,7 +102,7 @@
 </map>
 {{/if}}
 </div>
-
+</div>
 <ul class="menu">
   <li><img src="/img/LogoEspectre.png" width="60px" class="ml-2 mt-1 elastic-spin"></li>
   <li title="about"><a href="#" class="active about" id="button" >about</a></li>

@@ -1475,16 +1475,20 @@ router.get('/ingame/board', isAuthenticated, async (req, res) => {
       }
       var actividades = contexto.actividad;
       var logro = await Logros.findById("60316aa1437b6f1a940b4eb8");
-      var indexLogro = await user.logros.indexOf(logro._id);
 
-      if(indexLogro == -1){
+      const indexLogro = await logro.players.indexOf(user._id);
+
+      if(indexLogro > -1){
+        res.render('tablero/board.hbs', { user, group,actividades });
+      }else{
+        logro.players.push(user._id);
         user.logros.push(logro._id);
-        user.logrosconseguidos = user.logrosconseguidos + 1;
-        user.save();
+        user.logrosconseguidos++; 
+        await user.save();
+        await logro.save();
+
         req.flash('success_msg', 'Has conseguido el Logro: ' + logro.name);
         res.redirect('/ingame/board');
-      }else{
-        res.render('tablero/board.hbs', { user, group,actividades });
       }
     });
 
@@ -1747,7 +1751,7 @@ router.get(`/user/:id`, isAuthenticated, async (req, res) => {
 router.get('/ingame/logros', isAuthenticated, async (req, res) => {
     var group = await Group.findOne({_id: req.user.groupid});
 
-    await Logros.find().sort({date: 'desc'})
+    await Logros.find({players: req.user._id}).sort({date: 'desc'})
     .then(async documentos => {
       const contexto = {
           logros: documentos.map(documento => {
@@ -1764,6 +1768,38 @@ router.get('/ingame/logros', isAuthenticated, async (req, res) => {
       var userId = await User.findById(req.user._id);
       res.render('logros/all-logros.hbs', { logros, userId, group });
     });
+});
+
+router.put('/logro/:id', isAuthenticated, async (req, res, file) => {
+    var logro = await Logros.findById(req.params.id);
+    var user = await User.findById(req.user._id);
+
+    var indexLogro = logro.players.indexOf(req.user._id);
+    if(indexLogro > -1){
+        logro.players.splice(indexLogro, 1);
+        logro.save();
+
+        user.exp = user.exp + logro.recompensaexp;
+        if(user.exp >= 100){
+            user.exp = 0;
+            user.level++; 
+            user.save();
+            req.flash('success_msg', 'Has subido de nivel!');
+            res.redirect('/ingame/logros');
+        }else{
+            user.save();
+            req.flash('success_msg', 'Has recogido la recompensa del logro!');
+            res.redirect('/ingame/logros');
+        }
+        
+        
+
+    }else{
+        req.flash('error_msg', 'Aun no tienes ese logro completado!');
+        res.redirect('/ingame/logros');
+    }
+
+
 });
 
   // ===== NEW CLASS ======= //

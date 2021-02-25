@@ -26,7 +26,7 @@ const UserSchema = new Schema({
     logros: {type: Array},
     level: { type: Number},
     groupid: {type: String},
-    exp: {type: String},
+    exp: {type: Number},
     logrosconseguidos: {type: String, default: 0},
     cartasusadas: {type: String, default: 0},
     description: { type: String, default: 'CAMBIA LA DESCRIPCIÓN EDITANDO EL PERFIL'},

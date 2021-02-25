@@ -154,7 +154,6 @@ button:focus {
     width: 718px;
     margin-top: -5%;
     position: fixed;
-    max-width: 718px;
     margin-left: 200px;
     text-align:center;
   }
@@ -170,9 +169,7 @@ button:focus {
       position: absolute;
       overflow: auto;
       width: 100% 100%;
-      margin-left: 7%;
     }
-
   
     .btncartas {
       font-size: 12px;
@@ -1193,7 +1190,7 @@ tr {
 
 .progress-bar2 {
   width: attr(data-emoji);
-  background-color: #EF476F;  
+  background-color: #ff6d05;  
 }
 
 

@@ -29,6 +29,14 @@
         <div class="card-footer">
             Recompensa: {{recompensaexp}} exp
         </div>
+        <form action="/logro/{{_id}}?__method=PUT" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="__method" value="PUT">
+                <div class="form-group">
+                    <button class="btn btn-block btn-success" type="submit">
+                    Reclamar
+                    </button>
+                </div>
+            </form>
     </div>
 </div>
 {{else}}
