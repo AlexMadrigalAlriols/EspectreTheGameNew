@@ -143,7 +143,8 @@ router.get(`/users/edit-user/:id`, isAuthenticated, async (req, res) => {
 router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
     const lastImage = await User.findById(req.params.id);
     var user = await User.findById(req.params.id);
-    
+    var game = await Game.findOne({classtag: req.user.class});
+
     var { name, email, description, group } = req.body;
     
     user.name = name;
@@ -154,7 +155,7 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
     }else{
         user.group = req.user.group;
     }
-    var groupUser = await Group.findOne({_id: req.user.groupid});
+    var groupUser = await Group.findOne({name: req.body.group, game: game._id});
     var indexGroup = await groupUser.users.indexOf(req.params.id);
 
     if(indexGroup > -1){
@@ -163,7 +164,7 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
         await groupUser.users.push(req.params.id);
         const nameGroup = groupUser.name;
 
-        if(nameGroup == 'North_America'){
+        if(req.body.group == 'North_America'){
             user.North_America = true;
             user.Oceania = false;
             user.Asia = false;
@@ -171,8 +172,10 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
             user.Europa = false;
             user.SinGroup = false;
             user.Sud_America = false;
+            var group = await Group.findOne({name: 'North_America', game: game._id});
+            user.groupid = group._id;
             await user.save();
-        }else if( nameGroup == 'Sud_America'){
+        }else if(req.body.group == 'Sud_America'){
             user.North_America = false;
             user.Oceania = false;
             user.Asia = false;
@@ -180,6 +183,8 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
             user.Europa = false;
             user.SinGroup = false;
             user.Sud_America = true;
+            var group = await Group.findOne({name: 'Sud_America', game: game._id});
+            user.groupid = group._id;
             await user.save();
         }else if( nameGroup == 'Oceania'){
             user.North_America = false;
@@ -189,6 +194,8 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
             user.Europa = false;
             user.SinGroup = false;
             user.Sud_America = false;
+            var group = await Group.findOne({name: 'Oceania', game: game._id});
+            user.groupid = group._id;
             await user.save();
         }else if( nameGroup == 'Asia'){
             user.North_America = false;
@@ -198,6 +205,8 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
             user.Europa = false;
             user.SinGroup = false;
             user.Sud_America = false;
+            var group = await Group.findOne({name: 'Asia', game: game._id});
+            user.groupid = group._id;
             await user.save();
         }else if(nameGroup == 'Europa'){
             user.North_America = false;
@@ -207,6 +216,8 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
             user.Europa = true;
             user.SinGroup = false;
             user.Sud_America = false;
+            var group = await Group.findOne({name: 'Europa', game: game._id});
+            user.groupid = group._id;
             await user.save();
         }else if(nameGroup == 'Africa'){
             user.North_America = false;
@@ -216,6 +227,8 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
             user.Europa = false;
             user.SinGroup = false;
             user.Sud_America = false;
+            var group = await Group.findOne({name: 'Africa', game: game._id});
+            user.groupid = group._id;
             await user.save();
         }else if(nameGroup == 'SinGroup'){
             user.North_America = false;
@@ -225,55 +238,9 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
             user.Europa = false;
             user.SinGroup = true;
             user.Sud_America = false;
+            var group = await Group.findOne({name: 'SinGroup', game: game._id});
+            user.groupid = group._id;
             await user.save();
-        }else if(nameGroup == 'North_AmericaT'){
-            user.North_America = true;
-            user.Oceania = false;
-            user.Asia = false;
-            user.Africa = false;
-            user.Europa = false;
-            user.SinGroup = false;
-            user.Sud_America = false;
-        }else if(nameGroup == 'Sud_AmericaT'){
-            user.North_America = false;
-            user.Oceania = false;
-            user.Asia = false;
-            user.Africa = false;
-            user.Europa = false;
-            user.SinGroup = false;
-            user.Sud_America = true;
-        }else if(nameGroup == 'OceaniaT'){
-            user.North_America = false;
-            user.Oceania = true;
-            user.Asia = false;
-            user.Africa = false;
-            user.Europa = false;
-            user.SinGroup = false;
-            user.Sud_America = false;
-        }else if(nameGroup == 'AfricaT'){
-            user.North_America = false;
-            user.Oceania = false;
-            user.Asia = false;
-            user.Africa = true;
-            user.Europa = false;
-            user.SinGroup = false;
-            user.Sud_America = false;
-        }else if(nameGroup == 'AsiaT'){
-            user.North_America = false;
-            user.Oceania = false;
-            user.Asia = true;
-            user.Africa = false;
-            user.Europa = false;
-            user.SinGroup = false;
-            user.Sud_America = false;
-        }else if(nameGroup == 'EuropaT'){
-            user.North_America = false;
-            user.Oceania = false;
-            user.Asia = false;
-            user.Africa = false;
-            user.Europa = true;
-            user.SinGroup = false;
-            user.Sud_America = false;
         }
 
         await groupUser.save();
@@ -334,11 +301,15 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
                 req.flash('success_msg', 'Tienes que esperar para que tu profesor te coloque en un grupo.')
                 res.redirect('/');
             }else{
+
                 if(req.user.class == 'SMX-M'){
                    var group = await Group.findOne({name: user.group}); 
-                }else{
+                }else if(req.user.class == 'SMX-T'){
                    var group = await Group.findOne({name: user.group + 'T'}); 
+                }else{
+                    var group = await Group.findOne({name: user.group}); 
                 }
+
                 user.groupid = group._id;
                 await user.save();
                 var group = await Group.findOne({_id: user.groupid});
@@ -1374,13 +1345,13 @@ router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
 
     const user = await User.findOne({_id: req.user.id});
     const codeClass = req.body.codeClass;
-    var game = await Game.findOne({classtag: req.user.class});
+    var game = await Game.findOne({code: codeClass});
     if(codeClass == game.code){
         user.class = game.classtag;
         game.players.push(req.user._id);
         
-        game.save();
-        user.save();
+        await game.save();
+        await user.save();
         res.redirect('/ingame');
     }else{
         req.flash('error_msg', 'No existe ninguna clase con este codigo!');
