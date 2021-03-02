@@ -8,7 +8,9 @@
 </div> 
 
 <h4 style="position:absolute; left: 6rem; margin-top: -3rem;">Año: {{game.year}}</h4>
+{{#if user.admin}}
 <p style="position:absolute; left: 6rem; margin-top: -1rem; color: orange;">Class Code: "{{game.code}}"</p>
+{{/if}}
 
 <div class="container">
 <div class="p-5 p-md-8 mapafondo" style="margin-top: 5rem;">
