@@ -334,7 +334,11 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
                 req.flash('success_msg', 'Tienes que esperar para que tu profesor te coloque en un grupo.')
                 res.redirect('/');
             }else{
-                var group = await Group.findOne({game: userclass._id}); 
+                if(req.user.class == 'SMX-M'){
+                   var group = await Group.findOne({name: user.group}); 
+                }else{
+                   var group = await Group.findOne({name: user.group + 'T'}); 
+                }
                 user.groupid = group._id;
                 await user.save();
                 var group = await Group.findOne({_id: user.groupid});
