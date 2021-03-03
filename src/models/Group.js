@@ -13,7 +13,7 @@ const GroupSchema = new Schema({
     TierOfAttacked: {type: String},
     practica: { type: String },
     subido: { type: Boolean, default: false},
-    notaFinal: {type: String, default: 0},
+    notaFinal: {type: Number, default: 0},
     game: { type: String},
     nota: { type: Number, default: 0},
     comentarios: { type: String },

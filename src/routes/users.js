@@ -301,17 +301,6 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
                 req.flash('success_msg', 'Tienes que esperar para que tu profesor te coloque en un grupo.')
                 res.redirect('/');
             }else{
-
-                if(req.user.class == 'SMX-M'){
-                   var group = await Group.findOne({name: user.group}); 
-                }else if(req.user.class == 'SMX-T'){
-                   var group = await Group.findOne({name: user.group + 'T'}); 
-                }else{
-                    var group = await Group.findOne({name: user.group}); 
-                }
-
-                user.groupid = group._id;
-                await user.save();
                 var group = await Group.findOne({_id: user.groupid});
 
                 if(group.Ataqued == true){ 
@@ -377,7 +366,7 @@ router.put('/ingame/gameSettings', isAuthenticated, async (req, res, file) => {
 
 router.get('/ingame/all-groups/', isAuthenticated, async (req, res) => {
     const userId = await User.findById(req.user._id);
-    const game = await Game.findOne({classtag: userId.class});
+    const game = await Game.findOne({classtag: req.user.class});
 
     await Group.find({game: game._id}).sort({name: 'desc'})
       .then(async documentos => {
@@ -1641,8 +1630,10 @@ router.put('/entrega/:id', isAuthenticated, async (req, res, file) => {
     if(entrega.user != undefined){
         var user = await User.findById(entrega.user);
         var group = await Group.findOne({_id: req.user.groupid}); 
-        var game = await Game.fidnOnE({classtag: req.user.class});
+        var game = await Game.findOne({classtag: req.user.class});
     }else{
+        var user = await User.findById(entrega.user);
+        var game = await Game.findOne({classtag: req.user.class});
         var group = await Group.findOne({_id: entrega.group});
     }
 
@@ -1676,9 +1667,10 @@ router.put('/entrega/:id', isAuthenticated, async (req, res, file) => {
 });
 
 router.get(`/group/:id`, isAuthenticated, async (req, res) => {
+    
     if(req.user.admin){
         var user = await User.findById(req.user.id);
-        var group = await Group.findOne({name: req.params.id});
+        var group = await Group.findOne({_id: req.params.id});
     
         await Entregas.find({group: group._id}).sort({date: 'desc'})
         .then(async documentos => {
