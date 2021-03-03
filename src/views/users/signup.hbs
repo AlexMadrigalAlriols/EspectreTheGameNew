@@ -14,41 +14,41 @@
                     <nav style="background-color: white; margin-left: -3rem;">
 <a href="/"><button class="btn ml-4 mt-3 mb-3 btnvolver">Volver Atras</button></a>
 </nav>
-<div class="row" style="margin-top: 4rem;">
+<div class="row" style="margin-top: 0.5rem;">
     <div class="col-md-4 mx-auto">
-        <div class="card mt-4 text-center" style="background-color: rgba(255, 255, 255, 0.672);">
+        <div class="card mt-2 text-center" style="background-color: rgba(255, 255, 255, 0.672);">
             <div class="card-header">
-               <h2>Account Register</h2> 
+               <h2>Registrar Cuenta</h2> 
             </div>
             <div class="card-body">
                 <form action="/users/signup" method="POST">
 
                 <div class="form-group" >
-                    <input type="text" class="form-control" name="name" placeholder="Name" value="{{name}}" style="background-color:  rgba(255, 255, 255, 0.891);">
+                    <input type="text" class="form-control" name="name" placeholder="Nombre Completo" value="{{name}}" style="background-color:  rgba(255, 255, 255, 0.891);">
                 </div>
                 <div class="form-group">
                     <input type="email" class="form-control" name="email" placeholder="Email" value="{{email}}" style="background-color:  rgba(255, 255, 255, 0.891);">
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control" name="password" placeholder="Password" value="{{password}}" style="background-color:  rgba(255, 255, 255, 0.891);" required>
+                    <input type="password" class="form-control" name="password" placeholder="Contrase&ntilde;a" value="{{password}}" style="background-color:  rgba(255, 255, 255, 0.891);" required>
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control" name="confrim_password" placeholder="Confirm Password" value="{{confirm_password}}" style="background-color:  rgba(255, 255, 255, 0.891);" required>
+                    <input type="password" class="form-control" name="confrim_password" placeholder="Confirmar Contrase&ntilde;a" value="{{confirm_password}}" style="background-color:  rgba(255, 255, 255, 0.891);" required>
                 </div>
                 
                 <hr>
                 <select class="form-control" name="rol" style="background-color:  rgba(255, 255, 255, 0.800);" required>
-                    <option value="Student">Student</option> 
-                    <option value="Teacher">Teacher</option> 
+                    <option value="Student">Estudiante</option> 
+                    <option value="Teacher">Profesor</option> 
                 </select> </br>
 
                 <div class="form-group">
                     <input type="checkbox" name="terms_condi" id="terms_condi" value="Yes" required>
-                    <label for="terms_condi">Accept Terms &amp Conditions</label>
+                    <label for="terms_condi">Aceptar Terminos &amp Condiciones</label>
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btnsignup btn-block">
-                        SignUp
+                        Registrarse
                     </button>
                 </div>
                 </form>

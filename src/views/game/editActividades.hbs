@@ -2,17 +2,17 @@
 <div class="col-md-6 h-100" style="float: left; min-height:100%; padding:25px;"> 
     <div class="card">
         <div class="card-header">
-            <a href="/ingame"><button class="btn ml-2 mt-2 mr-4" style="background-color: #ff6d05; color: #fff; float: left;">Volver InGame</button></a>
-            <h3>New Activity</h3>
+            <a href="/ingame"><button class="btn ml-2 mt-2 mr-4" style="background-color: #ff6d05; color: #fff; float: left;">Volver Atras</button></a>
+            <h3>Modificar Actividad</h3>
         </div>
         <div class="card-body">
             <form action="/ingame/edit-activity/{{actividad._id}}?__method=PUT" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="__method" value="PUT">
-                <h5>Name</h5>
+                <h5>Nombre</h5>
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" name="name" value="{{actividad.name}}" aria-label="Sizing example input" placeholder="Some name to your activity" aria-describedby="inputGroup-sizing-default" minlength="1">
                 </div>
-                <h5>Description</h5>
+                <h5>Descripción</h5>
                 <div class="input-group mb-3">
                     <textarea name="descripcion" id="descripcion" class="form-control" placeholder="Put some description to your activity" maxlength="200">{{actividad.descripcion}}</textarea>
                 </div>
@@ -22,7 +22,7 @@
                     <label class="input-group-text" for="inputGroupFile02">EXPLORE</label>
                     <input type="file" name="file" class="form-control" id="inputGroupFile02">
                 </div>
-                <h5>Type</h5>
+                <h5>Tipo de entrega</h5>
                 <div class="mb-3" style="display:inline-block;">
                     <input type="radio" name="typeActivity" id="individual" value="individual" style="display: inline-block;">
                     <label for="individual" style="display: inline-block; margin-top: -0.3rem;" class="ml-2">individual</label>
@@ -40,7 +40,7 @@
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-block btnvolver">
-                        Create Activity
+                        Modificar Actividad
                     </button>
                 </div>
 
@@ -51,7 +51,7 @@
 <div class="col-md-6" style="padding:25px;">
     <div class="card">
         <div class="card-header">
-            <h3 class="text-center">Select a Boss</h3>
+            <h3 class="text-center">Selecciona un Jefe</h3>
         </div>
         <img class="card-img" src="/img/mazmorra2.jpg" style="height: 100%;">
         <div class="card-body card-img-overlay" style="background-size: 100%;">

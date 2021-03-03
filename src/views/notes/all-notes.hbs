@@ -1,6 +1,6 @@
 <nav style="background-color: white;">
-<a href="/ingame/"><button class="btn ml-2 mt-3 mb-3 btnvolver">Volver InGame</button></a>
-<a href="/notes/add/"><button class="btn mr-2 mt-3 mb-3 btnsucces" style="float:right;">Add Note</button></a>
+<a href="/ingame/"><button class="btn ml-2 mt-3 mb-3 btnvolver">Volver Atrás</button></a>
+<a href="/notes/add/"><button class="btn mr-2 mt-3 mb-3 btnsucces" style="float:right;">Añadir Posit</button></a>
 </nav>
 
 <div class="row">
@@ -17,7 +17,7 @@
                 <input type="hidden" name="__method" value="DELETE">
 
                 <button class="btn btn-danger btn-block btn-sm" type="submit">
-                Delete
+                Borrar
                 </button>
                 </form>
             </div>
@@ -27,8 +27,8 @@
     <div class="card mx-auto mt-3">
         <div class="card-body">
             <h1>Hey {{user.name}}!</h1>
-            <p class="lead">There are not notes yet.</p>
-            <a href="/notes/add" class="btn btn-success btn-block">Create One!</a>
+            <p class="lead">Aun no has creado ningun posit!</p>
+            <a href="/notes/add" class="btn btn-success btn-block">Crea Uno Ahora!</a>
         </div>
     </div>
     {{/each}}

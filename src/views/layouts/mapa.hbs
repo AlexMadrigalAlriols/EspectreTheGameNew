@@ -1,6 +1,6 @@
 
 <div class="container" style=" width:40%; margin-top:2rem;">   
-      <i style="margin-left: -5rem; color: white; position: absolute; margin-top: 0.2rem;">Level {{user.level}}</i> 
+      <i style="margin-left: -5rem; color: white; position: absolute; margin-top: 0.2rem;">Nivel {{user.level}}</i> 
   <div class="progress2 progress-moved">
     <div class="progress-bar2" style="width:{{user.exp}}%;">
     </div>                       
@@ -9,7 +9,7 @@
 
 <h4 style="position:absolute; left: 6rem; margin-top: -3rem;">Año: {{game.year}}</h4>
 {{#if user.admin}}
-<p style="position:absolute; left: 6rem; margin-top: -1rem; color: orange;">Class Code: "{{game.code}}"</p>
+<p style="position:absolute; left: 6rem; margin-top: -1rem; color: orange;">C&oacute;digo Clase: "{{game.code}}"</p>
 {{/if}}
 
 <div class="container">
@@ -124,7 +124,7 @@
 <div class="board__menu" id="actividades-menu">
     <a href="#" id="actividades-toggle2"><span><i class="fas fa-times" style="position:absolute; top: 15px; right: 15px; font-size:20px;"></i></span></a>
     <h4 style="float: left; color: #242424; display:inline-block;"><b>Actividades</b></h4></br>
-    <a href="/ingame/new-activity"><button class="btn-sm btn-success" style="float: right; display:inline-block; margin-top: -1.5rem;">Add Activity</button></a>
+    <a href="/ingame/new-activity"><button class="btn-sm btn-success" style="float: right; display:inline-block; margin-top: -1.5rem;">Añadir Actividad</button></a>
     <hr>
     {{#each actividades}}
             <p style="display: inline-block;">{{name}}</p>
@@ -133,11 +133,11 @@
 
         <a href="#"><button type="submit" style="float: right; right: 0; display:inline-block;" class="btn-danger">Borrar</button></a>
         </form>
-        <a href="/ingame/edit-activity/{{_id}}"><button style="float: right; right: 0; display:inline-block;" class="btn-success">Edit</button></a>
+        <a href="/ingame/edit-activity/{{_id}}"><button style="float: right; right: 0; display:inline-block;" class="btn-success">Modificar</button></a>
 
     <hr>
     {{else}}
-    <p style="display: inline-block;" class="text-center">There are not activities yet.</p>
+    <p style="display: inline-block;" class="text-center">Aun no hay actividades creadas.</p>
     <hr>
     {{/each}}
 </div>

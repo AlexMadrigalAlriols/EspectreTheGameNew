@@ -174,7 +174,7 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
             user.Sud_America = false;
             var group = await Group.findOne({name: 'North_America', game: game._id});
             user.groupid = group._id;
-            await user.save();
+
         }else if(req.body.group == 'Sud_America'){
             user.North_America = false;
             user.Oceania = false;
@@ -185,7 +185,7 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
             user.Sud_America = true;
             var group = await Group.findOne({name: 'Sud_America', game: game._id});
             user.groupid = group._id;
-            await user.save();
+
         }else if( nameGroup == 'Oceania'){
             user.North_America = false;
             user.Oceania = true;
@@ -196,7 +196,7 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
             user.Sud_America = false;
             var group = await Group.findOne({name: 'Oceania', game: game._id});
             user.groupid = group._id;
-            await user.save();
+
         }else if( nameGroup == 'Asia'){
             user.North_America = false;
             user.Oceania = false;
@@ -207,7 +207,7 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
             user.Sud_America = false;
             var group = await Group.findOne({name: 'Asia', game: game._id});
             user.groupid = group._id;
-            await user.save();
+
         }else if(nameGroup == 'Europa'){
             user.North_America = false;
             user.Oceania = false;
@@ -218,7 +218,7 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
             user.Sud_America = false;
             var group = await Group.findOne({name: 'Europa', game: game._id});
             user.groupid = group._id;
-            await user.save();
+
         }else if(nameGroup == 'Africa'){
             user.North_America = false;
             user.Oceania = false;
@@ -229,7 +229,7 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
             user.Sud_America = false;
             var group = await Group.findOne({name: 'Africa', game: game._id});
             user.groupid = group._id;
-            await user.save();
+
         }else if(nameGroup == 'SinGroup'){
             user.North_America = false;
             user.Oceania = false;
@@ -240,7 +240,7 @@ router.put('/users/edit-user/:id', isAuthenticated, async (req, res, file) => {
             user.Sud_America = false;
             var group = await Group.findOne({name: 'SinGroup', game: game._id});
             user.groupid = group._id;
-            await user.save();
+
         }
 
         await groupUser.save();

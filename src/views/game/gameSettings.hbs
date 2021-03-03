@@ -2,36 +2,30 @@
 <div class="col-md-6 mx-auto mt-2">
     <div class="card">
         <div class="card-header">
-            <h3>Game Settings</h3>
+            <h3>Opciones Generales</h3>
         </div>
         <div class="card-body">
             <form action="/ingame/gameSettings?__method=PUT" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="__method" value="PUT">
-                <h5>Year</h5>
+                <h5>Año</h5>
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="inputGroup-sizing-default">Year on Game:</span>
                     <input type="text" class="form-control" name="year" value="{{game.year}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                 </div>
 
-                <h5>Type of Map</h5>
+                <h5>Tipo de Mapa</h5>
                 <div class="input-group mb-3">
-                    <label class="input-group-text" for="inputGroupSelect01">Options</label>
+                    <label class="input-group-text" for="inputGroupSelect01">Opciones</label>
                     <select class="form-select" id="inputGroupSelect01" name="mapa">
-                        <option selected value="ningunoElegido">Choose one...</option>
-                        <option value="/img/background-hero.png">Cartografic</option>
-                        <option value="/img/fantasyMap.png">Fanatasy</option>
+                        <option selected value="ningunoElegido">Elige uno...</option>
+                        <option value="/img/background-hero.png">Cartográfico</option>
+                        <option value="/img/fantasyMap.png">Fantasia</option>
                     </select>
-                </div>
-
-                <h5>Periodico</h5>
-                <div class="input-group mb-4">
-                    <label class="input-group-text" for="inputGroupFile02">EXPLORE</label>
-                    <input type="file" name="file" class="form-control" id="inputGroupFile02" value="{{game.periodico}}">
                 </div>
                 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-block" style="background-color: #ff6d05; color: #242424;">
-                        Save GameSettings
+                    <button type="submit" class="btn btn-block btnvolver">
+                        Guardar Opciones
                     </button>
                 </div>
             </form>

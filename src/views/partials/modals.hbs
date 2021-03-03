@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h3 class="modal-title" id="exampleModalLabel">Your Profile</h3>
+          <h3 class="modal-title" id="exampleModalLabel">Tu Perfil</h3>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -22,7 +22,7 @@
                 <hr>
                 <p >{{user.description}}</p>
             <div class="p-2">
-                <a href="/users/all-users/"><button class="btn btn-sm btn-block btnvolver">All Users <i class="fas fa-users"></i></button></a>
+                <a href="/users/all-users/"><button class="btn btn-sm btn-block btnvolver">Todos Los Users <i class="fas fa-users"></i></button></a>
             </div>
             </center>                     
         </div>
@@ -42,10 +42,10 @@
         </tr>
 
     </table>
-    <center><a href="/users/edit-user/{{user.id}}" class="waves-effect waves-light btn edit btnvolver p-2">Edit Profile <i class="far fa-edit"></i></a></center>
+    <center><a href="/users/edit-user/{{user.id}}" class="waves-effect waves-light btn edit btnvolver p-2">Editar Perfil <i class="far fa-edit"></i></a></center>
 </div>
         <div class="modal-footer" style="background-color: rgba(255, 255, 255, 0.800);">
-          <button type="button" id="buttonclose" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
+          <button type="button" id="buttonclose" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cerrar</button>
         </div>
       </div>
     </div>
@@ -72,24 +72,24 @@
   </div>
 
   <div class="modal bg-modal" id="adminPanel" tabindex="-1" role="dialog" aria-labelledby="AdminPanel" aria-hidden="true">
-    <div class="modal-dialog modal-md" style="width: 20%;" role="document">
+    <div class="modal-dialog modal-md" style="width: 30%;" role="document">
       <div class="modal-content">
         <div class="modal-header">
-         <h3 class="modal-title text-center">Admin Panel</h3>
+         <h3 class="modal-title text-center">Panel de Profesor</h3>
         </div>
         <div class="modal-body">
-          <a href="/ingame/gameSettings/"><button class="btn btn-primary btn-block">InGame Settings</button></a>
+          <a href="/ingame/gameSettings/"><button class="btn btn-primary btn-block">Opciones Generales</button></a>
           <hr>
-          <a href="/users/all-users/"><button class="btn btn-primary btn-block">All Users</button></a>
+          <a href="/users/all-users/"><button class="btn btn-primary btn-block">Ver Todos Los Alumnos</button></a>
           <hr>
-          <a href="/ingame/all-groups/"><button class="btn btn-primary btn-block">All Groups</button></a>
+          <a href="/ingame/all-groups/"><button class="btn btn-primary btn-block">Ver Todos Los Grupos</button></a>
           <hr>
-          <a href="/ingame/events/"><button class="btn btn-primary btn-block">Events Console</button></a>
+          <a href="/ingame/events/"><button class="btn btn-primary btn-block">Consola de Eventos</button></a>
           <hr>
-          <a href="#" id="buttoncloseAdmin"><button class="btn btn-primary btn-block">Actividades Modify</button></a>
+          <a href="#" id="buttoncloseAdmin"><button class="btn btn-primary btn-block">Modificar Actividades/Entregas</button></a>
         </div>
         <div class="modal-footer">
-          <button type="button" id="buttoncloseAdmin2" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
+          <button type="button" id="buttoncloseAdmin2" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cerrar</button>
         </div>
       </div>
     </div>
@@ -161,7 +161,7 @@
           {{/if}}
         </div>
         <div class="modal-footer">
-          <button type="button" id="buttoncloseModal" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
+          <button type="button" id="buttoncloseModal" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cerrar</button>
         </div>
       </div>
     </div>

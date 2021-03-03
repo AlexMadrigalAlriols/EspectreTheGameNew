@@ -2,8 +2,8 @@
 <a href="/ingame"><button class="btn ml-2 mt-3 mb-3 btnvolver">Volver Atras</button></a>
 <form action="/user/search/" method="POST" style="float:right; display:inline-block;">
 <div class="input-group mt-3 mb-3" style="margin-left: -2rem;">
-  <input type="email" class="form-control" placeholder="User Email" name="email" aria-label="Recipient's username" aria-describedby="button-addon2">
-  <button class="btn btnvolver" type="submit" id="button-addon2">Search</button>
+  <input type="email" class="form-control" placeholder="Email del Alumno" name="email" aria-label="Recipient's username" aria-describedby="button-addon2">
+  <button class="btn btnvolver" type="submit" id="button-addon2">Buscar</button>
 </div>
 
 </form>
@@ -21,14 +21,14 @@
         <h2>{{name}}<span>{{group}} / {{class}}</span></h2><hr style="background-color: white;">
         <p>{{description}}</p>
 
-        <a href="/users/edit-user/{{_id}}" class="info" style="width:100%;">EDIT</a>
+        <a href="/users/edit-user/{{_id}}" class="info" style="width:100%;">Modificar Alumno</a>
         <form action="/users/delete/{{_id}}?__method=DELETE" method="POST">
         <input type="hidden" name="__method" value="DELETE">
 
-        <a href="#" class="follow" style="width:100%;"><button type="submit" class="btn btn-sm" style="background-color:transparent; color: red;">DELETE</button></a>
+        <a href="#" class="follow" style="width:100%;"><button type="submit" class="btn btn-sm" style="background-color:transparent; color: red;">Borrar Alumno</button></a>
         </form>
     </figcaption>
-     <a href="/user/{{_id}}" style="border-color: transparent;"><button class="btn btnvolver" style="border-color: transparent; width: 85%; margin-left: 8%; margin-bottom: 5px;">View Notes</button></a>
+     <a href="/user/{{_id}}" style="border-color: transparent;"><button class="btn btnvolver" style="border-color: transparent; width: 85%; margin-left: 8%; margin-bottom: 5px;">Ver Entregas</button></a>
 </figure>
 </div>
     {{/each}}
