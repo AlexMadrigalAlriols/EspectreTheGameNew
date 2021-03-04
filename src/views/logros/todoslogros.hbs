@@ -1,6 +1,5 @@
 <nav style="background-color: white;">
 <a href="/ingame"><button class="btn ml-2 mt-3 mb-3 btnvolver">Volver Atras</button></a>
-<a href="/ingame/all-logros"><button class="btnvolver btn mb-3 mt-3 text-center">Ver Todos Los Logros <i class="fas fa-trophy"></i></button></a>
 <div style="float: right;">
     <a href="/cards/select"><img src="/img/TiendaIcono.png" width="65px" class="mr-3 ml-2 mt-2 gelatine"></a>
 </div>
@@ -30,14 +29,6 @@
         <div class="card-footer">
             Recompensa: {{recompensaexp}} exp
         </div>
-        <form action="/logro/{{_id}}?__method=PUT" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="__method" value="PUT">
-                <div class="form-group">
-                    <button class="btn btn-block btn-success" type="submit">
-                    Reclamar
-                    </button>
-                </div>
-            </form>
     </div>
 </div>
 {{else}}

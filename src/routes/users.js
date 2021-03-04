@@ -1748,6 +1748,28 @@ router.get('/ingame/logros', isAuthenticated, async (req, res) => {
     });
 });
 
+router.get('/ingame/all-logros', isAuthenticated, async (req, res) => {
+    var group = await Group.findOne({_id: req.user.groupid});
+
+    await Logros.find().sort({date: 'desc'})
+    .then(async documentos => {
+      const contexto = {
+          logros: documentos.map(documento => {
+          return {
+              name: documento.name,
+              _id: documento._id,
+              recompensaexp: documento.recompensaexp,
+              img: documento.img,
+              recompensa: documento.recompensa
+          }
+        })
+      }
+      var logros = contexto.logros;
+      var userId = await User.findById(req.user._id);
+      res.render('logros/todoslogros.hbs', { logros, userId, group });
+    });
+});
+
 router.put('/logro/:id', isAuthenticated, async (req, res, file) => {
     var logro = await Logros.findById(req.params.id);
     var user = await User.findById(req.user._id);
