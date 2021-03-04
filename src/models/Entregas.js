@@ -8,7 +8,8 @@ const EntregasSchema = new Schema({
     actividad: { type: String },
     comentarios: { type: String },
     actividadname: {type: String },
-    entrega: {type: String }
+    entrega: {type: String },
+    date: { type: Date, default: Date.now}
 });
 
 module.exports = mongoose.model('Entregas', EntregasSchema);

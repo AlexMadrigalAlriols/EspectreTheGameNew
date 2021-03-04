@@ -16,7 +16,7 @@
 
     {{!-- Main Menu --}}
     <div class="collapse navbar-collapse" id="navbarNav">
-      <a class="navbar-brand " href="/"><img src="/img/LogoEspectre.png" width="80px"></a>
+      <a class="navbar-brand " href="/"><img src="/img/LogoEspectre.png" width="80px" class="elastic-spin"></a>
       <ul class="navbar-nav mx-auto">
         <li class="nav-item p-4">
           <a class="nav-link" style="color:#ff7f22;" href="#quienesomos"><u>¿QUIENES SOMOS?</u></a>
@@ -34,16 +34,17 @@
 
       <ul class="navbar-nav ml-auto">
         {{#if user}}
-          <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: orangered;">
-            Account
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="/ingame">InGame</a></li>
+        <div class="btn-group">
+          <a href="/ingame"><button type="button" class="btn btnvolver">Entrar Clase <i class="fas fa-chalkboard"></i></button></a>
+          <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="visually-hidden"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/ingame">Entrar Clase <i class="fas fa-chalkboard"></i></a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/users/logout">Logout</a></li>
+            <li><a class="dropdown-item" href="/users/logout">Logout <i class="fas fa-sign-out-alt"></i></a></li>
           </ul>
-        </li>
+        </div>
         {{else}}
         <li class="nav-item">
           <a type="button" class="btn btnlog mr-1" href="../users/signin"><span class="fas fa-user">&nbsp;</span>Entrar</a>

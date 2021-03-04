@@ -1,11 +1,16 @@
-<div class="col-md-6 mx-auto mt-2">
+<nav style="background-color: white;">
+<a href="/ingame"><button class="btn ml-2 mt-3 mb-3 btnvolver">Volver Atras</button></a>
+
+</nav>
+
+<div class="col-md-6 mx-auto mt-4">
     <div class="card">
         <div class="card-header">
-            <h3>Edit {{user.name}}</h3>
+            <h3>Modificar {{user.name}}</h3>
             <img class="mx-auto d-block" src="{{user.character}}" width="130px">
         </div>
         <div class="card-body">
-            <h5>Basic Information</h5>
+            <h5>Información Basica</h5>
             <form action="/users/edit-user/{{user._id}}?__method=PUT" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="__method" value="PUT">
                 <div class="form-group">
@@ -36,8 +41,8 @@
                 </div>
 
                 <div class="form-group">
-                    <button class="btn btn-block" style="background-color: #ff6d05; color: #242424;" type="submit">
-                    Save
+                    <button class="btn btn-block btnvolver" type="submit">
+                    Guardar Cambios
                     </button>
                 </div>
             </form>

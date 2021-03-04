@@ -1,5 +1,8 @@
-<a href="/ingame"><button class="btn ml-2 mt-2 " style="background-color: #ff6d05; color: #fff;">Volver InGame</button></a>
-<div class="col-md-6 mx-auto mt-2">
+<nav style="background-color: white;">
+<a href="/ingame"><button class="btn ml-2 mt-3 mb-3 btnvolver">Volver Atras</button></a>
+</nav>
+
+<div class="col-md-6 mx-auto mt-3">
     <div class="card">
         <div class="card-header">
             <h3>Opciones Generales</h3>
@@ -7,10 +10,10 @@
         <div class="card-body">
             <form action="/ingame/gameSettings?__method=PUT" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="__method" value="PUT">
-                <h5>Año</h5>
+                <h5>Clase Virtual</h5>
                 <div class="input-group mb-3">
-                    <span class="input-group-text" id="inputGroup-sizing-default">Year on Game:</span>
-                    <input type="text" class="form-control" name="year" value="{{game.year}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Link:</span>
+                    <input type="text" class="form-control" name="linkmeet" value="{{game.linkmeet}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                 </div>
 
                 <h5>Tipo de Mapa</h5>

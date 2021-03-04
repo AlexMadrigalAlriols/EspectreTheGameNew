@@ -1,7 +1,7 @@
 {{#if success_msg}}
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{success_msg}}
-        <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+        <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close" style="margin-top: -0.7rem;">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
@@ -10,16 +10,17 @@
 {{#if error_msg}}
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         {{error_msg}}
-        <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+        <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close" style="margin-top: -0.7rem;">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
 {{/if}}
 
+
 {{#if attack_msg}}
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{error_msg}} <a href="/ingame/shop"><button class="btn btn-primary" style="background-color: green; color: white;">Comprar Defensas</button></a>
-        <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+        {{attack_msg}} <a href="/ingame/shop"><button class="btn btn-primary" style="background-color: green; color: white; float:right; margin-top: -0.5rem;">Comprar Defensas</button></a>
+        <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close" style="margin-top: -0.7rem;">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>

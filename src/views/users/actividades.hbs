@@ -24,7 +24,7 @@
 
         <a href="#"><button type="submit" style="float: right; right: 0; display:inline-block;" class="btn-danger">Borrar</button></a>
         </form>
-        <a href="/uploads/{{entrega}}" download="{{actividadname}}_{{group.name}}" class="btnvolver"><button class="btnvolver" style="display: inline-block; float:right;">Descargar practica</button></a>
+        <a href="/uploads/{{entrega}}" download="{{actividadname}}_{{nombre}}" class="btnvolver"><button class="btnvolver" style="display: inline-block; float:right;">Descargar practica</button></a>
         
         <form action="/entrega/{{_id}}?__method=PUT" method="POST">
         <input type="hidden" name="__method" value="PUT">

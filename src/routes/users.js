@@ -304,7 +304,7 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
                 var group = await Group.findOne({_id: user.groupid});
 
                 if(group.Ataqued == true){ 
-                req.flash('attack_msg', 'Estas siendo atacado usa una carta de defensa para defenderte!');
+                req.flash('attack_msg', 'Estas siendo atacado usa una carta de TIER ' + group.TierOfAttacked + ' para poderte defender.');
                 res.redirect('/ingame/cards/');
 
                 }else{
@@ -334,6 +334,12 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
     }
 });
 
+router.get('/ingame/nolink', isAuthenticated, async (req, res) => {
+    req.flash('error_msg', 'Tu profesor aun no ha puesto un link para la clase virtual!');
+    console.log('no link');
+    res.redirect('/ingame');
+});
+
 router.get('/ingame/gameSettings', isAuthenticated, async (req, res) => {
     var game = await Game.findOne({classtag: req.user.class});
 
@@ -348,7 +354,7 @@ router.put('/ingame/gameSettings', isAuthenticated, async (req, res, file) => {
     var lastGame = await Game.findOne({classtag: req.user.class});
     var group = await Group.findOne({_id: req.user.groupid});
 
-    const year = req.body.year;
+    const linkmeet = req.body.linkmeet;
 
     if(req.body.mapa == "ningunoElegido"){
         var mapa = lastGame.mapa;
@@ -356,7 +362,7 @@ router.put('/ingame/gameSettings', isAuthenticated, async (req, res, file) => {
         var mapa = req.body.mapa;
     }
 
-    await Game.findByIdAndUpdate(lastGame._id, { year, mapa });
+    await Game.findByIdAndUpdate(lastGame._id, { linkmeet, mapa });
     await group.save();
     res.redirect('/ingame');
 });
@@ -886,6 +892,7 @@ router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
             group.TierOfAttacked = card.tier;
             var ataque = true;
             var defensa = false;
+            await group.save();
         }else if(card.type == 'Defensa'){
             var ataque = false;
             var defensa = true;
@@ -1039,7 +1046,7 @@ router.put('/cards/buy/:id', isAuthenticated, async (req, res) => {
             }
 
             groupAtacado.save();
-            group.save({cartas, TierOfAttacked, construccion, inteligencia});
+            group.save();
             req.flash('success_msg', 'Has atacado Con Exito!');
             res.redirect('/ingame/cards');
 
@@ -1419,7 +1426,6 @@ router.put('/ingame/character', isAuthenticated, async (req, res) => {
 
 // ============= BOARD GAME =========
 router.get('/ingame/board', isAuthenticated, async (req, res) => {
-    var user = await User.findById(req.user.id);
     var group = await Group.findOne({_id: req.user.groupid});  
 
     await Actividades.find({class: req.user.class}).sort({date: 'desc'})
@@ -1439,8 +1445,8 @@ router.get('/ingame/board', isAuthenticated, async (req, res) => {
       }
       var actividades = contexto.actividad;
       var logro = await Logros.findById("60316aa1437b6f1a940b4eb8");
-
-      const indexLogro = await logro.players.indexOf(user._id);
+      var user = await User.findById(req.user.id);
+      var indexLogro = await user.logros.indexOf(logro._id);
 
       if(indexLogro > -1){
         res.render('tablero/board.hbs', { user, group,actividades });
@@ -1500,7 +1506,7 @@ router.get('/ingame/boardgame/:id', isAuthenticated, async (req, res) => {
 router.get('/ingame/boardactivity/:id', isAuthenticated, async (req, res) => {
     var user = await User.findById(req.user.id);
     var practica = await Actividades.findById(req.params.id);
-    var group = await Group.findOne({_id: req.user.groupid}); 
+    var group = await Group.findOne({_id: req.user.groupid});
 
     res.render('tablero/entregaPractica.hbs', {user, group, practica});
 });
@@ -1603,25 +1609,38 @@ router.put('/ingame/boardactivity/:id', isAuthenticated, async (req, res, file) 
     var practica = await Actividades.findById(req.params.id);
     var group = await Group.findOne({_id: req.user.groupid}); 
 
-    if(req.file == undefined){
-        var entrega = "";
-    }else{
-        var entrega = req.file.filename;
-    }
     if(practica.individual){
-        const newEntrega = new Entregas({user: req.user._id, actividad: req.params.id, comentarios: req.body.comments, entrega: entrega, actividadname: practica.name});
-        await newEntrega.save();
-        await practica.entregados.push(newEntrega._id);
+        var indexEntrega = await Entregas.findOne({actividad: req.params.id, user: req.user._id});
     }else{
-        const newEntrega = new Entregas({group: group._id, actividad: req.params.id, comentarios: req.body.comments, entrega: entrega, actividadname: practica.name});
-        await newEntrega.save();
-        await practica.entregados.push(newEntrega._id);
+        var indexEntrega = await Entregas.findOne({actividad: req.params.id, group: group._id});
     }
+
+    if(indexEntrega == null){
+        if(req.file == undefined){
+            var entrega = "";
+        }else{
+            var entrega = req.file.filename;
+        }
+        if(practica.individual){
+            const newEntrega = new Entregas({user: req.user._id, actividad: req.params.id, comentarios: req.body.comments, entrega: entrega, actividadname: practica.name});
+            
+            await newEntrega.save();
+            await practica.entregados.push(newEntrega._id);
+        }else{
+            const newEntrega = new Entregas({group: group._id, actividad: req.params.id, comentarios: req.body.comments, entrega: entrega, actividadname: practica.name});
+            await newEntrega.save();
+            await practica.entregados.push(newEntrega._id);
+        }
+        
+        await practica.save();
     
-    await practica.save();
-
-
-    res.redirect('/ingame/boardgame/' + req.params.id);
+    
+        res.redirect('/ingame/boardgame/' + req.params.id);
+    }else{
+        req.flash('error_msg', 'Ya has entregado esta practica!');
+        res.redirect('/ingame/boardgame/' + req.params.id);
+    }
+   
 });
 
 router.put('/entrega/:id', isAuthenticated, async (req, res, file) => {
@@ -1683,6 +1702,7 @@ router.get(`/group/:id`, isAuthenticated, async (req, res) => {
                   comentarios: documento.comentarios,
                   actividadname: documento.actividadname,
                   actividad: documento.actividad,
+                  nombre: group.name
               }
             })
           }
@@ -1712,6 +1732,7 @@ router.get(`/user/:id`, isAuthenticated, async (req, res) => {
                   comentarios: documento.comentarios,
                   actividadname: documento.actividadname,
                   actividad: documento.actividad,
+                  nombre: user.name
               }
             })
           }

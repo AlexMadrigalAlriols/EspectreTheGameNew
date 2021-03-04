@@ -1,15 +1,15 @@
 
 <div class="container" style=" width:40%; margin-top:2rem;">   
-      <i style="margin-left: -5rem; color: white; position: absolute; margin-top: 0.2rem;">Nivel {{user.level}}</i> 
+  <i style="margin-left: -5rem; color: white; position: absolute; margin-top: 0.2rem;">Nivel {{user.level}}</i> 
   <div class="progress2 progress-moved">
     <div class="progress-bar2" style="width:{{user.exp}}%;">
     </div>                       
   </div> 
 </div> 
 
-<h4 style="position:absolute; left: 6rem; margin-top: -3rem;">Año: {{game.year}}</h4>
+<a href="{{game.linkmeet}}"><button style="position:absolute; left: 6rem; margin-top: -3rem;" class="btn btnvolver">Clase Virtual <i class="fas fa-video"></i></button></a>
 {{#if user.admin}}
-<p style="position:absolute; left: 6rem; margin-top: -1rem; color: orange;">C&oacute;digo Clase: "{{game.code}}"</p>
+<p style="position:absolute; left: 6rem; color: orange;">C&oacute;digo Clase: "{{game.code}}"</p>
 {{/if}}
 
 <div class="container">
@@ -108,18 +108,18 @@
 </div>
 <ul class="menu">
   <li><img src="/img/LogoEspectre.png" width="60px" class="ml-2 mt-1 elastic-spin"></li>
-  <li title="about"><a href="#" class="active about" id="button" >about</a></li>
-  <li title="archive"><a href="/ingame/cards/" class="archive">archive</a></li>
-  <li title="shop"><a href="/cards/select/" class="shop">shop</a></li>
-  <li title="contact"><a href="/ingame/board" class="contact">contact</a></li>
-  <li title="note"><a href="/notes/" class="note">note</a></li>
+  <li title="Perfil"><a href="#" class="active about" id="button" >Perfil</a></li>
+  <li title="Inventario"><a href="/ingame/cards/" class="archive">Inventario</a></li>
+  <li title="Tienda"><a href="/cards/select/" class="shop">Tienda</a></li>
+  <li title="Mazmorras"><a href="/ingame/board" class="contact">Mazmorras</a></li>
+  <li title="Posits"><a href="/notes/" class="note">Posits</a></li>
 
   {{#if user.admin}}
-  <li title="contact"><a href="#" id="adminpanel" class="fas fa-users-cog"></a></li>
+  <li title="Admin"><a href="#" id="adminpanel" class="fas fa-users-cog"></a></li>
   {{else}}
   <li id="adminpanel">&nbsp;</li>
   {{/if}}
-  <li title="contact"><a href="/users/logout" id="logout" class="fas fa-sign-out-alt"></a></li>
+  <li title="Salir"><a href="/users/logout" id="logout" class="fas fa-sign-out-alt"></a></li>
 </ul>
 <div class="board__menu" id="actividades-menu">
     <a href="#" id="actividades-toggle2"><span><i class="fas fa-times" style="position:absolute; top: 15px; right: 15px; font-size:20px;"></i></span></a>

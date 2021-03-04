@@ -8,6 +8,7 @@ const GameSchema = new Schema({
     periodico: { type: String, default: 'PeriodicoDefault.png'},
     mapa: { type: String, default: '/img/background-hero.png'},
     year: { type: Number, default: 1800 },
+    linkmeet: {type: String, default: '/ingame/nolink'},
     events: { type: Array },
     groups: { type: Array },
     practicasSubidas: {type: Number, default: 0 },
