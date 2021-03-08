@@ -1,0 +1,151 @@
+<nav id="navTop"class="navbar navbar-expand-lg container navbar-dark" style="z-index: 999999;">
+
+<div class="container" style="font-size: 14px;">
+    <div class="container-fluid">
+
+    {{!-- Respective Menu --}}
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    {{!-- Main Menu --}}
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <a class="navbar-brand " href="/"><img src="/img/LogoEspectre.png" width="80px" class="elastic-spin"></a>
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item p-4">
+          <a class="nav-link" style="color:#ff7f22;" href="#quienesomos"><u>¿QUIENES SOMOS?</u></a>
+        </li>
+        <li class="nav-item p-4">
+          <a class="nav-link" style="color:#ff7f22;" href="#espectre"><u>ESPECTRE</u></a>
+        </li>
+        <li class="nav-item p-4">
+          <a class="nav-link" style="color:#ff7f22;" href="#comojugar"><u>COMO JUGAR</u></a>
+        </li>
+        <li class="nav-item p-4">
+          <a class="nav-link" style="color:#ff7f22;" href="#porque"><u>¿PORQUE?</u></a>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav ml-auto">
+        {{#if user}}
+        <div class="btn-group">
+          <a href="/ingame"><button type="button" class="btn btnvolver">Entrar Clase <i class="fas fa-chalkboard"></i></button></a>
+          <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="visually-hidden"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/ingame">Entrar Clase <i class="fas fa-chalkboard"></i></a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/users/logout">Logout <i class="fas fa-sign-out-alt"></i></a></li>
+          </ul>
+        </div>
+        {{else}}
+        <li class="nav-item">
+          <a type="button" class="btn btnlog mr-1" href="../users/signin"><span class="fas fa-user">&nbsp;</span>Entrar</a>
+        </li>
+        <li class="nav-item">
+          <a type="button" href="/users/signup" type="button" class="btn btnreg"><span class="fas fa-sign-in-alt">&nbsp;</span>Registro</a>
+        </li>
+        {{/if}}
+      </ul>
+    </div>
+  </div>
+</div>
+</nav>
+<div style="margin-top: 2rem; background-color:white; font-family:Arial, Helvetica, sans-serif;">
+<hr style="background-color: white;">
+
+<body style="height: 100%;">
+
+    <h1 class="text-center">Terminos & Condiciones</h1>
+    <hr>
+    <p>
+<h6 style="margin-left: 1rem; color:black;">Propietario de la web , la oferta y el enlace de los Términos:</h6></br>
+<ul>
+    <li>Como propietario de la web esta única y exclusivamente (Nombre de la empresa)</li>
+    <li>Estos vocablos establecen los términos y condiciones bajo los cuales tu puedes usar nuestra página web y servicios ofrecidos por nosotros.</li>
+    <li>Esta página web ofrece a los visitantes una experiencia gratificante la cual se basa en el aprendizaje de forma interactiva y social, esto se plantea así con una estructuración dinámica y divertida, gracias a los diferentes Bichitos y cartas interactivas que podemos utilizar, que le dan un toque de estrategia y rol a esta página web/juego.</li>
+    <li>Al acceder a usar la página web de nuestro servicio, usted aprueba que haya leído, entendido y aceptado estar sujeto a estos Términos.</li>
+    <li>No nos hacemos responsables si tu cuenta se ve afectada en base acciones externas a nuestra empresa.</li>
+</ul>
+<h6 style="margin-left: 1rem; color:black;">Requisitos para navegar y participar en ( nombre de la web)</h6>
+<ul>
+    <li>Para usar ( nombre de la web) y/o recibir nuestros servicios, debes cumplir todos los requisitos que son los siguientes:</li>
+    <li>autorización del tutor/a legal del alumno que utilice la web incluida la autorización del tutor/a de la clase a no ser que el alumno sea mayor de edad , entonces debería hacerse responsable él mismo de todo lo sucedido en base a su cuenta.</li>
+</ul>
+<h6 style="margin-left: 1rem; color:black;">Retención del derecho a cambiar de oferta:</h6>
+<ul>
+    <li>Podemos, sin aviso previo, cambiar los servicios; dejar de proporcionar los servicios o cualquier característica de los servicios que ofrecemos; o crear límites para los servicios. Podemos  suspender de manera permanente o temporal el acceso a los servicios sin previo aviso ni responsabilidad por cualquier motivo, o sin ningún motivo.</li>
+</ul>
+<h6 style="margin-left: 1rem; color:black;">Garantías y responsabilidad por servicios y productos:</h6>
+<ul>
+    <li>Cuando recibimos un reclamo de garantía válido de un producto que vendemos, reparamos el defecto relevante o reemplazamos el producto. Si no podemos reparar o reemplazar el producto dentro de un tiempo razonable, el cliente tendrá derecho a un reembolso total cuando nos devuelva el producto. Pagaremos el envío de los productos reparados o reemplazados al cliente y el cliente será responsable de devolvernos el producto.</li>
+</ul>
+<h6 style="margin-left: 1rem; color:black;">Posesión de propiedad intelectual, derechos de autor y logos:</h6>
+<ul>
+    <li>El Servicio y todos los materiales incluidos o transferidos, incluyendo, sin limitación, software, imágenes, texto, gráficos, logotipos, patentes, marcas registradas, marcas de servicio, derechos de autor, fotografías, audio, videos, música y todos los Derechos de Propiedad Intelectual relacionados con ellos, son la propiedad exclusiva de [Nombre de la empresa]. Salvo que se indique explícitamente en este documento, no se considerará que nada en estos Términos crea una licencia en o bajo ninguno de dichos Derechos de Propiedad Intelectual, y tú aceptas no vender, licenciar, alquilar, modificar, distribuir, copiar, reproducir, transmitir, exhibir públicamente, realizar públicamente, publicar, adaptar, editar o crear trabajos derivados de los mismos.</li>
+</ul>
+<h6 style="margin-left: 1rem; color:black;">Derecho a suspender o cancelar la cuenta de usuario:</h6>
+<ul>
+    <li>Podemos terminar o suspender de manera permanente o temporal tu acceso al servicio sin previo aviso y responsabilidad por cualquier razón, incluso si nuestra sola determinación viola alguna disposición de estos Términos o cualquier ley o regulación aplicable. Puedes descontinuar el uso y solicitar cancelar tu cuenta y / o cualquier servicio en cualquier momento. Sin perjuicio de lo contrario en lo que antecede, con respecto a las suscripciones renovadas automáticamente a los servicios pagados, dichas suscripciones se suspenderán sólo al vencimiento del período correspondiente por el que ya has realizado el pago.</li>
+    <li>Usted reconoce que es responsable de la seguridad de su identificación de usuario y contraseña y acepta mantener la confidencialidad. Además, acepta no otorgar acceso a estudiantes o padres de manera insegura, ni a estudiantes y padres de estudiantes que no forman parte de su clase.</li>
+    <li>Usted acepta no permitir que otros usen su identificación de usuario de maestro para clases que no sean las clases autorizadas cubiertas por este acuerdo.</li>
+    <li>Usted reconoce que como maestro será responsable de otorgar acceso a los Servicios a los estudiantes en las Clases Licenciadas y sus Padres. Usted acepta que el acceso a los Servicios no se otorgará fuera de usted, los estudiantes en la Clase con Licencia, sus Padres y la administración de la escuela para la que trabaja (si corresponde)</li>
+</ul>
+<h6 style="margin-left: 1rem; color:black;">Responsabilidad del maestro/professor:</h6>
+<ul>
+    <li>Como profesor, usted es responsable de supervisar y gestionar todos los envíos de usuarios. (Nombre de la empresa) no supervisa ni administra los Envíos de los usuarios y no es responsable de ninguna manera por los envíos de los usuarios.</li>
+    <li>Usted acepta la responsabilidad exclusiva de asegurarse de que los envíos de usuario cumplan con las siguientes pautas: </li>
+    <li>Los Envíos de usuario no deben incluir ninguna comunicación o solicitud diseñada o destinada a obtener contraseña, cuenta o información privada de cualquier usuario de los Servicios.</li>
+    <li>Los Envíos del usuario no deben incluir ningún material ilegal, incluido cualquier material que pueda considerarse amenazante u obsceno.</li>
+    <li>Los Envíos de usuario no deben incluir ningún software o código de software que pueda ejecutarse desde los Servicios.</li>
+    <li>Como maestro, usted es responsable de emitir invitaciones para participar en los Servicios a los padres, dándoles así acceso a la información del estudiante de su hijo, hijos o cualquier menor de quien sea legalmente responsable. Usted acepta que no enviará tales invitaciones a nadie más que a los padres de sus estudiantes como se define en este acuerdo. Usted reconoce que estas invitaciones están diseñadas para otorgar acceso a la información personal de los estudiantes relacionados, y que el incumplimiento de esta sección será una violación de la Política de privacidad de (Nombre de la empresa) y puede resultar en la terminación de este acuerdo. Como profesor, tiene la opción de utilizar las funciones de varias clases, lo que permite a otros profesores que enseñan a los mismos estudiantes vincular sus clases con licencia a las cuentas de los estudiantes en sus clases con licencia. Acepta que sólo utilizará esta función con profesores que enseñan en la misma escuela que usted.</li>
+</ul>
+</p>
+</div>
+<footer class="text-center text-white" style="width: 100%; margin-top: -1rem; background-color:#242424;">
+  <!-- Grid container -->
+  <div class="container p-4 pb-0">
+    <!-- Section: Social media -->
+    <section class="mb-4">
+      <!-- Facebook -->
+      <a
+        class="btn btn-primary btn-floating m-1"
+        style="background-color: #3b5998;"
+        href="#!"
+        role="button"
+        ><i class="fab fa-facebook-f"></i
+      ></a>
+
+      <!-- Twitter -->
+      <a
+        class="btn btn-primary btn-floating m-1"
+        style="background-color: #55acee;"
+        href="#!"
+        role="button"
+        ><i class="fab fa-twitter"></i
+      ></a>
+
+
+      <!-- Instagram -->
+      <a
+        class="btn btn-primary btn-floating m-1"
+        style="background-color: #ac2bac;"
+        href="#!"
+        role="button"
+        ><i class="fab fa-instagram"></i
+      ></a>
+
+    </section>
+    <!-- Section: Social media -->
+  </div>
+  <!-- Grid container -->
+
+  <!-- Copyright -->
+  <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+    © 2020 Copyright:
+    <a class="text-white" href="https://espectrethegame.com/">EspectreTheGame.com</a>
+  </div>
+  <!-- Copyright -->
+</footer>
+</body>

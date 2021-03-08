@@ -1893,4 +1893,9 @@ router.put('/logro/:id', isAuthenticated, async (req, res, file) => {
     await user.save();
     res.redirect('/ingame');
 });
+
+// ============== TERMS & CONDITIONS ================
+router.get('/terms-and-conditions', async (req, res) => {
+    res.render('layouts/terms&conditions.hbs');
+});
 module.exports = router;
