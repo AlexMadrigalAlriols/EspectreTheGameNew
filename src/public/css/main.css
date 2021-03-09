@@ -1241,8 +1241,7 @@ min-height: 100%;
 
 @media (max-width: 1440px) {
   .logoEspectre{
-    width: 350px;
-    margin-bottom: -1rem;
+    width: 290px;
     animation: logomain 2s forwards;
   }
 
