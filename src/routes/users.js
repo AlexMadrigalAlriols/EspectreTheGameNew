@@ -323,9 +323,15 @@ router.get('/ingame', isAuthenticated, async (req, res) =>{
                     }
                     var user = await User.findById(req.user._id);
                     var group = await Group.findOne({_id: req.user.groupid});
-                    var game = await Game.findOne({classtag: user.class}); 
+                    var game = await Game.findOne({classtag: user.class});
+                    var groupnewentrega = await  Group.findOne({game: game._id, newentrega: true});
+                    if(groupnewentrega == null){
+                        var notificacion = false;
+                    }else{
+                        var notificacion = true;
+                    }
                     var actividades = contexto.actividad;
-                    res.render('layouts/mapa.hbs', { game, user, group, actividades });
+                    res.render('layouts/mapa.hbs', { game, user, group, actividades, notificacion });
                     });
         }
     }
@@ -388,19 +394,32 @@ router.get('/ingame/all-groups/', isAuthenticated, async (req, res) => {
                 practica: documento.practica,
                 nota: documento.nota,
                 notaFinal: documento.notaFinal,
-                diamantes: documento.diamantes
+                diamantes: documento.diamantes,
+                newentrega: documento.newentrega
             }
           })       
         }
-        const userAdmin = userId.admin;
+        var userAdmin = userId.admin;
         var groups = contexto.groups;
-        if(req.user.admin == true){
-            res.render('groups/all-groups.hbs', {groups, userAdmin });
-        }else{
-            req.flash('error_msg', 'You are not admin');
-            res.redirect('/ingame');
-        }
+        var groupnew = await Group.findOne({game: game._id, newentrega: true});
+
+            if(req.user.admin == true){
+                if(groupnew == null){
+                    res.render('groups/all-groups.hbs', {groups, userAdmin });
+                }else{
+                    req.flash('error_msg', 'Hay un grupo que tiene una entrega para corregir!');
+                    res.render('groups/all-groups.hbs', {groups, userAdmin });
+                }
+            }else{
+                req.flash('error_msg', 'You are not admin');
+                res.redirect('/ingame');
+            }
       });
+  });
+
+  router.get('/notificacion/groups', isAuthenticated, async (req, res) => {
+    req.flash('error_msg', 'Hay un grupo que tiene una entrega para corregir!');
+    res.redirect('/ingame/all-groups/');
   });
 
   router.get(`/ingame/edit-group/:id`, isAuthenticated, async (req, res) => {
@@ -1613,6 +1632,9 @@ router.put('/ingame/boardactivity/:id', isAuthenticated, async (req, res, file) 
         var indexEntrega = await Entregas.findOne({actividad: req.params.id, user: req.user._id});
     }else{
         var indexEntrega = await Entregas.findOne({actividad: req.params.id, group: group._id});
+        group.newentrega = true;
+        group.save();
+        console.log(group.newentrega);
     }
 
     if(indexEntrega == null){
@@ -1650,6 +1672,7 @@ router.put('/entrega/:id', isAuthenticated, async (req, res, file) => {
         var user = await User.findById(entrega.user);
         var group = await Group.findOne({_id: req.user.groupid}); 
         var game = await Game.findOne({classtag: req.user.class});
+        group.newentrega = false;
     }else{
         var user = await User.findById(entrega.user);
         var game = await Game.findOne({classtag: req.user.class});
@@ -1690,7 +1713,8 @@ router.get(`/group/:id`, isAuthenticated, async (req, res) => {
     if(req.user.admin){
         var user = await User.findById(req.user.id);
         var group = await Group.findOne({_id: req.params.id});
-    
+        group.newentrega = false;
+        group.save();
         await Entregas.find({group: group._id}).sort({date: 'desc'})
         .then(async documentos => {
           const contexto = {
@@ -1744,6 +1768,71 @@ router.get(`/user/:id`, isAuthenticated, async (req, res) => {
         res.redirect('/ingame');
     }
 
+});
+// ==================== TIPOS TEST ========================
+router.put('/ingame/new-test', isAuthenticated, async (req, res) => {
+    var game = await Game.findOne({classtag: req.user.class});
+
+    if(req.body.typeActivity == 'individual'){
+        var individual = true;
+    }else{
+        var individual = false;
+    } 
+
+    var estest = true;
+
+    var preguntas = [];
+    var respuesta1 = [];
+    var respuesta2 = [];
+    var respuesta3 = [];
+    var respuesta4 = [];
+
+    if(req.body.pregunta1 != null){
+        preguntas.push(req.body.pregunta1);
+        respuesta1.push(req.body.respuesta1p1);
+        respuesta2.push(req.body.respuesta2p1);
+        respuesta3.push(req.body.respuesta3p1);
+        respuesta4.push(req.body.respuesta4p1);
+    }
+
+    if(req.body.pregunta2 != null){
+        preguntas.push(req.body.pregunta2);
+        respuesta1.push(req.body.respuesta1p2);
+        respuesta2.push(req.body.respuesta2p2);
+        respuesta3.push(req.body.respuesta3p2);
+        respuesta4.push(req.body.respuesta4p2);
+    }
+
+    if(req.body.pregunta3 != null){
+        preguntas.push(req.body.pregunta3);
+        respuesta1.push(req.body.respuesta1p3);
+        respuesta2.push(req.body.respuesta2p3);
+        respuesta3.push(req.body.respuesta3p3);
+        respuesta4.push(req.body.respuesta4p3);
+    }
+
+    if(req.body.pregunta4 != null){
+        preguntas.push(req.body.pregunta4);
+        respuesta1.push(req.body.respuesta1p4);
+        respuesta2.push(req.body.respuesta2p4);
+        respuesta3.push(req.body.respuesta3p4);
+        respuesta4.push(req.body.respuesta4p4);
+    }
+
+    if(req.body.pregunta5 != null){
+        preguntas.push(req.body.pregunta5);
+        respuesta1.push(req.body.respuesta1p5);
+        respuesta2.push(req.body.respuesta2p5);
+        respuesta3.push(req.body.respuesta3p5);
+        respuesta4.push(req.body.respuesta4p5);
+    }
+
+    const newActivity = new Actividades({name: req.body.name, descripcion: req.body.descripcion, individual , preguntas, respuesta1, respuesta2, respuesta3, respuesta4, boss: req.body.bossSelect, estest, class: req.user.class, diamax: req.body.diamax, mesmax: req.body.mesmax});
+    await newActivity.save();
+    game.practicasSubidas = game.practicasSubidas + 1;
+    game.save();
+
+    res.redirect('/ingame/boardgame/' + newActivity._id);
 });
 
 // ===================== LOGROS ===========================
@@ -1846,52 +1935,60 @@ router.put('/logro/:id', isAuthenticated, async (req, res, file) => {
 
   router.post('/newclass/:id', isAuthenticated, async (req, res) => {
     var user = await User.findById(req.params.id);
+
     const {name, code, classtag} = req.body;
-    const newClass = new Game({name, code, classtag, admin: req.params.id});
-    newClass.players.push(req.params.id);
-    user.class = classtag;
-    user.group = 'Game Master';
-    user.Oceania = true;
-    user.admin = true;
-    user.SinGroup = false;
-    // ========== CREAR GRUPOS PARA NEW CLASS ==============
-    // ===== OCEANIA ====
-    const cartas = ['5ffb2e2fcd2b9a11c4a4bbae'];
-    const newGroup = new Group({name: "Oceania", cartas, game: newClass._id});
-    await newGroup.save();
-    // === ASIA ====
-    const carta1 = ['5ffb2e47cd2b9a11c4a4bbb0'];
-    const newGroup1 = new Group({name: "Asia", cartas: carta1, game: newClass._id});
-    await newGroup1.save();
-    // === Africa ===
-    const carta2 = ['5ffb2e67cd2b9a11c4a4bbb1'];
-    const newGroup2 = new Group({name: "Africa", cartas: carta2, game: newClass._id});
-    await newGroup2.save();
-    // === Europa ===
-    const carta3 = ['5ffb2e3ccd2b9a11c4a4bbaf'];
-    const newGroup3 = new Group({name: "Europa", cartas: carta3, game: newClass._id});
-    await newGroup3.save();
-
-    // === North America ===
-    const carta4 = ['5ffb2d59cd2b9a11c4a4bbac'];
-    const newGroup4 = new Group({name: "North_America", cartas: carta4, game: newClass._id});
-    await newGroup4.save();
-
-    // === Sud America ===
-    const carta5 = ['5ffb2e13cd2b9a11c4a4bbad'];
-    const newGroup5 = new Group({name: "Sud_America", cartas: carta5, game: newClass._id});
-    await newGroup5.save();
-
-
-    await newClass.groups.push(newGroup._id);
-    await newClass.groups.push(newGroup1._id);
-    await newClass.groups.push(newGroup2._id);
-    await newClass.groups.push(newGroup3._id);
-    await newClass.groups.push(newGroup4._id);
-    await newClass.groups.push(newGroup5._id);
-    await newClass.save();
-    await user.save();
-    res.redirect('/ingame');
+    var tag = await Game.findOne({classtag: classtag});
+    if(tag == null) {
+        const newClass = new Game({name, code, classtag, admin: req.params.id});
+        newClass.players.push(req.params.id);
+        user.class = classtag;
+        user.group = 'Game Master';
+        user.Oceania = true;
+        user.admin = true;
+        user.SinGroup = false;
+        // ========== CREAR GRUPOS PARA NEW CLASS ==============
+        // ===== OCEANIA ====
+        const cartas = ['5ffb2e2fcd2b9a11c4a4bbae'];
+        const newGroup = new Group({name: "Oceania", cartas, game: newClass._id});
+        await newGroup.save();
+        // === ASIA ====
+        const carta1 = ['5ffb2e47cd2b9a11c4a4bbb0'];
+        const newGroup1 = new Group({name: "Asia", cartas: carta1, game: newClass._id});
+        await newGroup1.save();
+        // === Africa ===
+        const carta2 = ['5ffb2e67cd2b9a11c4a4bbb1'];
+        const newGroup2 = new Group({name: "Africa", cartas: carta2, game: newClass._id});
+        await newGroup2.save();
+        // === Europa ===
+        const carta3 = ['5ffb2e3ccd2b9a11c4a4bbaf'];
+        const newGroup3 = new Group({name: "Europa", cartas: carta3, game: newClass._id});
+        await newGroup3.save();
+    
+        // === North America ===
+        const carta4 = ['5ffb2d59cd2b9a11c4a4bbac'];
+        const newGroup4 = new Group({name: "North_America", cartas: carta4, game: newClass._id});
+        await newGroup4.save();
+    
+        // === Sud America ===
+        const carta5 = ['5ffb2e13cd2b9a11c4a4bbad'];
+        const newGroup5 = new Group({name: "Sud_America", cartas: carta5, game: newClass._id});
+        await newGroup5.save();
+    
+    
+        await newClass.groups.push(newGroup._id);
+        await newClass.groups.push(newGroup1._id);
+        await newClass.groups.push(newGroup2._id);
+        await newClass.groups.push(newGroup3._id);
+        await newClass.groups.push(newGroup4._id);
+        await newClass.groups.push(newGroup5._id);
+        await newClass.save();
+        await user.save();
+        res.redirect('/ingame');
+    }else{
+        req.flash('error_msg', 'El Tag de la classe ya existe, colocale otro porfavor! Si ya ha creado la clase vuelva a entrar!');
+        res.redirect('/ingame');
+    }
+    
 });
 
 // ============== TERMS & CONDITIONS ================

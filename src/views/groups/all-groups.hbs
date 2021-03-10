@@ -13,6 +13,9 @@
         <hr style="background-color: white;">
         <a href="/ingame/edit-group/{{_id}}" class="info" style="width: 100%;">Modificar Grupo</a>
     </figcaption>
+    {{#if newentrega}}
+        <p style="color: red;" class="text-center">Tiene una nueva entrega para corregir!</p>
+    {{/if}}
     <a href="/group/{{_id}}" style="border-color: transparent;"><button class="btn btnvolver" style="border-color: transparent; width: 85%; margin-left: 8%; margin-bottom: 5px;"><b>Ver Entregas</b></button></a>
 </figure>
 </div>

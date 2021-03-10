@@ -121,6 +121,11 @@
   {{/if}}
   <li title="Salir"><a href="/users/logout" id="logout" class="fas fa-sign-out-alt"></a></li>
 </ul>
+{{#if user.admin}}
+  {{#if notificacion}}
+  <a href="/notificacion/groups"><img src="/img/notificacion.png" style="position: absolute; float:right; bottom: 0; right:0;" width="250px"></a>
+  {{/if}}
+{{/if}}
 <div class="board__menu" id="actividades-menu">
     <a href="#" id="actividades-toggle2"><span><i class="fas fa-times" style="position:absolute; top: 15px; right: 15px; font-size:20px;"></i></span></a>
     <h4 style="float: left; color: #242424; display:inline-block;"><b>Actividades</b></h4></br>

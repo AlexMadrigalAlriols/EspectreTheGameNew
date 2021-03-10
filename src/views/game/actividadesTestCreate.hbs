@@ -3,12 +3,12 @@
     <div class="card" style="min-height: 100%;">
         <div class="card-header">
             <a href="/ingame"><button class="btn ml-2 mt-2 mr-4" style="background-color: #ff6d05; color: #fff; float: left;">Volver InGame</button></a>
-            <h3>New Test</h3>
+            <h3>Nuevo Test</h3>
         </div>
         <div class="card-body">
-            <form action="/ingame/new-activity?__method=PUT" method="POST" enctype="multipart/form-data">
+            <form action="/ingame/new-test?__method=PUT" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="__method" value="PUT">
-                <h5>Type Of Activity</h5>
+                <h5>Tipo de Actividad</h5>
                 <div class="mb-3" style="display:inline-block;">
                    <input type="radio" name="estest" id="entrega" value="entrega" style="display: inline-block;" required checked>
                     <label for="entrega" style="display: inline-block; margin-top: -0.3rem;" class="ml-2">Entrega</label>
@@ -18,28 +18,24 @@
                     <label for="test" style="display: inline-block; margin-top: -0.3rem;" class="ml-2">Test</label>
                 </div>
 
-                <h5>Name</h5>
+                <h5>Nombre</h5>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" name="name" value="" aria-label="Sizing example input" placeholder="Some name to your activity" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                    <input type="text" class="form-control" name="name" value="" aria-label="Sizing example input" placeholder="Aqui va el nombre de la actividad" aria-describedby="inputGroup-sizing-default" minlength="1" required>
                 </div>
-                <h5>Description</h5>
+                <h5>Descripción</h5>
                 <div class="input-group mb-3">
-                    <textarea name="descripcion" id="descripcion" class="form-control" placeholder="Put some description to your activity" maxlength="200"></textarea>
+                    <textarea name="descripcion" id="descripcion" class="form-control" placeholder="Coloca alguna descripcion de la actividad( max 200 char.)" maxlength="200"></textarea>
                 </div>
 
-                <h5>Type</h5>
+                <h5>Tipo de entrega</h5>
                 <div class="mb-3" style="display:inline-block;">
-                   <input type="radio" name="typeActivity" id="individual" value="individual" style="display: inline-block;" required>
+                   <input type="radio" name="typeActivity" id="individual" value="individual" style="display: inline-block;" required checked>
                     <label for="individual" style="display: inline-block; margin-top: -0.3rem;" class="ml-2">individual</label>
                 </div>
-                <div class="mb-3" style="display:inline-block;">
-                   <input type="radio" name="typeActivity" id="group" value="group" style="display: inline-block;">
-                    <label for="group" style="display: inline-block; margin-top: -0.3rem;" class="ml-2">group</label>
-                </div>
-                <h5>Limit Date</h5>
+                <h5>Fecha Limite</h5>
                 <p style="font-size: 10px; margin-bottom: 1px;"><k>Coloca 0 para no tener fecha limite</k></p>    
                 <div class="input-group mb-3">
-                    <span class="input-group-text">Date:</span>                    
+                    <span class="input-group-text">Fecha:</span>                    
                     <input type="text" class="form-control" name="diamax" placeholder="Dia Maximo" aria-label="Dia Maximo De Entrega" required>
                     <span class="input-group-text">/</span>
                     <input type="text" class="form-control" name="mesmax" placeholder="Mes Maximo" aria-label="Mes Maximo de Entrega" required>
@@ -50,9 +46,114 @@
                 <h5>Preguntas</h5>
                 <p>Aqui puedes añadir todas las preguntas y respuestas que quieras.</p>
                 <hr>
-                <h6>Pregunta 1</h6>
+                <h5>Pregunta 1</h5>
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" name="pregunta1" value="" aria-label="Sizing example input" placeholder="Pregunta 1" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
+                <h5 style="margin-left: 1rem;">Respuestas</h5>
+                <h6>Respuesta 1</h6>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="respuesta1p1" value="" aria-label="Sizing example input" placeholder="Respuesta 1" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
+                <h6>Respuesta 2</h6>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="respuesta2p1" value="" aria-label="Sizing example input" placeholder="Respuesta 2" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
+                <h6>Respuesta 3</h6>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="respuesta3p1" value="" aria-label="Sizing example input" placeholder="Respuesta 3" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
+                <h6>Respuesta 4</h6>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="respuesta4p1" value="" aria-label="Sizing example input" placeholder="Respuesta 4" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
+                <hr>
+                <h5>Pregunta 2</h5>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="pregunta2" value="" aria-label="Sizing example input" placeholder="Pregunta 2" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
+                <h5 style="margin-left: 1rem;">Respuestas</h5>
+                <h6>Respuesta 1</h6>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="respuesta1p2" value="" aria-label="Sizing example input" placeholder="Respuesta 1" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
+                <h6>Respuesta 2</h6>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="respuesta2p2" value="" aria-label="Sizing example input" placeholder="Respuesta 2" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
+                <h6>Respuesta 3</h6>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="respuesta3p2" value="" aria-label="Sizing example input" placeholder="Respuesta 3" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
+                <h6>Respuesta 4</h6>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="respuesta4p2" value="" aria-label="Sizing example input" placeholder="Respuesta 4" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
+<hr>
+                <h5>Pregunta 3</h5>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="pregunta3" value="" aria-label="Sizing example input" placeholder="Pregunta 2" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
+                <h5 style="margin-left: 1rem;">Respuestas</h5>
+                <h6>Respuesta 1</h6>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="respuesta1p3" value="" aria-label="Sizing example input" placeholder="Respuesta 1" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
+                <h6>Respuesta 2</h6>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="respuesta2p3" value="" aria-label="Sizing example input" placeholder="Respuesta 2" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
+                <h6>Respuesta 3</h6>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="respuesta3p3" value="" aria-label="Sizing example input" placeholder="Respuesta 3" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
+                <h6>Respuesta 4</h6>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="respuesta4p3" value="" aria-label="Sizing example input" placeholder="Respuesta 4" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
+            <hr>
+                <h5>Pregunta 4</h5>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="pregunta4" value="" aria-label="Sizing example input" placeholder="Pregunta 4" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
+                <h5 style="margin-left: 1rem;">Respuestas</h5>
+                <h6>Respuesta 1</h6>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="respuesta1p4" value="" aria-label="Sizing example input" placeholder="Respuesta 1" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
+                <h6>Respuesta 2</h6>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="respuesta2p4" value="" aria-label="Sizing example input" placeholder="Respuesta 2" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
+                <h6>Respuesta 3</h6>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="respuesta3p4" value="" aria-label="Sizing example input" placeholder="Respuesta 3" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
+                <h6>Respuesta 4</h6>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="respuesta4p4" value="" aria-label="Sizing example input" placeholder="Respuesta 4" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
+<hr>
+                <h5>Pregunta 5</h5>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="pregunta5" value="" aria-label="Sizing example input" placeholder="Pregunta 5" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
+                <h5 style="margin-left: 1rem;">Respuestas</h5>
+                <h6>Respuesta 1</h6>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="respuesta1p5" value="" aria-label="Sizing example input" placeholder="Respuesta 1" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
+                <h6>Respuesta 2</h6>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="respuesta2p5" value="" aria-label="Sizing example input" placeholder="Respuesta 2" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
+                <h6>Respuesta 3</h6>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="respuesta3p5" value="" aria-label="Sizing example input" placeholder="Respuesta 3" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
+                <h6>Respuesta 4</h6>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="respuesta4p5" value="" aria-label="Sizing example input" placeholder="Respuesta 4" aria-describedby="inputGroup-sizing-default" minlength="1" required>
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-block btnvolver">

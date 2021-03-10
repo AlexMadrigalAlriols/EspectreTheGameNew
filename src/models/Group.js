@@ -17,6 +17,7 @@ const GroupSchema = new Schema({
     game: { type: String},
     nota: { type: Number, default: 0},
     comentarios: { type: String },
+    newentrega: {type: Boolean, default: false},
     notas: { type: Array }
 });
 
