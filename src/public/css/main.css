@@ -996,6 +996,10 @@ tr {
   height: 75px;
   color: black;
 }
+.editarentrega{
+  position: absolute;
+  margin-top: 25rem;
+}
 .nav-item:hover{
   text-decoration: overline;
 }

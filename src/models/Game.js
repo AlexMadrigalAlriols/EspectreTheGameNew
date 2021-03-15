@@ -14,7 +14,8 @@ const GameSchema = new Schema({
     practicasSubidas: {type: Number, default: 0 },
     actividadActual: { type: String },
     admin: {type: String },
-    classtag: {type: String}
+    classtag: {type: String},
+    notes: { type: Boolean, default: true}
 });
 
 module.exports = mongoose.model('Game', GameSchema);

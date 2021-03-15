@@ -25,6 +25,27 @@
                         <option value="/img/fantasyMap.png">Fantasia</option>
                     </select>
                 </div>
+
+                <h5>Notas/Posits</h5>
+                {{#if game.notes}}
+                <div class="mb-3" style="display:inline-block;">
+                   <input type="radio" name="notesact" id="activado" value="activado" style="display: inline-block;" required checked>
+                    <label for="activado" style="display: inline-block; margin-top: -0.3rem;" class="ml-2">Activado</label>
+                </div>
+                <div class="mb-3" style="display:inline-block;">
+                    <input type="radio" name="notesact" id="desactivado" value="desactivado" style="display: inline-block;">
+                    <label for="desactivado" style="display: inline-block; margin-top: -0.3rem;" class="ml-2">Desactivado</label>
+                </div>
+                {{else}}
+                <div class="mb-3" style="display:inline-block;">
+                   <input type="radio" name="notesact" id="activado" value="activado" style="display: inline-block;" required>
+                    <label for="activado" style="display: inline-block; margin-top: -0.3rem;" class="ml-2">Activado</label>
+                </div>
+                <div class="mb-3" style="display:inline-block;">
+                    <input type="radio" name="notesact" id="desactivado" value="desactivado" style="display: inline-block;" checked>
+                    <label for="desactivado" style="display: inline-block; margin-top: -0.3rem;" class="ml-2">Desactivado</label>
+                </div>
+                {{/if}}
                 
                 <div class="form-group">
                     <button type="submit" class="btn btn-block btnvolver">

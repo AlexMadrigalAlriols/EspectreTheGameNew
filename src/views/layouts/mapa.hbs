@@ -112,8 +112,10 @@
   <li title="Inventario"><a href="/ingame/cards/" class="archive">Inventario</a></li>
   <li title="Tienda"><a href="/cards/select/" class="shop">Tienda</a></li>
   <li title="Mazmorras"><a href="/ingame/board" class="contact">Mazmorras</a></li>
+  {{#if game.notes}}
   <li title="Posits"><a href="/notes/" class="note">Posits</a></li>
-
+  {{/if}}
+  
   {{#if user.admin}}
   <li title="Admin"><a href="#" id="adminpanel" class="fas fa-users-cog"></a></li>
   {{else}}

@@ -368,7 +368,13 @@ router.put('/ingame/gameSettings', isAuthenticated, async (req, res, file) => {
         var mapa = req.body.mapa;
     }
 
-    await Game.findByIdAndUpdate(lastGame._id, { linkmeet, mapa });
+    if(req.body.notesact == 'desactivado'){
+        var notes = false;
+    }else{
+        var notes = true;
+    }
+
+    await Game.findByIdAndUpdate(lastGame._id, { linkmeet, mapa, notes });
     await group.save();
     res.redirect('/ingame');
 });
@@ -1519,9 +1525,31 @@ router.get('/ingame/boardgame/:id', isAuthenticated, async (req, res) => {
     }else{
         var pasadolimite = false;
     }
-
+    console.log(entrega);
     res.render('tablero/boardgame.hbs', {user, group, actividad, entregado, entrega, pasadolimite});
 });
+
+router.get('/board/edit-entrega/:id', isAuthenticated, async (req, res, file) => {
+    var entrega = await Entregas.findById(req.params.id);
+
+    res.render('tablero/editPractica.hbs', {entrega});
+});
+
+router.put('/ingame/edit-entrega/:id', isAuthenticated, async (req, res, file) => {
+    var entrega = await Entregas.findById(req.params.id);
+
+    entrega.comentarios = req.body.comments;
+
+    if(req.file != null){
+        entrega.entrega = req.file.filename;
+    }
+
+    entrega.save();
+
+    res.redirect('/ingame/boardgame/' + entrega.actividad);
+});
+
+
 router.get('/ingame/boardactivity/:id', isAuthenticated, async (req, res) => {
     var user = await User.findById(req.user.id);
     var practica = await Actividades.findById(req.params.id);
@@ -1973,14 +2001,18 @@ router.put('/logro/:id', isAuthenticated, async (req, res, file) => {
         const carta5 = ['5ffb2e13cd2b9a11c4a4bbad'];
         const newGroup5 = new Group({name: "Sud_America", cartas: carta5, game: newClass._id});
         await newGroup5.save();
+
+        const newGroup6 = new Group({name: "Game Master", game: newClass._id});
+        await newGroup6.save();
     
-    
+        user.groupid = newGroup6._id;
         await newClass.groups.push(newGroup._id);
         await newClass.groups.push(newGroup1._id);
         await newClass.groups.push(newGroup2._id);
         await newClass.groups.push(newGroup3._id);
         await newClass.groups.push(newGroup4._id);
         await newClass.groups.push(newGroup5._id);
+        await newClass.groups.push(newGroup6._id);
         await newClass.save();
         await user.save();
         res.redirect('/ingame');
