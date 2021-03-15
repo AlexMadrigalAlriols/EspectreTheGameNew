@@ -18,6 +18,7 @@ const GroupSchema = new Schema({
     nota: { type: Number, default: 0},
     comentarios: { type: String },
     newentrega: {type: Boolean, default: false},
+    practicas: { type: Array },
     notas: { type: Array }
 });
 

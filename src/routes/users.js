@@ -1452,8 +1452,9 @@ router.put('/ingame/character', isAuthenticated, async (req, res) => {
 // ============= BOARD GAME =========
 router.get('/ingame/board', isAuthenticated, async (req, res) => {
     var group = await Group.findOne({_id: req.user.groupid});  
+    var user = await User.findById(req.user._id);
 
-    await Actividades.find({class: req.user.class}).sort({date: 'desc'})
+    await Actividades.find({_id: user.practicas}).sort({date: 'desc'})
     .then(async documentos => {
       const contexto = {
         actividad: documentos.map(documento => {
@@ -1613,9 +1614,18 @@ router.get('/ingame/new-activity/', isAuthenticated, async (req, res) => {
   });
 
   router.delete('/ingame/activity/delete/:id', isAuthenticated, async (req, res) => {
-    await Entregas.findByIdAndDelete(req.params.id);
-    req.flash('success_msg', 'Entrega Deleted Successfully');
-    res.redirect('/ingame');
+    var actividad = await Actividades.findById(entrega.actividad);
+    var entrega = await Entregas.findByIdAndDelete(req.params.id);
+
+    if(actividad.individual){
+        req.flash('success_msg', 'Entrega Deleted Successfully');
+        res.redirect('/users/all-users/');
+    }else{
+        req.flash('success_msg', 'Entrega Deleted Successfully');
+        res.redirect('/ingame/all-groups/');
+    }
+
+
   });
 
 router.put('/ingame/new-activity', isAuthenticated, async (req, res, file) => {
@@ -1637,8 +1647,66 @@ router.put('/ingame/new-activity', isAuthenticated, async (req, res, file) => {
     }else{
         var estest = false;
     }
+    var group = await Group.findById(req.user.groupid);
+
     const newActivity = new Actividades({name: req.body.name, descripcion: req.body.descripcion, recursosAdicionales, individual ,boss: req.body.bossSelect, estest, class: req.user.class, diamax: req.body.diamax, mesmax: req.body.mesmax});
     await newActivity.save();
+    if(req.body.North_America == "true"){
+        var North_America = await Group.findOne({game: game._id, name: 'North_America'});
+        North_America.users.forEach(async element => {
+            var user = await User.findById(element);
+            user.practicas.push(newActivity._id);
+            user.save();
+        });
+    }
+
+    if(req.body.Sud_America == "true"){
+        var Sud_America = await Group.findOne({game: game._id, name: 'Sud_America'});
+        Sud_America.users.forEach(async element => {
+            var user = await User.findById(element);
+            user.practicas.push(newActivity._id);
+            user.save();
+        });
+    }
+
+    if(req.body.Africa == "true"){
+        var Africa = await Group.findOne({game: game._id, name: 'Africa'});
+        Africa.users.forEach(async element => {
+            var user = await User.findById(element);
+            user.practicas.push(newActivity._id);
+            user.save();
+        });
+    }
+
+    if(req.body.Oceania == "true"){
+        var Oceania = await Group.findOne({game: game._id, name: "Oceania"});
+
+        Oceania.users.forEach(async element => {
+            var user = await User.findById(element);
+            user.practicas.push(newActivity._id);
+            user.save();
+        });
+
+    }
+
+    if(req.body.Asia == "true"){
+        var Asia = await Group.findOne({game: game._id, name: 'Asia'});
+        Asia.users.forEach(async element => {
+            var user = await User.findById(element);
+            user.practicas.push(newActivity._id);
+            user.save();
+        });
+    }
+
+    if(req.body.Europa == "true"){
+        var Europa = await Group.findOne({game: game._id, name: 'Europa'});
+        Europa.users.forEach(async element => {
+            var user = await User.findById(element);
+            user.practicas.push(newActivity._id);
+            user.save();
+        });
+    }
+
     game.practicasSubidas = game.practicasSubidas + 1;
     game.save();
 

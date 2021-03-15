@@ -23,6 +23,7 @@ const UserSchema = new Schema({
     admin: {type: Boolean, default: false},
     practica: {type: String },
     comentarios: {type: String},
+    practicas: {type: Array},
     logros: {type: Array},
     level: { type: Number, default: 0},
     groupid: {type: String},
