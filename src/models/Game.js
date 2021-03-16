@@ -15,7 +15,19 @@ const GameSchema = new Schema({
     actividadActual: { type: String },
     admin: {type: String },
     classtag: {type: String},
-    notes: { type: Boolean, default: true}
+    notes: { type: Boolean, default: true},
+    normas: {type: Array },
+    castigos: {type: Array},
+    norma1: { type: String},
+    castigo1: {type: String},
+    norma2: {type:String},
+    castigo2: { type: String},
+    norma3: {type: String},
+    castigo3: { type: String},
+    norma4: {type: String},
+    castigo4: { type: String},
+    norma5: {type: String},
+    castigo5: { type: String}
 });
 
 module.exports = mongoose.model('Game', GameSchema);

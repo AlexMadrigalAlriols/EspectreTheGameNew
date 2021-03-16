@@ -1536,6 +1536,37 @@ router.get('/board/edit-entrega/:id', isAuthenticated, async (req, res, file) =>
     res.render('tablero/editPractica.hbs', {entrega});
 });
 
+router.get('/ingame/edit-normas', isAuthenticated, async (req, res, file) => {
+    var game = await Game.findOne({classtag: req.user.class});
+
+    res.render('game/editNormas.hbs', {game});
+});
+
+router.put('/ingame/edit-normas', isAuthenticated, async (req, res) => {
+    var game = await Game.findOne({classtag: req.user.class});
+    game.norma1 = req.body.norma1;
+    game.castigo1 = req.body.castigo1;
+
+    game.norma2 = req.body.norma2;
+    game.castigo2 = req.body.castigo2;  
+    
+    game.norma3 = req.body.norma3;
+    game.castigo3 = req.body.castigo3;
+
+    game.norma4 = req.body.norma4;
+    game.castigo4 = req.body.castigo4;
+
+    game.norma4 = req.body.norma4;
+    game.castigo4 = req.body.castigo4;
+
+    game.norma5 = req.body.norma5;
+    game.castigo5 = req.body.castigo5;
+
+    game.save();
+    req.flash('success_msg', 'Ya se han actualizado las normas con exito!');
+    res.redirect('/ingame');
+});
+
 router.put('/ingame/edit-entrega/:id', isAuthenticated, async (req, res, file) => {
     var entrega = await Entregas.findById(req.params.id);
 

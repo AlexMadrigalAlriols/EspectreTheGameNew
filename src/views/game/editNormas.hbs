@@ -1,0 +1,73 @@
+<nav style="background-color: white;">
+<a href="/ingame"><button class="btn ml-2 mt-3 mb-3 btnvolver">Volver Atras</button></a>
+</nav>
+
+<div class="col-md-6 mx-auto mt-3">
+    <div class="card">
+        <div class="card-header">
+            <h3>Normas del Juego</h3>
+        </div>
+        <div class="card-body">
+            <form action="/ingame/edit-normas?__method=PUT" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="__method" value="PUT">
+                <h5>Normas y Castigos</h5>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Norma 1:</span>
+                    <input type="text" class="form-control" name="norma1" value="{{game.norma1}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                </div>
+
+                <div class="input-group mb-3 ml-4" style="width: 96%;">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Castigo</span>
+                    <input type="text" class="form-control" name="castigo1" value="{{game.castigo1}}" style="width: 80%;" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Norma 2:</span>
+                    <input type="text" class="form-control" name="norma2" value="{{game.norma2}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                </div>
+
+                <div class="input-group mb-3 ml-4" style="width: 96%;">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Castigo</span>
+                    <input type="text" class="form-control" name="castigo2" value="{{game.castigo2}}" style="width: 80%;" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Norma 3:</span>
+                    <input type="text" class="form-control" name="norma3" value="{{game.norma3}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                </div>
+
+                <div class="input-group mb-3 ml-4" style="width: 96%;">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Castigo</span>
+                    <input type="text" class="form-control" name="castigo3" value="{{game.castigo3}}" style="width: 80%;" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Norma 4:</span>
+                    <input type="text" class="form-control" name="norma4" value="{{game.norma4}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                </div>
+
+                <div class="input-group mb-3 ml-4" style="width: 96%;">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Castigo</span>
+                    <input type="text" class="form-control" name="castigo4" value="{{game.castigo4}}" style="width: 80%;" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Norma 5:</span>
+                    <input type="text" class="form-control" name="norma5" value="{{game.norma5}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                </div>
+
+                <div class="input-group mb-3 ml-4" style="width: 96%;">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Castigo</span>
+                    <input type="text" class="form-control" name="castigo5" value="{{game.castigo5}}" style="width: 80%;" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn btn-block btnvolver">
+                        Guardar Normas
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

@@ -8,7 +8,17 @@
         <div class="card-body">
             <form action="/ingame/new-activity?__method=PUT" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="__method" value="PUT">
-                <h5>Tipo de Actividad</h5>
+                <h5 style="display: inline-block;">Tipo de Actividad</h5>     
+                    <div class="col-md-7" style="display: inline-block;">
+                        <div class="info" style="display: inline-block;">
+                        <i class="fas fa-info-circle" style="display: inline-block;"></i>
+
+                        <span class="extra-info" >
+                            Entrega: Es para subir un archivo o un comentario.</br>
+                            Test: Es una practica tipo Test en la cual tienen que responder.
+                        </span>
+                        </div>
+                    </div>
                 <div class="mb-3" style="display:inline-block;">
                    <input type="radio" name="estest" id="entrega" value="entrega" style="display: inline-block;" required checked>
                     <label for="entrega" style="display: inline-block; margin-top: -0.3rem;" class="ml-2">Entrega</label>
@@ -20,14 +30,23 @@
 
                 <h5>Nombre</h5>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" name="name" value="" aria-label="Sizing example input" placeholder="Some name to your activity" aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                    <input type="text" class="form-control" name="name" value="" aria-label="Sizing example input" placeholder="Nombre de La Actividad" aria-describedby="inputGroup-sizing-default" minlength="1" required>
                 </div>
                 <h5>Descripción</h5>
                 <div class="input-group mb-3">
-                    <textarea name="descripcion" id="descripcion" class="form-control" placeholder="Put some description to your activity" maxlength="200"></textarea>
+                    <textarea name="descripcion" id="descripcion" class="form-control" placeholder="Descripcion de la Actividad" maxlength="200"></textarea>
                 </div>
 
-                <h5>Recursos Adicionales</h5>
+                <h5 style="display: inline-block;">Recursos Adicionales</h5>                    
+                <div class="col-md-6" style="display: inline-block; z-index: 9999;">
+                        <div class="info" style="display: inline-block;">
+                        <i class="fas fa-info-circle" style="display: inline-block;"></i>
+
+                        <span class="extra-info" style="background-color: white; padding: 5px;">
+                            Es un archivo que puedes subir para que tus alumnos puedan descargar y verlo.
+                        </span>
+                        </div>
+                    </div>
                 <div class="input-group mb-4">
                     <label class="input-group-text" for="inputGroupFile02">EXPLORE</label>
                     <input type="file" name="file" class="form-control" id="inputGroupFile02">
